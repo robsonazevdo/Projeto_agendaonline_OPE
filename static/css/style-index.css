@@ -8,6 +8,10 @@
     border: none;
 }
 
+body {
+    background-color: #808080;
+}
+
 #slider {
     width: 80%;
     height: 25vw;
@@ -41,7 +45,7 @@ header {
     padding: 90px;
     text-align: center;
     height: 300px;
-    color: #808080;
+    color: #ebddcd;
 }
 
 .logo-menu {
@@ -164,14 +168,27 @@ input:focus {
 }
 
 .flex-container img {
-    max-width: 376px;
-    max-height: 282px;
+    max-width: 451px;
+    max-height: 338px;
+    width: auto;
+    height: auto;
+}
+
+.sobre {
+    border-top: 2px solid #fff;
+}
+
+.foto-maquiagem img {
+    max-width: 800px;
+    max-height: 600px;
     width: auto;
     height: auto;
 }
 
 .flex-item {
-    flex: 0 1 25%;
+    flex: 0 0 30%;
+    background-color: #808080;
+    border: none;
 }
 
 .card {
@@ -181,7 +198,7 @@ input:focus {
 }
 
 .card h2 {
-    color: #808080;
+    color: #ebddcd;
 }
 
 .card p {
@@ -217,4 +234,16 @@ address {
     display: block;
     font-style: italic;
     color: #ffffff;
+}
+
+.section-equipe {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.pro {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
 }
