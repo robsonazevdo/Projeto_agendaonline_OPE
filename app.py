@@ -35,7 +35,7 @@ class Cliente (db.Model):
 
  
 
-@app.route('/inicio')
+@app.route('/')
 def inicio():
     return render_template('index.html')
 
