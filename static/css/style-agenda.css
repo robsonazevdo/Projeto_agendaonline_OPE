@@ -1,0 +1,55 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: none;
+    font-family: helvetica;
+    color: #323232;
+    border: none;
+}
+
+.opacity-body {
+    width: 100%;
+    background-color: #323232;
+    height: 100%;
+    opacity: .7;
+    position: fixed;
+}
+
+a {
+    text-decoration: none;
+}
+
+h2 {
+    margin-top: 50px;
+}
+
+.form-table {
+    background-color: #fff;
+    width: 75%;
+    height: 100vh;
+    margin: auto auto auto auto;
+    text-align: center;
+    border-radius: 20px;
+    z-index: 2;
+}
+
+.form-agenda {
+    border-radius: 20px;
+}
+
+.agenda {
+    margin-top: 50px;
+}
+
+.agenda-header {
+    margin-top: auto;
+    background-color: #808080;
+    text-align: left;
+    padding: 10px;
+    border-radius: 20px 20px 0 0;
+}
+
+.agenda-header a {
+    color: #000;
+}
