@@ -16,7 +16,7 @@ function navFix() {
 }
 
 function toggle(event) {
-    console.log(form.classList.contains("aparecer"))
+
     if (form.classList.contains("aparecer")) {
 
         form.classList.remove("aparecer");
@@ -58,24 +58,3 @@ function start() {
 
 window.addEventListener("load", start);
 //fim banner rotativo//
-
-
-
-//inicio calendario// 
-
-let monthNames = ['Janeiro', 'Fevereiro', 'Março', 'April', 'Maio', 'Junho', 'Julio', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-
-let currentDate = new Date();
-let currentDay = currentDate.getDate();
-let monthNumber = currentDate.getMonth();
-let currentYear = currentDate.getFullYear();
-
-let dates = document.getElementById('dates');
-var month = document.getElementById('month').innerHTML = monthNames[monthNumber];
-let year = document.getElementById('year').innerHTML = currentYear.toString();
-
-let prevMonthDOM = document.getElementById('prev-month');
-let nextMonthDOM = document.getElementById('next-month');
-
-
-//fim calendario//

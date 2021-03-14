@@ -1,0 +1,129 @@
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        border: none;
+        font-family: helvetica;
+        color: #323232;
+        border: none;
+    }
+    
+    body {
+        background-image: linear-gradient(to down up, #fff, #808080);
+    }
+    
+    */ input:focus {
+        outline: none;
+    }
+    
+    a,
+    label {
+        font-size: 0.8rem;
+    }
+    
+    a:hover {
+        color: #08558b;
+    }
+    
+    .container {
+        width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 20px 30px;
+        margin-top: 10vh;
+        border-radius: 10px;
+        text-align: center;
+        opacity: .7;
+        background-color: #323232;
+    }
+    
+    form {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    
+    label,
+    input {
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+    
+    label {
+        font-weight: bold;
+    }
+    
+    input {
+        border-bottom: 2px solid #ffffff;
+        padding: 5px;
+        font-size: 1rem;
+        margin-bottom: 20px;
+        background-color: #323232;
+        color: #fff;
+    }
+    
+    input:focus {
+        border-bottom: 2px solid #b4918f;
+    }
+    
+    #forgot-pass {
+        text-align: right;
+        display: block;
+    }
+    
+    .btn1 {
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: bold;
+        border: none;
+        height: 40px;
+        width: 100%;
+        margin-top: 30px;
+        color: #fff;
+        background-color: #08558b;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+    
+    .btn1:hover {
+        background-color: #18223c;
+        transition: 0.5s;
+    }
+    
+    .rede-social,
+    .rede-social p {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .rede-social i {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        line-height: 40px;
+        color: #fff;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+    
+    .fa-facebook-f {
+        background-color: #385898;
+    }
+    
+    .fa-linkedin-in {
+        background-color: #0077b5;
+    }
+    
+    .fa-google-plus-g {
+        background-color: #db4a39;
+    }
+    
+    .cadastro-container p {
+        margin-bottom: 10px;
+        color: #0077b5;
+    }
+    
+    .btn-cadastrar {
+        font-size: 1.5rem;
+        margin-top: 20px;
+    }
