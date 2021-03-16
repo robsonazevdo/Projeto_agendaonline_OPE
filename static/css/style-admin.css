@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: none;
+    font-family: helvetica;
+    color: #323232;
+    border: none;
+}
+
+.container {
+    margin-left: 0;
+    background-color: #323232;
+    width: 25%;
+    height: 100vh;
+}
+
+.nav-menu {
+    padding: 25px;
+}
+
+.nav-menu ul {
+    list-style: none;
+}
+
+.nav-menu ul li {
+    margin: 2px;
+}

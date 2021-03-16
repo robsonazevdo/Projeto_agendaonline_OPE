@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
     <link rel="stylesheet" href="" class="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
+    <link rel="stylesheet" href="/static/css/style-agendamento.css">
 
     <title>Agendamento</title>
 
@@ -22,16 +21,36 @@
         <form action="">
 
             <div class="input-group mb-3">
-                <input type="date" class="form-control" aria-label="Recipiente para nickname" aria-describedby="basic-addon2">
+
+                <label for="escolha-servico">Escolha um Serviço: </label>
+                <!--<input type="text" id="escolha-servico" class=" form-control " aria-label="Recipiente para nickname " aria-describedby="basic-addon2 " name="escolha-servico ">-->
+
+                <select name="escolha-servico" id="escolha-servico">
+                    <option value="lista">Corte feminino</option>
+                    <option value="lista">Corte cabelo</option>
+                    <option value="lista">Manicure e Pedicure</option>
+                    <option value="lista">Coloração</option>
+                </select>
+                <select name="valor" id="valor">
+                    <option value="lista">60,00</option>
+                    <option value="lista">45,00</option>
+                    <option value="lista">45,00</option>
+                    <option value="lista">80,00</option>
+                </select>
 
             </div>
-            <div class="input-group mb-3">
-                <input type="time" class="form-control" aria-label="Recipiente para nickname" aria-describedby="basic-addon2">
+
+            <div class="input-group mb-3 ">
+                <input type="date" class="form-control " aria-label="Recipiente para nickname " aria-describedby="basic-addon2 ">
 
             </div>
 
+            <div class="input-group mb-3 ">
+                <input type="time" class="form-control " aria-label="Recipiente para nickname " aria-describedby="basic-addon2 ">
 
-            <button type="submit" class=" btn btn-primary ">Agendar</button>
+            </div>
+
+            <button type="submit " class=" btn btn-agendamento">Agendar</button>
 
         </form>
 
