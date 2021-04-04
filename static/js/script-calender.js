@@ -116,3 +116,40 @@ function formatDate(d) {
 
     return day + ' / ' + month + ' / ' + year;
 }
+
+
+
+
+
+
+
+function agendar(data, tempo, func, cond, intervalo) {
+    var aryData = data.split('/'),
+        dia = parseInt(aryData[0]),
+        mes = parseInt(aryData[1]),
+        ano = parseInt(aryData[2]);
+    var aryTempo = tempo.split(':'),
+        hora = parseInt(aryTempo[0]),
+        minuto = parseInt(aryTempo[1]);
+    console.log("Necessario Data: " + dia + "/" + mes + "/" + ano + " Tempo: " + hora + ":" + minuto);
+    var agora = new Date();
+    var diaAtual = agora.getDate(),
+        mesAtual = (agora.getMonth() + 1),
+        anoAtual = agora.getFullYear(),
+        horaAtual = agora.getHours(),
+        minAtual = agora.getMinutes();
+    console.log("Atual Data: " + diaAtual + "/" + mesAtual + "/" + anoAtual + " Tempo: " + horaAtual + ":" + minAtual);
+    if (ano == anoAtual && mes == mesAtual && dia == diaAtual && hora == horaAtual && minuto == minAtual) {
+        func();
+    } else if (cond) {
+        cond = false;
+        return setTimeout(scheduler, intervalo, data, tempo, func, cond, intervalo);
+    }
+}
+
+function scheduler(data, tempo, func, cond, intervalo) {
+    return setTimeout(agendar, 0, data, tempo, func, true, intervalo);
+}
+
+
+agendar('18/03/2021', '22:03', function() { alert("Está na hora!"); }, true, 5000);

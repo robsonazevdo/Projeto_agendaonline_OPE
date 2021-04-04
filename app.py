@@ -5,12 +5,13 @@ import os
 import werkzeug
 
 
+
+
 app = Flask(__name__)
 
 
 
         
- 
 
 @app.route('/')
 def inicio():
@@ -18,21 +19,61 @@ def inicio():
 
 
 
+@app.route("/login")
+def menu():
+    # Autenticação.
+    logado = autenticar_login()
+    if logado is None:
+        return render_template("/login.html", erro = "")
+
+    # Monta a resposta.
+    return render_template("menu.html", logado = logado, mensagem = "")
+
+@app.route("/login", methods = ["POST"])
+def login():
+    # Extrai os dados do formulário.
+    f = request.form
+    if "login" not in f or "senha" not in f:
+        return ":(", 422
+    login = f["login"]
+    senha = f["senha"]
+
+    # Faz o processamento.
+    logado = db_fazer_login(login, senha)
+
+    # Monta a resposta.
+    if logado is None:
+        return render_template("login.html", erro = "Ops. A senha estava errada.")
+    resposta = make_response(redirect("/"))
+
+    # Armazena o login realizado com sucesso em cookies (autenticação).
+    resposta.set_cookie("login", login, samesite = "Strict")
+    resposta.set_cookie("senha", senha, samesite = "Strict")
+    return resposta
+
     
 
 @app.route('/users', methods=['GET', 'POST'])
-def cliente():
-    if request.method == "POST":
-        '''cliente = TB_Cliente(nome = request.form['nome'],
-                        email = request.form['email'], 
-                        logradouro = request.form['endereco'], 
-                        numero = request.form['numero'],
-                        cep = request.form['cep'],
-                        complemento = request.form['complemento'], 
-                        senha = request.form['senha'])'''
-        
-        
-        return redirect(url_for('inicio')) 
+def criar_serie_api():
+    # Autenticação.
+    logado = autenticar_login()
+    if logado is None:
+        return redirect("/")
+
+    # Extrai os dados do formulário.
+    nome = request.form["nome"]
+    email = request.form["email"]
+    numero = request.form["numero"]
+    endereco = request.form["endereco"]
+
+
+    # Faz o processamento.
+    ja_existia, serie = criar_serie(numero, turma)
+
+    # Monta a resposta.
+    mensagem = f"A série {numero}{turma} já existia com o id {serie['id_serie']}." if ja_existia else f"A série {numero}{turma} foi criada com id {serie['id_serie']}."
+    return render_template("menu.html", logado = logado, mensagem = mensagem)
+
 
 
 
