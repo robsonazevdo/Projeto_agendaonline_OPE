@@ -4,7 +4,6 @@
         box-sizing: border-box;
         border: none;
         font-family: helvetica;
-        color: #323232;
         border: none;
     }
     
@@ -34,7 +33,7 @@
         border-radius: 10px;
         text-align: center;
         opacity: .7;
-        background-color: #323232;
+        background-color: #545252;
     }
     
     form {
@@ -51,8 +50,9 @@
     
     label {
         font-weight: bold;
+        color: #ffffff;
     }
-    
+
     input {
         border-bottom: 2px solid #ffffff;
         padding: 5px;
@@ -69,6 +69,12 @@
     #forgot-pass {
         text-align: right;
         display: block;
+        color: #000000;
+        font-weight: bold;
+    }
+
+    #forgot-pass:hover {
+        color: #ffffff;
     }
     
     .btn1 {
@@ -94,6 +100,7 @@
     .rede-social p {
         margin-top: 20px;
         margin-bottom: 20px;
+        color: #fff;
     }
     
     .rede-social i {
@@ -120,10 +127,17 @@
     
     .cadastro-container p {
         margin-bottom: 10px;
-        color: #0077b5;
+        color: #ffffff;
+        display: contents;
     }
     
     .btn-cadastrar {
-        font-size: 1.5rem;
+        font-size: 1rem;
         margin-top: 20px;
+        color: #000000;
+        font-weight: bold;
+    }
+
+    .btn-cadastrar:hover {
+        color: #ffffff;
     }

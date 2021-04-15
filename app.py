@@ -5,13 +5,8 @@ import os
 import werkzeug
 
 
-
-
 app = Flask(__name__)
 
-
-
-        
 
 @app.route('/')
 def inicio():
@@ -21,14 +16,14 @@ def inicio():
 
 @app.route("/login")
 def menu():
-    # Autenticação.
+    return render_template("/login.html", erro="")
+'''   # Autenticação.
     logado = autenticar_login()
     if logado is None:
-        return render_template("/login.html", erro = "")
 
     # Monta a resposta.
     return render_template("menu.html", logado = logado, mensagem = "")
-
+'''
 @app.route("/login", methods = ["POST"])
 def login():
     # Extrai os dados do formulário.
@@ -51,7 +46,7 @@ def login():
     resposta.set_cookie("senha", senha, samesite = "Strict")
     return resposta
 
-    
+
 
 @app.route('/users', methods=['GET', 'POST'])
 def criar_serie_api():
@@ -144,9 +139,7 @@ CREATE TABLE IF NOT EXISTS agendamento (
     FOREIGN KEY (id_servico, id_funcionario) REFERENCES servico_funcionario(id_servico, id_funcionario)
 );
 
-
 """
-
 
 
 def conectar():
@@ -156,9 +149,6 @@ def db_inicializar():
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.executescript(sql_create)
         con.commit()
-
-
-
 
 
 if __name__ == '__main__':
