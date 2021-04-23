@@ -1,109 +1,18 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{%extends'_base.html'%} {% block title %} Início {% endblock title %}
 
-<head>
-    <!-- Meta tags Obrigatórias -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!---->
+<!--estilos-->{% block head%} {{super()}}
+<<link rel="stylesheet" type="text/css" href="/static/css/style-index.css">{% endblock head%} {% block estilos %} {% endblock estilos %}
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="/static/css/style-index.css">
-    <link rel="sortcut icon" href="/static/img/Logo-branco.png" type="image/png" />
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <!--estilos-->
 
-    <title>
-        Início
-    </title>
-
-</head>
-
-<body>
-
-
-    <!--inicio cadastro-->
-    <div class="form aparecer">
-
-
-        <form action="/users" method="POST" class="text-center form-contato" class="was-validated">
-            <a class="btn-fechar"><i class="fas fa-times"></i></a>
-            <h1 class=" ">Cadastro</h1>
-
-            <label for="id_nome" class="sr-only">Nome</label>
-            <input type="text" id="id_nome" placeholder="Nome*" autocomplete="off" required autofocus name="nome">
-
-            <label for="id_email" class="sr-only">Email</label>
-            <input type="text" id="id_email" placeholder="Email*" autocomplete="off" required autofocus name="email">
-
-            <label for="id_endereco " class="sr-only">Endereço</label>
-            <input type="text" id="id_endereco" placeholder="Endereço* " autocomplete="off" required autofocus name="endereco">
-
-            <label for="id_numero" class="sr-only">Número</label>
-            <input type="text" id="id_numero" placeholder="Numero* " autocomplete="off" required autofocus name="numero">
-
-            <label for="id_cep" class="sr-only">CEP</label>
-            <input type="text" id="id_cep" placeholder="CEP* " autocomplete="off" required autofocus name="cep">
-
-            <label for="id_cep" class="sr-only">Complemento</label>
-            <input type="text" id="id_complemento" placeholder="Complemento " autocomplete="off" required autofocus name="complemento">
-
-            <label for="password" class="sr-only">Senha</label>
-            <input type="password" id="password" placeholder="Crie uma Senha* " name="senha">
-
-
-            <button type="submit " class="btn btn-form btn-primary">Enviar</button>
-
-        </form>
-    </div>
-
-    <!--fim cadastro-->
-
-    <header id="header ">
-
-    </header>
-
-    <!--inicio menu-->
-
-    <nav class="nav-menu">
-        <a href="/inicio">
-            <img src="/static/img/Logo-colorido.png " class="logo-menu ">
-
-            <ul>
-                <li><a href="#header">Início</a></li>
-                <li><a href="#">Agenda Online</a></li>
-                <li><a href="#sobre">Sobre</a></li>
-                <li><a href="#servico">Serviços</a></li>
-                <li><a href="#equipe">equipe</a></li>
-                <li><a href="#">Contato</a></li>
-                <li><a href="#produto">Produtos</a></li>
-                <li><a href="#">Carreiras</a></li>
-                <li><a href="#" class="btn-cadastro ">Cadastro</a></li>
-            </ul>
-
-    </nav>
-    <!--fim menu-->
-
+    {% block content %}
 
     <div id="bem-vindo">
         <h1 class="h1">Bem-Vindo ao HAIR2YOU</h1>
 
         <h3 class="h3">Um presente para você</h3>
     </div>
-
-
-    <!-- incio banner rotativo-->
-    <div id="slider">
-
-        <img class="selected" src="/static/img/depilação.jpg " alt="depilação ">
-        <img src="/static/img/escova1.png " alt="escova ">
-        <img src="/static/img/sobrancelhas.gif " alt="depilação ">
-        <img src="/static/img/Logo-colorido.png " alt="logocolorido ">
-
-    </div>
-
-
-
-    <!-- incio banner rotativo-->
 
 
     <div id="servico" class="card-topico">
@@ -119,7 +28,7 @@
     <section class="flex-container">
 
         <div class="flex-item card card-info">
-            <img src="/static/img/estetica.jfif " alt=" ">
+            <img src="/static/img/estetica.jfif" alt=" ">
 
             <h2>
                 Estética
@@ -296,46 +205,9 @@
 
 
     <!-- fim sessão equipe-->
+    {% endblock content %}
 
+    <!--inicio script-->
 
-    <!-- incio rodapé-->
-    <footer class="footer" role="contentinfo">
-        <ul class="social-buttons cf">
-
-            <li>
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-            </li>
-            <li>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-            </li>
-            <li>
-                <a href="#"><i class="fab fa-whatsapp"></i></a>
-            </li>
-
-        </ul>
-
-        <address>Site criado em 2021 por HAIR2YOU — Copyright © 2020-2021. </address>
-    </footer>
-
-    <!-- fim rodapé-->
-
-
-
-
-    <!-- JavaScript (Opcional) -->
-    <!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js " integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo " crossorigin="anonymous "></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js " integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49 " crossorigin="anonymous "></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js " integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy " crossorigin="anonymous "></script>
-
-
-
-
-    <script src="/static/js/script.js "></script>
-
-
-
-</body>
-
-
-</html>
+    {% block scripts %}
+    <script src="/static/js/script.js"></script>{% endblock scripts %}

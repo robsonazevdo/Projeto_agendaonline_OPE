@@ -1,0 +1,13 @@
+.row {
+    height: 30em;
+}
+
+.coluna {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container h1 {
+    text-align: center;
+}

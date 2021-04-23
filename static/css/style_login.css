@@ -7,10 +7,6 @@
         border: none;
     }
     
-    body {
-        background-image: linear-gradient(to down up, #fff, #808080);
-    }
-    
     */ input:focus {
         outline: none;
     }
@@ -28,8 +24,9 @@
         width: 400px;
         margin-left: auto;
         margin-right: auto;
-        padding: 20px 30px;
-        margin-top: 10vh;
+        margin-top: auto;
+        margin-bottom: auto;
+        padding: 20px 30px 20px 30px;
         border-radius: 10px;
         text-align: center;
         opacity: .7;
@@ -52,7 +49,7 @@
         font-weight: bold;
         color: #ffffff;
     }
-
+    
     input {
         border-bottom: 2px solid #ffffff;
         padding: 5px;
@@ -72,7 +69,7 @@
         color: #000000;
         font-weight: bold;
     }
-
+    
     #forgot-pass:hover {
         color: #ffffff;
     }
@@ -137,7 +134,7 @@
         color: #000000;
         font-weight: bold;
     }
-
+    
     .btn-cadastrar:hover {
         color: #ffffff;
     }

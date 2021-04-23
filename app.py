@@ -8,10 +8,21 @@ import werkzeug
 app = Flask(__name__)
 
 
-@app.route('/')
+
+
+@app.route('/inicio')
 def inicio():
     return render_template('index.html')
 
+
+@app.route('/cadastro')
+def cadastro():
+    return render_template('cadastro.html')
+
+
+@app.route('/contato')
+def contato():
+    return render_template('contato.html')
 
 
 @app.route("/login")

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+    {% block head %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>
+        {% block title %} {% endblock title %}
+    </title>
+
+    <link rel="stylesheet" type="text/css" href="/static/css/style-index.css">
+
+    <!---->
+
+
+    <!---->
+
+    {% endblock head %}
+</head>
+
+<body>
+    <!-- incio banner rotativo-->
+
+    <div id="slider"><img class="selected" src="/static/img/depilação.jpg " alt="depilação "><img src="/static/img/escova1.png " alt="escova "><img src="/static/img/sobrancelhas.gif " alt="depilação "><img src="/static/img/Logo-colorido.png " alt="logocolorido "></div>
+
+    <!-- incio banner rotativo-->
+
+
+    <!--inicio menu-->
+    <nav class="nav-menu">
+        <a href="/inicio"><img src="/static/img/Logo-colorido.png " class="logo-menu ">
+            <ul>
+                <li><a href="/inicio">Início</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#servico">Serviços</a></li>
+                <li><a href="#equipe">equipe</a></li>
+                <li><a href="contato">Contato</a></li>
+                <li><a href="#produto">Produtos</a></li>
+                <li><a href="#">Carreiras</a></li>
+                <li>
+                    <a href="/login">Acessar agenda</a>
+                </li>
+            </ul>
+    </nav>
+
+
+
+    <!--fim menu-->
+    <div class="conteudo"> {% block content %}
+
+        <!--conteudo-->
+
+        {% endblock content %}</div>
+
+
+
+
+
+    <!-- incio rodapé-->
+    <footer class="footer" role="contentinfo">
+        <ul class="social-buttons cf">
+
+            <li>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+            </li>
+            <li>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </li>
+            <li>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+            </li>
+
+        </ul>
+
+        <address>Site criado em 2021 por HAIR2YOU — Copyright © 2020-2021. </address>
+    </footer>
+
+
+
+    <script src="/static/js/script.js"></script>
+
+    {% block scripts %} {% endblock scripts %}
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first,
+        then Popper.js,
+            then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,276 +1,222 @@
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        border: none;
-        font-family: helvetica;
-        color: #323232;
-        border: none;
-    }
-    
-    p {
-        text-indent: 4rem;
-    }
-    
-    body {
-        background-color: #808080;
-    }
-    
-    #slider {
-        width: 90%;
-        height: 25vw;
-        max-height: 200px;
-        position: relative;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    #slider img {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0;
-        transition: opacity 2000ms;
-    }
-    
-    #slider img.selected {
-        opacity: 1;
-    }
-    
-    header {
-        background-image: url(/static/img/banner.jpg);
-        background-repeat: no-repeat;
-        background-size: 100%;
-        height: 200px;
-    }
-    
-    #bem-vindo {
-        padding: 90px;
-        text-align: center;
-        height: 300px;
-        color: #ebddcd;
-    }
-    
-    .logo-menu {
-        width: 50px;
-        margin-left: 25px;
-    }
-    
-    .nav-menu {
-        overflow: hidden;
-        background-color: #ebddcd;
-        display: flex;
-        height: 50px;
-    }
-    
-    .fixoNoTopo {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 1;
-        overflow: hidden;
-    }
-    
-    nav ul {
-        margin-bottom: auto;
-        margin-top: auto;
-        margin-right: 80px;
-        margin-left: auto;
-        color: #fff;
-        list-style: none;
-    }
-    
-    nav a {
-        text-decoration: none;
-        font-size: 20px;
-        color: #000000
-    }
-    
-    nav a:hover {
-        color: #b4918f;
-    }
-    
-    nav ul li {
-        display: inline;
-        float: center;
-        padding: 0px;
-        margin: 1rem;
-        width: 80px;
-        text-transform: capitalize;
-    }
-    
-    .aparecer {
-        display: none;
-    }
-    
-    .btn-fechar {
-        margin-left: auto;
-    }
-    
-    .btn-fechar i:hover {
-        color: #b4918f;
-        cursor: pointer;
-    }
-    
-    .form {
-        background-color: #323232;
-        opacity: 0.9;
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        color: #000;
-        z-index: 2;
-    }
-    
-    .form-contato {
-        background-color: #fff;
-        width: 75%;
-        height: 90%;
-        margin-top: 30px;
-        margin-bottom: auto;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 50px 60px;
-        color: #000;
-        border-radius: 20px 20px;
-        display: grid;
-        border-bottom: 8px solid #000;
-        border-right: 8px solid #000;
-    }
-    
-    .form-contato h1 {
-        color: #000;
-    }
-    
-    input:focus {
-        outline: 0;
-    }
-    
-    .btn-form {
-        width: 30%;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 10px;
-    }
-    
-    .card-topico {
-        background-color: #000000;
-        text-align: center;
-        height: 200px;
-        color: #fff;
-        padding: 60px;
-    }
-    
-    .flex-container {
-        display: flex;
-        width: 100%;
-        margin: auto;
-        justify-content: space-around;
-        flex-wrap: wrap;
-        align-content: center;
-    }
-    
-    .flex-container img {
-        max-width: 451px;
-        max-height: 338px;
-        width: auto;
-        height: auto;
-    }
-    
-    .sobre {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        border-top: 2px solid #fff;
-        border-bottom: 2px solid #fff;
-    }
-    
-    .item-sobre {
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: auto;
-        margin-bottom: auto;
-    }
-    
-    .sobre p {
-        padding: 0 3px;
-    }
-    
-    .sobre h2 {
-        text-align: center;
-    }
-    
-    .foto-maquiagem img {
-        max-width: 800px;
-        max-height: 400px;
-    }
-    
-    .flex-item {
-        flex: 0 0 30%;
-        background-color: #808080;
-        border: none;
-    }
-    
-    .card {
-        width: 10vw;
-        margin: 5px;
-        padding: 5px;
-    }
-    
-    .card h2 {
-        color: #ebddcd;
-    }
-    
-    .card p {
-        width: 25vw;
-        margin: 5px;
-        padding: 5px;
-    }
-    
-    .footer {
-        color: #ffffff;
-        font-size: 18px;
-        padding: 20px 0;
-        border-top: 1px solid #fff;
-        text-align: center;
-        background: #272822;
-    }
-    
-    .social-buttons {
-        display: inline-flex;
-        list-style: none;
-    }
-    
-    .social-buttons i {
-        color: #ffffff;
-        font-size: 25px;
-    }
-    
-    .social-buttons a {
-        padding: .5rem;
-    }
-    
-    address {
-        display: block;
-        font-style: italic;
-        color: #ffffff;
-    }
-    
-    .section-equipe {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        border-top: 1px solid #fff;
-        border-bottom: 1px solid #fff;
-    }
-    
-    .pro {
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    .content {
-        text-indent: 4rem;
-        padding: 2px;
-        margin-top: auto;
-        margin-bottom: auto;
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: none;
+    font-family: helvetica;
+    color: #323232;
+    border: none;
+}
+
+p {
+    text-indent: 4rem;
+}
+
+body {
+    background-color: #808080;
+}
+
+#slider {
+    width: 90%;
+    height: 25vw;
+    max-height: 200px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#slider img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 2000ms;
+}
+
+#slider img.selected {
+    opacity: 1;
+}
+
+header {
+    background-image: url(/static/img/banner.jpg);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 200px;
+}
+
+#bem-vindo {
+    padding: 90px;
+    text-align: center;
+    height: 300px;
+    color: #ebddcd;
+}
+
+.logo-menu {
+    width: 50px;
+    margin-left: 25px;
+}
+
+.nav-menu {
+    overflow: hidden;
+    background-color: #ebddcd;
+    display: flex;
+    height: 50px;
+}
+
+.fixoNoTopo {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    overflow: hidden;
+}
+
+nav ul {
+    margin-bottom: auto;
+    margin-top: auto;
+    margin-right: 80px;
+    margin-left: auto;
+    color: #fff;
+    list-style: none;
+}
+
+nav a {
+    text-decoration: none;
+    font-size: 20px;
+    color: #000000
+}
+
+nav a:hover {
+    color: #b4918f;
+}
+
+nav ul li {
+    display: inline;
+    float: center;
+    padding: 0px;
+    margin: 1rem;
+    width: 80px;
+    text-transform: capitalize;
+}
+
+.card-topico {
+    background-color: #000000;
+    text-align: center;
+    height: 200px;
+    color: #fff;
+    padding: 60px;
+}
+
+.flex-container {
+    display: flex;
+    width: 100%;
+    margin: auto;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.flex-container img {
+    max-width: 451px;
+    max-height: 338px;
+    width: auto;
+    height: auto;
+}
+
+.sobre {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+}
+
+.item-sobre {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.sobre p {
+    padding: 0 3px;
+}
+
+.sobre h2 {
+    text-align: center;
+}
+
+.foto-maquiagem img {
+    max-width: 800px;
+    max-height: 400px;
+}
+
+.flex-item {
+    flex: 0 0 30%;
+    background-color: #808080;
+    border: none;
+}
+
+.card {
+    width: 10vw;
+    margin: 5px;
+    padding: 5px;
+}
+
+.card h2 {
+    color: #ebddcd;
+}
+
+.card p {
+    width: 25vw;
+    margin: 5px;
+    padding: 5px;
+}
+
+.footer {
+    color: #ffffff;
+    font-size: 18px;
+    padding: 20px 0;
+    border-top: 1px solid #fff;
+    text-align: center;
+    background: #272822;
+}
+
+.social-buttons {
+    display: inline-flex;
+    list-style: none;
+}
+
+.social-buttons i {
+    color: #ffffff;
+    font-size: 25px;
+}
+
+.social-buttons a {
+    padding: .5rem;
+}
+
+address {
+    display: block;
+    font-style: italic;
+    color: #ffffff;
+}
+
+.section-equipe {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+.pro {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.content {
+    text-indent: 4rem;
+    padding: 2px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
