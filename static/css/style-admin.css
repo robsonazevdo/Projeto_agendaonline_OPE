@@ -8,15 +8,26 @@
     border: none;
 }
 
+body {
+    background-image: url(/static/img/tratamento-facial.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
 .container {
-    margin-left: 0;
-    background-color: #323232;
-    width: 25%;
-    height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-menu {
     padding: 25px;
+    position: absolute;
+    background-color: #323232;
+    width: 20%;
+    height: 100vh;
+    opacity: 0.7;
+    margin-top: -50px;
 }
 
 .nav-menu ul {
@@ -25,4 +36,10 @@
 
 .nav-menu ul li {
     margin: 2px;
+}
+
+.content {
+    left: 27%;
+    position: relative;
+    margin-top: 50px;
 }

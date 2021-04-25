@@ -1,0 +1,49 @@
+ {%extends '_base.html'%}
+<!---->
+
+
+{% block title %} Cadastro {% endblock title %} {% block head%} {{super()}}
+<link rel="stylesheet" type="text/css" href="/static/css/style-cadastro.css">{% endblock head%}
+
+<!-- estilos-->
+
+{% block estilos %} {% endblock estilos %}
+
+
+<!---->
+
+{% block content %}
+<!--inicio cadastro-->
+<div class="form">
+
+    <form action="/users" method="POST" class="text-center form-contato" class="was-validated">
+
+        <h1 class=" ">Cadastro</h1>
+
+        <label for="id_nome" class="sr-only">Nome</label>
+        <input type="text" id="id_nome" placeholder="Nome*" autocomplete="off" required autofocus name="nome">
+
+        <label for="id_email" class="sr-only">Email</label>
+        <input type="text" id="id_email" placeholder="Email*" autocomplete="off" required autofocus name="email">
+
+        <label for="id_cep" class="sr-only">Data Nascimento</label>
+        <input type="date" id="id_dt-nascimento" placeholder="DATA NASCIMENTO* " autocomplete="off" required autofocus name="data-nascimento">
+
+        <label for="password" class="sr-only">Senha</label>
+        <input type="password" id="password" placeholder="Crie uma Senha* " name="senha">
+
+        <label for="password" class="sr-only">Confirmar Senha</label>
+        <input type="password" id="password" placeholder="Confirmar Senha* " name="confirmar-senha">
+
+
+        <button type="submit " class="btn btn-form btn-primary">Enviar</button>
+
+    </form>
+</div>
+
+<!--fim cadastro-->
+{% endblock content %}
+
+<!-- scripts-->
+
+{% block scripts %} {% endblock scripts %}

@@ -10,6 +10,8 @@ app = Flask(__name__)
 
 
 
+
+
 @app.route('/inicio')
 def inicio():
     return render_template('index.html')
@@ -17,12 +19,17 @@ def inicio():
 
 @app.route('/cadastro')
 def cadastro():
-    return render_template('cadastro.html')
+    return render_template('cadastro_cliente.html')
 
 
 @app.route('/contato')
 def contato():
     return render_template('contato.html')
+
+
+@app.route('/cadastro_funcionario')
+def cadastro_funcionario():
+    return render_template('cadastro_funcionario.html')
 
 
 @app.route("/login")
