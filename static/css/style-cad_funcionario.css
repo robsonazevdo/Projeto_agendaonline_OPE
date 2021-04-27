@@ -25,19 +25,19 @@ form {
     margin-bottom: 0;
 }
 
-label,
+.form-label,
 input {
     display: block;
     width: 100%;
     text-align: left;
 }
 
-label {
+.form-label {
     font-weight: bold;
     color: #ffffff;
 }
 
-input {
+.input-fun {
     border-bottom: 2px solid #ffffff;
     padding: 5px;
     font-size: 1rem;
@@ -50,6 +50,7 @@ input:focus {
     border-bottom: 2px solid #b4918f;
 }
 
-.form-check {
-    display: inline-flex;
+.form-check-label {
+    font-weight: bold;
+    color: #ffffff;
 }

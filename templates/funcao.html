@@ -1,0 +1,39 @@
+{%extends 'base_admin.html'%}
+<!---->
+
+
+{% block title %} Cadastro função{% endblock title %} {% block head%} {{super()}}
+<link rel="stylesheet" type="text/css" href="/static/css/style-cad_funcionario.css">{% endblock head%}
+
+<!-- estilos-->
+
+{% block estilos %} {% endblock estilos %}
+
+
+<!---->
+
+{% block content %}
+<!--inicio cadastro-->
+<div class="conteudo">
+    <div class="form">
+
+        <form action="" method="POST" class="text-center form-contato" class="was-validated">
+
+            <h1 class=" ">Cadastro Função</h1>
+
+            <label for="id_nomefuncao" class="form-label">Função</label>
+            <input type="text" id="id_nomefuncao" placeholder='Função*' autocomplete="off " required autofocus class="input-fun " name="nome ">
+
+
+            <button type="submit " class="btn btn-form btn-primary ">Enviar</button>
+
+        </form>
+    </div>
+</div>
+
+<!--fim cadastro-->
+{% endblock content %}
+
+<!-- scripts-->
+
+{% block scripts %} {% endblock scripts %}
