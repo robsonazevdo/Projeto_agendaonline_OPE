@@ -36,6 +36,11 @@ body {
 
 .nav-menu ul li {
     margin: 2px;
+    color: #fff;
+}
+
+.nav-menu ul li a {
+    color: #fff;
 }
 
 .content {

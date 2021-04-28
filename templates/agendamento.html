@@ -31,12 +31,17 @@
             <label for="id_servico" class="form-label">Escolha o Serviço</label>
             <input type="text" class="form-control" id="id_servico">
         </div>
-        <div class="mb-3">
+        <div name="funcionarios" method="GET" action="" class="mb-3">
             <label for="id_funcionario" class="form-label">Escolha o Profissional</label>
-            <input type="text" class="form-control" id="id_funcionario">
+            <input list="id_funcionario" class="form-control" id="id_funcionario">
+            <datalist id="id_funcionario">
+                {% for funcionario in funcionarios %}
+                <option value="{{funcionario}}" SELECTED>{{funcionarios}}</option>
+                {% endfor %}
+                </datalist>
         </div>
 
-        <button type="submit" class="btn1">Enviar</button>
+        <button type=" submit " class="btn1 ">Enviar</button>
 
 
     </form>
