@@ -1,3 +1,4 @@
 {
-    "files.autoSave": "afterDelay"
+    "files.autoSave": "afterDelay",
+    "python.pythonPath": "C:\\Users\\Robson\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
 }

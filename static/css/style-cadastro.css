@@ -4,37 +4,137 @@
     box-sizing: border-box;
     border: none;
     font-family: helvetica;
-    color: #323232;
     border: none;
 }
 
-.form {
-    width: 100%;
-    height: 100%;
-    color: #000;
+*/ input:focus {
+    outline: none;
 }
 
-.form-contato {
-    margin-top: 30px;
-    margin-bottom: auto;
+a,
+label {
+    font-size: 0.8rem;
+}
+
+a:hover {
+    color: #08558b;
+}
+
+.container {
+    width: 400px;
     margin-left: auto;
     margin-right: auto;
-    padding: 50px 60px;
-    color: #000;
-    display: grid;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 20px 30px 20px 30px;
+    border-radius: 10px;
+    text-align: center;
+    opacity: .7;
+    background-color: #545252;
 }
 
-.form-contato h1 {
-    color: #000;
+form {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+label,
+input {
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+label {
+    font-weight: bold;
+    color: #ffffff;
+}
+
+input {
+    border-bottom: 2px solid #ffffff;
+    padding: 5px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    background-color: #323232;
+    color: #fff;
 }
 
 input:focus {
-    outline: 0;
+    border-bottom: 2px solid #b4918f;
 }
 
-.btn-form {
-    width: 30%;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 10px;
+#forgot-pass {
+    text-align: right;
+    display: block;
+    color: #000000;
+    font-weight: bold;
+}
+
+#forgot-pass:hover {
+    color: #ffffff;
+}
+
+.btn1 {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: none;
+    height: 40px;
+    width: 100%;
+    margin-top: 30px;
+    color: #fff;
+    background-color: #08558b;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.btn1:hover {
+    background-color: #18223c;
+    transition: 0.5s;
+}
+
+.rede-social,
+.rede-social p {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.rede-social i {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    line-height: 40px;
+    color: #fff;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.fa-facebook-f {
+    background-color: #385898;
+}
+
+.fa-linkedin-in {
+    background-color: #0077b5;
+}
+
+.fa-google-plus-g {
+    background-color: #db4a39;
+}
+
+.cadastro-container p {
+    margin-bottom: 10px;
+    color: #ffffff;
+    display: contents;
+}
+
+.btn-cadastrar {
+    font-size: 1rem;
+    margin-top: 20px;
+    color: #000000;
+    font-weight: bold;
+}
+
+.btn-cadastrar:hover {
+    color: #ffffff;
 }
