@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, make_response, send_from_directory
 from contextlib import closing
 import sqlite3
 import os
@@ -12,10 +12,16 @@ app = Flask(__name__)
 
 
 
+
+
 @app.route('/')
 def inicio():
     return render_template('index.html')
 
+
+@app.route('/agenda')
+def agenda():
+    return render_template('calendario.html')
 
 @app.route('/cadastro')
 def cadastro():
@@ -46,6 +52,9 @@ def cadastro_funcao():
 def agendamento():
     return render_template('agendamento.html')
 
+@app.route('/historico')
+def historico():
+    return render_template('historico.html')
 
 @app.route("/login")
 def menu():
@@ -105,9 +114,6 @@ def criar_serie_api():
 
 
 
-
-
-
 #### Definições básicas do banco. ####
 
 sql_create = """ 
@@ -115,11 +121,8 @@ CREATE TABLE IF NOT EXISTS cliente (
     id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
     nome VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
-    logradouro VARCHAR(50) NOT NULL,
-    numero INTEGER NOT NULL,
-    cep VARCHAR(9) NOT NULL,
-    complemento VARCHAR(50) NOT NULL,
-    senha VARCHAR(20) NOT NULL,
+    senha VARCHAR(10) NOT NULL,
+    data_nascimento TEXT NOT NULL,
     UNIQUE(email)
 );
 
@@ -133,7 +136,8 @@ CREATE TABLE IF NOT EXISTS servico (
     id_servico INTEGER PRIMARY KEY AUTOINCREMENT,
     nome_sevico VARCHAR(50) NOT NULL,
     preco_servico REAL NOT NULL,
-    duracao_servico DATETIME NOT NULL
+    duracao_servico TEXT NOT NULL,
+    status VARCHAR(7) NOT NULL
 
 );
 
@@ -143,33 +147,34 @@ CREATE TABLE IF NOT EXISTS funcionario (
     nome VARCHAR(50) NOT NULL,
     cpf VARCHAR(14) NOT NULL,
     email VARCHAR(50) NOT NULL,
-    logradouro VARCHAR(50) NOT NULL,
-    numero INTEGER NOT NULL,
-    cep VARCHAR(9) NOT NULL,
-    complemento VARCHAR(50) NOT NULL,
-    senha VARCHAR(20) NOT NULL,
+    endereco VARCHAR(50) NOT NULL,
+    telefone VARCHAR(12) NOT NULL,
+    status VARCHAR(7) NOT NULL,
+    senha VARCHAR(8) NOT NULL,
     UNIQUE(email),
     FOREIGN KEY (id_funcao) REFERENCES funcao(id_funcao)
 
 );
 
 CREATE TABLE IF NOT EXISTS servico_funcionario (
+    id_servico_funcionario INTEGER PRIMARY KEY AUTOINCREMENT,
     id_servico INTEGER NOT NULL,
     id_funcionario INTEGER NOT NULL,
     FOREIGN KEY (id_servico) REFERENCES servico(id_servico),
-    FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_funcionario),
-    PRIMARY KEY (id_servico, id_funcionario)
+    FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_funcionario)
+    
 );
 
 CREATE TABLE IF NOT EXISTS agendamento (
     id_agendamento INTEGER PRIMARY KEY AUTOINCREMENT,
-    data DATE NOT NULL,
+    data TEXT NOT NULL,
+    hora TEXT NOT NULL,
     id_cliente INTEGER NOT NULL,
-    observaçao VARCHAR(150),
     id_servico INTEGER NOT NULL,
     id_funcionario INTEGER NOT NULL,
     FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
-    FOREIGN KEY (id_servico, id_funcionario) REFERENCES servico_funcionario(id_servico, id_funcionario)
+    FOREIGN KEY (id_servico) REFERENCES servico(id_servico),
+    FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_funcionario)
 );
 
 """
@@ -182,6 +187,7 @@ def db_inicializar():
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.executescript(sql_create)
         con.commit()
+
 
 
 if __name__ == '__main__':

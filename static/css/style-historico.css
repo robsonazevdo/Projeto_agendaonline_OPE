@@ -9,7 +9,7 @@
 }
 
 .conteudo {
-    width: 400px;
+    width: 600px;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: auto;
@@ -20,15 +20,12 @@
     background-color: #545252;
 }
 
-form {
-    margin-top: 0;
-    margin-bottom: 0;
-}
+
 
 .form-label,
 input {
-    display: block;
-    width: 100%;
+   
+    width: 80%;
     text-align: left;
 }
 

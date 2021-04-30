@@ -2,7 +2,12 @@
 
 <!---->
 <!--estilos-->{% block head%} {{super()}}
-<link rel="stylesheet" type="text/css" href="/static/css/style-index.css">{% endblock head%} {% block estilos %} {% endblock estilos %}
+<link rel="stylesheet" type="text/css" href="/static/css/style-index.css">
+
+{% block estilos %} {% endblock estilos %}
+{% endblock head%} 
+
+
 
 <!--estilos-->
 
@@ -208,5 +213,6 @@
 {% endblock content %}
 
 <!--inicio script-->
+<script src="/static/js/script.js"></script>
 
-{% block scripts %} {% endblock scripts %}
+{% block scripts %}<script src="/static/js/script.js"></script> {% endblock scripts %}

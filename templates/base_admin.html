@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
     <link rel="stylesheet" href="" class="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/static/css/style-admin.css">
-
+    
     <title>
         {% block title %} {% endblock title %}
     </title>
@@ -22,19 +22,18 @@
     <div class="container">
 
         <nav class="nav-menu">
-            <a href="">Logo</a>
+            <a href="#" class="logo-menu"><img src="/static/img/Logo-colorido.png" class="logo-menu" alt="200">
             <ul>
                 <li>
-                    <a href="/agenda">Agenda</a>
+                    <a href="#">inicio</a>
                 </li>
-
-                <li><a href="#">Sobre</a></li>
-                <li><a href="#">Serviços</a></li>
-                <li><a href="#">equipe</a></li>
-                <li><a href="#">Contato</a></li>
-                <li><a href="#">Produtos</a></li>
-                <li><a href="#">Carreiras</a></li>
-                <li><a href="#">Cadastro</a></li>
+                <li><a href="/agenda">Agenda</a></li>
+                <li><a href="/servico">Cadastro Serviços</a></li>
+                <li><a href="/funcao">Cadastro Função</a></li>
+                <li><a href="/cadastro_funcionario">Cadastro Funcionários</a></li>
+                
+                
+                <li><a href="/historico">Histórico</a></li>
             </ul>
 
         </nav>
@@ -45,16 +44,16 @@
             {% block content %} {% endblock content %}
         </div>
 
-        {% block script %} {% endblock script %}
+        
 
     </div>
 
     <link rel="stylesheet " href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css " />
     <script src="http://code.jquery.com/jquery-1.8.2.js "></script>
     <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js "></script>
+    <script src="/static/js/script-calendar.js"></script>
 
-
-
+    {% block script %} {% endblock script %}
 </body>
 
 </html>

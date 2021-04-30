@@ -1,0 +1,38 @@
+{%extends 'base_admin.html'%}
+<!---->
+
+
+{% block title %} Histórico {% endblock title %} {% block head%} {{super()}}
+<link rel="stylesheet" type="text/css" href="/static/css/style-historico.css">{% endblock head%}
+
+<!-- estilos-->
+
+{% block estilos %} {% endblock estilos %}
+
+
+<!---->
+
+{% block content %}
+<!--inicio cadastro-->
+<div class="conteudo">
+    <div class="form">
+
+        <form action="" method="POST" class="text-center form-contato" class="was-validated">
+
+
+            <label for="id_nome" class="form-label">Buscar histórico de cliente</label>
+            <input type="text" id="id_nome" placeholder="Buscar histórico de cliente*" autocomplete="off" required autofocus class="input-fun" name="nome">
+
+        
+            <button type="submit" class="btn btn-form "><i class="fas fa-search"></i></button>
+
+        </form>
+    </div>
+</div>
+
+<!--fim cadastro-->
+{% endblock content %}
+
+<!-- scripts-->
+
+{% block scripts %} {% endblock scripts %}

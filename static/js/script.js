@@ -15,45 +15,33 @@ function navFix() {
 
 }
 
-function toggle(event) {
 
-    if (form.classList.contains("aparecer")) {
 
-        form.classList.remove("aparecer");
-    } else {
-        form.classList.add("aparecer")
-    }
+//banner rotativo//  
+let time = 3000;
 
-}
-
-btn.addEventListener("click", toggle, false);
-btnForm.addEventListener("click", toggle, false);
-
-//banner rotativo//
-let time = 3000,
-
-    currentImageIndex = 0,
-    images = document.querySelectorAll("#slider img")
-max = images.length;
+let currentImageIndex = 0;
+let images = document.querySelectorAll("#slider img");
+let max = images.length;
 
 
 function nextImage() {
 
-    images[currentImageIndex].classList.remove("selected")
+    images[currentImageIndex].classList.remove("selected");
 
-    currentImageIndex++
+    currentImageIndex++;
 
-    if (currentImageIndex >= max)
-        currentImageIndex = 0
+    if (currentImageIndex >= max);
+        currentImageIndex = 0;
 
-    images[currentImageIndex].classList.add("selected")
+    images[currentImageIndex].classList.add("selected");
 
 }
 
 function start() {
     setInterval(() => {
         nextImage()
-    }, time)
+    }, time);
 }
 
 window.addEventListener("load", start);

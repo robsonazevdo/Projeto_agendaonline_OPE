@@ -1,0 +1,65 @@
+{%extends 'base_admin.html'%}
+<!---->
+
+
+{% block title %} Histórico {% endblock title %}
+{% block head%} {{super()}}
+
+<link rel="stylesheet" type="text/css" href="/static/css/style-calendar.css">
+{% endblock head%}
+
+<!-- estilos-->
+
+
+<!---->
+
+{% block content %}
+<!--inicio cadastro-->
+<div class="form-table">
+
+    <form action="" method="POST" class="form-agenda">
+
+
+       
+       <div class="calendar">
+            <div class="calendar-info">
+                <div class="calendar-prev" id="prev-month">&#9664;</div>
+                <div class="calendar-month" id="month"></div>
+                <div class="calendar-year" id="year"> </div>
+                <div class="calendar-next" id="next-month">&#9654;</div>
+            </div>
+        </div>
+
+        <div class="calendar__week">
+            <div class="calendar__day calendar__item">Seg</div>
+            <div class="calendar__day calendar__item">Ter</div>
+            <div class="calendar__day calendar__item">Qua</div>
+            <div class="calendar__day calendar__item">Qui</div>
+            <div class="calendar__day calendar__item">Sex</div>
+            <div class="calendar__day calendar__item">Sáb</div>
+            <div class="calendar__day calendar__item">Dom</div>
+        </div>
+
+
+
+        <div class="calendar__dates" id="dates">
+
+        </div>
+
+
+
+        <div class="calender__period">
+            
+        </div>
+
+
+    </form>
+</div>-->
+
+
+<!--fim cadastro-->
+{% endblock content %}
+
+<!-- scripts-->
+
+{% block scripts %} {% endblock scripts %}
