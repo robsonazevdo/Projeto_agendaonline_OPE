@@ -12,28 +12,26 @@
 <!---->
 
 {% block content %}
-<!--{% with messages = get_flashed_messages() %} {% if messages %}
-    <div class="alert alert-dark " role="alert">
-        <ul class=flashes>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %} {% endwith %}-->
+
+    {% if mensagem %}
+    <p class="mensagem">{{mensagem}}</p>
+    {% endif %}
+    {% if erro %}
+        <p class="erro">{{erro}}</p>
+    {% endif %}
 
 <div class="container ">
 
-    <form action="" class="form" method="POST">
+    <form action="/login" class="form" method="POST">
 
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Email</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="*Digite seu E-mail">
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="*Digite seu E-mail" name="email">
 
         </div>
         <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="*Digite sua senha">
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="*Digite sua senha" name="senha">
 
             <a id="forgot-pass" href="#">Esqueceu Senha?</a>
             <button type="submit" class="btn1">Entrar</button>

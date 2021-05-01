@@ -9,17 +9,12 @@ app = Flask(__name__)
 
 
 
-
-
-
-
-
 @app.route('/')
 def inicio():
     return render_template('index.html')
 
 
-@app.route('/agenda')
+@app.route('/calendario')
 def agenda():
     return render_template('calendario.html')
 
@@ -50,29 +45,22 @@ def cadastro_funcao():
 
 @app.route('/agendamento')
 def agendamento():
-    return render_template('agendamento.html')
-
-@app.route('/historico')
-def historico():
-    return render_template('historico.html')
-
-@app.route("/login")
-def menu():
-    return render_template("/login.html", erro="")
-'''   # Autenticação.
+    # Autenticação.
     logado = autenticar_login()
     if logado is None:
+        return render_template("/login.html", erro="")
+        # Monta a resposta.
+    return render_template("agendamento.html", logado = logado, mensagem = "")
+    
 
-    # Monta a resposta.
-    return render_template("menu.html", logado = logado, mensagem = "")
-'''
+
 @app.route("/login", methods = ["POST"])
 def login():
     # Extrai os dados do formulário.
     f = request.form
-    if "login" not in f or "senha" not in f:
+    if "email" not in f or "senha" not in f:
         return ":(", 422
-    login = f["login"]
+    login = f["email"]
     senha = f["senha"]
 
     # Faz o processamento.
@@ -81,38 +69,137 @@ def login():
     # Monta a resposta.
     if logado is None:
         return render_template("login.html", erro = "Ops. A senha estava errada.")
-    resposta = make_response(redirect("/"))
+    resposta = make_response(redirect("/agendamento"))
 
     # Armazena o login realizado com sucesso em cookies (autenticação).
     resposta.set_cookie("login", login, samesite = "Strict")
     resposta.set_cookie("senha", senha, samesite = "Strict")
     return resposta
 
+@app.route("/logout", methods=['GET', 'POST'])
+def logout():
+    # Monta a resposta.
+    resposta = make_response(render_template("index.html", mensagem = "Tchau."))
+
+    # Limpa os cookies com os dados de login (autenticação).
+    resposta.set_cookie("login", "", samesite = "Strict")
+    resposta.set_cookie("senha", "", samesite = "Strict")
+    return resposta
+
 
 
 @app.route('/users', methods=['GET', 'POST'])
-def criar_serie_api():
-    # Autenticação.
-    logado = autenticar_login()
-    if logado is None:
-        return redirect("/")
-
+def criar_cliente():
+    
     # Extrai os dados do formulário.
     nome = request.form["nome"]
     email = request.form["email"]
-    numero = request.form["numero"]
-    endereco = request.form["endereco"]
+    data_nascimento = request.form["data_nascimento"]
+    senha = request.form["senha"]
+    
+
+    # Faz o processamento.
+    ja_existia, cliente = criar_cliente(nome, email, data_nascimento, senha)
+
+    # Monta a resposta.
+    mensagem = f"o cliente {nome}{email} já existia com o id {cliente['id_cliente']}." if ja_existia else f"A série {nome}{email} foi criada com id {cliente['id_cliente']}."
+    return render_template("login.html", logado = logado, mensagem = mensagem)
+
+
+
+@app.route('/add', methods=['GET', 'POST'])
+def criar_agendamento():
+    
+    # Extrai os dados do formulário.
+    data = request.form["data"]
+    hora = request.form["hora"]
+    servico = request.form["servico"]
+    funcionario = request.form["funcionario"]
+    
 
 
     # Faz o processamento.
-    ja_existia, serie = criar_serie(numero, turma)
+    ja_existia, agendamento = criar_agendamento(data, hora, servico, funcionario)
 
     # Monta a resposta.
-    mensagem = f"A série {numero}{turma} já existia com o id {serie['id_serie']}." if ja_existia else f"A série {numero}{turma} foi criada com id {serie['id_serie']}."
-    return render_template("menu.html", logado = logado, mensagem = mensagem)
+    mensagem = f"o agendamento {data}{hora}{funcionario} já existia com o id {agendamento['id_agendamento']}." if ja_existia else f"O agendamento {data}{hora}{funcionario} foi criada com id {agendamento['id_agendameto']}."
+    return render_template("agendamento.html", logado = logado, mensagem = mensagem, funcionarios = funcionarios)
+
+
+@app.route('/historico')
+def historico():
+    return render_template('historico.html')
 
 
 
+###############################################
+#### Coisas internas da controller da API. ####
+###############################################
+
+def extensao_arquivo(filename):
+    if '.' not in filename: return ''
+    return filename.rsplit('.', 1)[1].lower()
+
+def salvar_arquivo_upload():
+    import uuid
+    if "foto" in request.files:
+        foto = request.files["foto"]
+        e = extensao_arquivo(foto.filename)
+        if e in ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp']:
+            u = uuid.uuid1()
+            n = f"{u}.{e}"
+            foto.save(os.path.join("alunos_fotos", n))
+            return n
+    return ""
+
+def deletar_foto(id_foto):
+    if id_foto == '': return
+    p = os.path.join("alunos_fotos", id_foto)
+    if os.path.exists(p):
+        os.remove(p)
+
+def autenticar_login():
+    login = request.cookies.get("login", "")
+    senha = request.cookies.get("senha", "")
+    return db_fazer_login(login, senha)
+
+
+##########################################
+#### Definições de regras de negócio. ####
+##########################################
+
+def criar_cliente(nome, email, data_nascimento, senha):
+    serie_ja_existe = db_verificar_cliente(nome, email, data_nascimento, senha)
+    if serie_ja_existe is not None: return True, serie_ja_existe
+    serie_nova = db_criar_cliente(nome, email, data_nascimento, senha)
+    return False, serie_nova
+
+
+def criar_agendamento(data, hora, id_cliente, servico, funcionario):
+    serie_ja_existe = db_verificar_agendamento(data, hora, id_cliente, servico, funcionario)
+    if serie_ja_existe is not None: return True, serie_ja_existe
+    novo_agendamento = db_criar_agendamento(data, hora, id_cliente, servico, funcionario)
+    return False, novo_agendamento
+
+
+###############################################
+#### Funções auxiliares de banco de dados. ####
+###############################################
+
+# Converte uma linha em um dicionário.
+def row_to_dict(description, row):
+    if row is None: return None
+    d = {}
+    for i in range(0, len(row)):
+        d[description[i][0]] = row[i]
+    return d
+
+# Converte uma lista de linhas em um lista de dicionários.
+def rows_to_dict(description, rows):
+    result = []
+    for row in rows:
+        result.append(row_to_dict(description, row))
+    return result
 
 #### Definições básicas do banco. ####
 
@@ -175,7 +262,12 @@ CREATE TABLE IF NOT EXISTS agendamento (
     FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
     FOREIGN KEY (id_servico) REFERENCES servico(id_servico),
     FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_funcionario)
+
 );
+
+
+    REPLACE INTO funcionario (id_funcao,nome,cpf,email,endereco,telefone,status,senha) VALUES ('1','Tony Stark', '31737797895', 'spveiok@hotmail.com','rua das camelis', '235645', 'ativo', '123456');
+
 
 """
 
@@ -183,11 +275,45 @@ CREATE TABLE IF NOT EXISTS agendamento (
 def conectar():
     return sqlite3.connect('agenda.db')
 
+
 def db_inicializar():
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.executescript(sql_create)
         con.commit()
 
+
+def db_verificar_cliente(nome, email, data_nascimento, senha):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_cliente, nome, email, data_nascimento, senha FROM cliente WHERE nome = ? AND email = ? AND senha = ?", [nome, email, senha])
+        return row_to_dict(cur.description, cur.fetchone())
+
+
+def db_verificar_agendamento(data, hora, id_cliente, servico, funcionario):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_agendamento, data, hora, id_cliente, servico, funcionario FROM agendamento WHERE data = ? AND hora = ? AND funcionario = ?", [data, hora, funcionario])
+        return row_to_dict(cur.description, cur.fetchone())
+
+
+def db_criar_cliente(nome, email, data_nascimento, senha):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("INSERT INTO cliente (nome, email, data_nascimento, senha) VALUES (?, ?, ?, ?)", [nome, email, data_nascimento, senha])
+        id_cliente = cur.lastrowid
+        con.commit()
+        return {'id_cliente': id_cliente, 'nome': nome, 'email': email, 'data_nascimento': data_nascimento, 'senha':senha}
+
+
+def db_criar_agendamento(data, hora, servico, funcionario):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("INSERT INTO agendamento (data, hora, servico, funcionario) VALUES (?, ?, ?, ?, ?)", [data, hora, servico, funcionario])
+        id_cliente = cur.lastrowid
+        con.commit()
+        return {'id_agendamento':id_agendamento, 'data':data, 'hora':hora, 'id_cliente':id_cliente,'servico':servico, 'funcionario':funcionario}
+
+
+def db_fazer_login(email, senha):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT c.email, c.senha, c.nome FROM cliente c WHERE c.email = ? AND c.senha = ?", [email, senha])
+        return row_to_dict(cur.description, cur.fetchone())
 
 
 if __name__ == '__main__':

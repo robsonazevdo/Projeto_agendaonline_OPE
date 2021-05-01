@@ -14,9 +14,11 @@
 {% block content %}
 
 
+    <h2>Seja bem-vindo, {{logado['nome']}}!</h2>
+
 <div class="container ">
 
-    <form action="" class="form" method="POST">
+    <form action="add" class="form" method="POST">
 
         <div class="mb-3">
             <label for="id_data" class="form-label">Escolha a Data</label>
@@ -25,20 +27,21 @@
         </div>
         <div class="mb-3">
             <label for="id_hora" class="form-label">Escolha a hora</label>
-            <input type="time" class="form-control" id="id_hora" nome="hora">
+            <input type="time" class="form-control" id="id_hora" name="hora">
         </div>
+        
         <div class="mb-3">
             <label for="id_servico" class="form-label">Escolha o Serviço</label>
             <input type="text" class="form-control" id="id_servico" name="servico">
         </div>
-        <div name="funcionarios" method="GET" action="" class="mb-3">
+        <div  class="mb-3">
             <label for="id_funcionario" class="form-label">Escolha o Profissional</label>
-            <input list="id_funcionario" class="form-control" id="id_funcionario" name="funcionario">
-            <datalist id="id_funcionario">
+            <select name="funcionario" id="serie">
+                <option value="escolha">Escolha...</option>
                 {% for funcionario in funcionarios %}
-                <option value="{{funcionario}}" SELECTED>{{funcionarios}}</option>
+                    <option value="{{funcionario['funcionario']}}" {% if aluno['id_serie'] == funcionario['funcionario'] %}selected="selected"{% endif %}>{{funcionario['nome']}} </option>
                 {% endfor %}
-                </datalist>
+            </select>
         </div>
 
         <button type=" submit " class="btn1 ">Enviar</button>
