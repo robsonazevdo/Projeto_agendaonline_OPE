@@ -9,6 +9,8 @@ app = Flask(__name__)
 
 
 
+
+
 @app.route('/')
 def inicio():
     return render_template('index.html')
@@ -95,15 +97,15 @@ def criar_cliente():
     nome = request.form["nome"]
     email = request.form["email"]
     data_nascimento = request.form["data_nascimento"]
-    senha = request.form["senha"]
+    senha = request.form["confirmar-senha"]
     
-
     # Faz o processamento.
     ja_existia, cliente = criar_cliente(nome, email, data_nascimento, senha)
-
+    
+    print(ja_existia)
     # Monta a resposta.
-    mensagem = f"o cliente {nome}{email} já existia com o id {cliente['id_cliente']}." if ja_existia else f"A série {nome}{email} foi criada com id {cliente['id_cliente']}."
-    return render_template("login.html", logado = logado, mensagem = mensagem)
+    mensagem = f"O email já existe." if ja_existia else f"O login foi criada com sucesso."
+    return render_template("login.html", mensagem = mensagem)
 
 
 
@@ -169,8 +171,8 @@ def autenticar_login():
 ##########################################
 
 def criar_cliente(nome, email, data_nascimento, senha):
-    serie_ja_existe = db_verificar_cliente(nome, email, data_nascimento, senha)
-    if serie_ja_existe is not None: return True, serie_ja_existe
+    cliente_ja_existe = db_verificar_cliente(nome, email, data_nascimento, senha)
+    if cliente_ja_existe is not None: return True, cliente_ja_existe
     serie_nova = db_criar_cliente(nome, email, data_nascimento, senha)
     return False, serie_nova
 
