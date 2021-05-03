@@ -8,9 +8,7 @@
     border: none;
 }
 
-body {
-    background-image: linear-gradient(to down up, #fff, #808080);
-}
+
 
 input:focus {
     outline: none;
@@ -42,15 +40,24 @@ form {
     margin-bottom: 0;
 }
 
-label,
-input {
+
+option {
     display: block;
     width: 100%;
     text-align: left;
+    border-bottom: 2px solid #ffffff;
+    padding: 5px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    background-color: #323232;
+    color: #fff;
 }
 
 label {
     font-weight: bold;
+    color: #ffffff;
+    display: block;
+    width: 100%;
 }
 
 input {
@@ -60,6 +67,8 @@ input {
     margin-bottom: 20px;
     background-color: #323232;
     color: #fff;
+    display: block;
+    width: 100%;
 }
 
 input:focus {
