@@ -3,10 +3,7 @@
 <!---->
 
 {% block title %} Agendamento{% endblock title %} {% block head%} {{super()}}
-<link rel="stylesheet" type="text/css" href="/static/css/style-agendamento.css">
-{% block estilos %} {% endblock estilos %}
-
-{% endblock head%}
+<link rel="stylesheet" type="text/css" href="/static/css/style-agendamento.css"> {% block estilos %} {% endblock estilos %} {% endblock head%}
 
 <!---->
 
@@ -16,24 +13,22 @@
 
 {% block content %}
 
-        {% if mensagem %}
-            <p class="mensagem">{{mensagem}}</p>
-        {% endif %}
-        {% if erro %}
-            <p class="erro">{{erro}}</p>
-        {% endif %}
 
-    <h2>Seja bem-vindo, {{logado['nome']}}!</h2>
 
 <div class="container ">
 
+    {% if mensagem %}
+    <p class="mensagem">{{mensagem}}</p>
+    {% endif %} {% if erro %}
+    <p class="erro">{{erro}}</p>
+    {% endif %}
+
+    <h2>Seja bem-vindo, {{logado['nome']}}!</h2>
+
     <form action="/add" class="form" method="POST">
 
-        {% for c in cliente %}
-            {% if c['nome'] == logado['nome'] %}
-                <input type="hidden" name='id_cliente' value="{{c['id_cliente']}}">
-            {% endif %}
-        {% endfor %}
+        {% for c in cliente %} {% if c['nome'] == logado['nome'] %}
+        <input type="hidden" name='id_cliente' value="{{c['id_cliente']}}"> {% endif %} {% endfor %}
 
         <div class="mb-3">
             <label for="id_data" class="form-label">Escolha a Data</label>
@@ -44,10 +39,10 @@
             <label for="id_hora" class="form-label">Escolha a hora</label>
             <input type="time" class="form-control" id="id_hora" name="hora">
         </div>
-        
+
         <div class="mb-3">
             <label for="servico" class="form-label">Escolha o Serviço</label>
-            <input type="text" class="form-control"  name="servico">
+            <input type="text" class="form-control" name="servico">
         </div>
 
         <div class="mb-3">
@@ -60,18 +55,19 @@
             <input type="text" class="form-control" id="id_servicoe" name="id_funcionario">
         </div>
 
-        <div  class="mb-3">
-            
+        <div class="mb-3">
+
             <label for="id_funcionario" class="form-label">Escolha o Profissional</label>
+
             <select name="funcionario" id="id_funcionario2">
                 <option value="escolha">Escolha o Profissional</option>
                 {% for funcionario in funcionarios %}
-                    <option value="{{funcionario['nome']}}" {% if funcionario['id_funcionario'] == funcionario['funcionario'] %}selected="selected"{% endif %}>{{funcionario['nome']}}</option>
+                    <option value="{{funcionario['nome']}}" selected="selected">{{funcionario['nome']}}</option>
                 {% endfor %}
             </select>
 
-            
- 
+
+
         </div>
 
         <button type="submit" class="btn-agendamento btn-primary btn1">Enviar</button>

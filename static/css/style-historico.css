@@ -9,7 +9,7 @@
 }
 
 .conteudo {
-    width: 600px;
+    width: 80%;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: auto;
@@ -20,18 +20,16 @@
     background-color: #545252;
 }
 
-
-
-.form-label,
 input {
-   
-    width: 80%;
+    width: 50%;
     text-align: left;
 }
 
 .form-label {
     font-weight: bold;
     color: #ffffff;
+    width: 80%;
+    text-align: center;
 }
 
 .input-fun {
@@ -50,4 +48,26 @@ input:focus {
 .form-check-label {
     font-weight: bold;
     color: #ffffff;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: auto;
+    border: 2px double;
+    border-color: #e0e0e0;
+}
+
+thead {
+    background-color: #b0b0b0
+}
+
+th,
+td {
+    text-align: center;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0
 }

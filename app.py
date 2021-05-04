@@ -83,6 +83,8 @@ def login():
     resposta.set_cookie("senha", senha, samesite = "Strict")
     return resposta
 
+
+
 @app.route("/logout", methods=['GET', 'POST'])
 def logout():
     # Monta a resposta.
@@ -144,6 +146,8 @@ def criar_agendamento_api():
 @app.route('/historico')
 def historico():
     return render_template('historico.html')
+
+
 
 
 
