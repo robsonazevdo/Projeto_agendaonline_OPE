@@ -12,39 +12,45 @@
 
 <!---->
 
-{% block content %}
+{% block content %} {% if mensagem %}
+<p class="mensagem">{{mensagem}}</p>
+{% endif %} {% if erro %}
+<p class="erro">{{erro}}</p>
+{% endif %}
+
 <!--inicio cadastro-->
 <div class="conteudo">
     <div class="form">
 
-        <form action="" method="POST" class="text-center form-contato" class="was-validated">
+        <form action="add_servico" method="POST" class="text-center form-contato" class="was-validated">
 
             <h1 class=" ">Cadastro serviço</h1>
 
             <label for="id_nomeservico" class="form-label">Serviço</label>
-            <input type="text" id="id_nomeservico" placeholder=Serviço* " autocomplete="off " required autofocus class="input-fun " name="nome ">
+            <input type="text" id="id_nomeservico" placeholder="Serviço* " autocomplete="off" required autofocus class="input-fun" name="nome">
 
-            
 
-            <label for="id_preco " class="form-label ">Preço</label>
-            <input type="text " id="id_preco " placeholder="Preço* " autocomplete="off " required autofocus class="input-fun " name="preco ">
+            <label for="id_preco" class="form-label">Preço</label>
+            <input type="text " id="id_preco" placeholder="Preço* " autocomplete="off" required autofocus class="input-fun" name="preco">
 
             <label for="id_duracao " class="form-label ">Duração</label>
-            <input type="text " id="id_duracao " placeholder="Durção do serviço* "autocomplete="off " required autofocus class="input-fun " name="CPF ">
+            <input type="text" id="id_duracao" placeholder="Durção do serviço* " autocomplete="off" required autofocus class="input-fun" name="duracao">
 
 
             <div class="form-check ">
-                <input type="radio " id="id_status " name="status " value="Ativo ">
-                <label class="form-check-label " for="exampleRadios1 ">
+                <input type="radio" id="id_status" name="status" value="Ativo">
+                <label class="form-check-label" for="exampleRadios1">
                   Ativo
                 </label>
             </div>
+
             <div class="form-check ">
-                <input type="radio " id="id_status " name="status " value="Inativo ">
-                <label class="form-check-label " for="exampleRadios1 ">
+                <input type="radio" id="id_status" name="status" value="Inativo">
+                <label class="form-check-label" for="exampleRadios1">
                   Inativo
                 </label>
             </div>
+
 
 
 

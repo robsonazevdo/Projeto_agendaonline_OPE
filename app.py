@@ -45,6 +45,8 @@ def cadastro_funcao():
     return render_template('funcao.html')    
 
 
+
+
 @app.route('/agendamento')
 def agendamento():
     # Autenticação.
@@ -54,11 +56,15 @@ def agendamento():
 
         # Faz o processamento.
     lista = db_listar_funcionarios()
-    lista2 = db_listar_cliente() 
+    lista2 = db_listar_cliente()
+    lista3 = db_listar_servico() 
+
 
         # Monta a resposta.
-    return render_template("agendamento.html", logado = logado, mensagem = "", funcionarios = lista, cliente = lista2)
+    return render_template("agendamento.html", logado = logado, mensagem = "", funcionarios = lista, cliente = lista2, servicos = lista3)
     
+
+
 
 
 @app.route("/login", methods = ["POST"])
@@ -116,7 +122,7 @@ def criar_cliente():
 
 
 
-@app.route('/add', methods=['GET', 'POST'])
+@app.route('/add_agendamento', methods=['GET', 'POST'])
 def criar_agendamento_api():
     logado = autenticar_login()
     if logado is None:
@@ -124,28 +130,46 @@ def criar_agendamento_api():
 
     # Extrai os dados do formulário.
     id_cliente = request.form["id_cliente"]
-    data = request.form["data"]
+    data1 = request.form["data"]
     hora = request.form["hora"]
-    servico = request.form["servico"]
     id_servico = request.form["id_servico"]
     id_funcionario = request.form["id_funcionario"]
-    funcionario = request.form["funcionario"]
     
+
 
 
     # Faz o processamento.
     lista = db_listar_funcionarios()
-    ja_existia, agendamento = criar_agendamento(id_cliente, data, hora, servico, id_servico, id_funcionario, funcionario)
+    ja_existia, agendamento = criar_agendamento(data1, hora, id_cliente, id_servico, id_funcionario)
 
 
     # Monta a resposta.
-    mensagem = f"o agendamento {data}{hora}{funcionario} já existia com o id {agendamento['servico']}." if ja_existia else f"O agendamento {data}{hora}{funcionario} foi criada com id {agendamento['servico']}."
+    mensagem = f"o agendamento {data1}{hora} já existia com o id {agendamento['id_servico']}." if ja_existia else f"O agendamento {data1}{hora} foi criada."
     return render_template("agendamento.html", logado = logado, funcionarios = lista, mensagem = mensagem)
 
 
-@app.route('/historico')
-def historico():
-    return render_template('historico.html')
+
+@app.route('/add_servico', methods=['GET', 'POST'])
+def criar_servico_api():
+
+    # Extrai os dados do formulário.
+    nome_servico = request.form["nome"]
+    preco_servico = request.form["preco"]
+    duracao_servico = request.form["duracao"]
+    status = request.form["status"]
+    
+    
+    # Faz o processamento.
+    lista = db_listar_funcionarios()
+    ja_existia, servico = criar_servico(nome_servico, preco_servico, duracao_servico, status)
+
+
+    # Monta a resposta.
+    mensagem = f"o serviço {nome_servico} já existe." if ja_existia else f"O serviço {nome_servico} foi criada com sucesso."
+    return render_template("servico.html", funcionarios = lista, mensagem = mensagem)
+
+
+
 
 
 
@@ -190,15 +214,23 @@ def autenticar_login():
 def criar_cliente(nome, email, data_nascimento, senha):
     cliente_ja_existe = db_verificar_cliente(nome, email, data_nascimento, senha)
     if cliente_ja_existe is not None: return True, cliente_ja_existe
-    serie_nova = db_criar_cliente(nome, email, data_nascimento, senha)
-    return False, serie_nova
+    novo_cliente = db_criar_cliente(nome, email, data_nascimento, senha)
+    return False, novo_cliente
 
 
-def criar_agendamento(id_cliente, data, id_servico, id_funcionario, hora, servico, funcionario):
-    serie_ja_existe = db_verificar_agendamento(id_cliente, data, id_servico, id_funcionario, hora, servico, funcionario)
+def criar_agendamento(data1,hora, id_cliente, id_servico, id_funcionario):
+    serie_ja_existe = db_verificar_agendamento(data1,hora, id_cliente, id_servico, id_funcionario)
     if serie_ja_existe is not None: return True, serie_ja_existe
-    novo_agendamento = db_criar_agendamento(id_cliente, data, id_servico, id_funcionario, hora, servico, funcionario)
+    novo_agendamento = db_criar_agendamento(data1,hora, id_cliente, id_servico, id_funcionario)
     return False, novo_agendamento
+
+
+
+def criar_servico(nome_servico, preco_servico, duracao_servico, status):
+    servico_ja_existe = db_verificar_servico(nome_servico, preco_servico, duracao_servico, status)
+    if servico_ja_existe is not None: return True, servico_ja_existe
+    novo_servico = db_criar_servico(nome_servico, preco_servico, duracao_servico, status)
+    return False, novo_servico
 
 
 ###############################################
@@ -273,10 +305,8 @@ CREATE TABLE IF NOT EXISTS servico_funcionario (
 
 CREATE TABLE IF NOT EXISTS agendamento (
     id_agendamento INTEGER PRIMARY KEY AUTOINCREMENT,
-    data TEXT NOT NULL,
+    data1 TEXT NOT NULL,
     hora TEXT NOT NULL,
-    servico VARCHAR(50) NOT NULL,
-    funcionario VARCHAR(50) NOT NULL,
     id_cliente INTEGER NOT NULL,
     id_servico INTEGER NOT NULL,
     id_funcionario INTEGER NOT NULL,
@@ -287,8 +317,8 @@ CREATE TABLE IF NOT EXISTS agendamento (
 );
 
     
-    REPLACE INTO funcionario (id_funcao,nome,cpf,email,endereco,telefone,status,senha) VALUES ('1','Tony Stark', '31737797895', 'spveiok@hotmail.com','rua das camelis', '235645', 'ativo', '123456');
-    REPLACE INTO funcionario (id_funcao,nome,cpf,email,endereco,telefone,status,senha) VALUES ('2','steve rogers', '00000000000', 'capitao@america.com','rua das camelis', '123456', 'ativo', '123456');
+    REPLACE INTO funcionario (id_funcionario,id_funcao,nome,cpf,email,endereco,telefone,status,senha) VALUES ('5','1','Tony Stark', '31737797895', 'spveiok@hotmail.com','rua das camelis', '235645', 'ativo', '123456');
+    REPLACE INTO funcionario (id_funcionario,id_funcao,nome,cpf,email,endereco,telefone,status,senha) VALUES ('10','2','steve rogers', '00000000000', 'capitao@america.com','rua das camelis', '123456', 'ativo', '123456');
     
 
     
@@ -312,10 +342,19 @@ def db_verificar_cliente(nome, email, data_nascimento, senha):
         return row_to_dict(cur.description, cur.fetchone())
 
 
-def db_verificar_agendamento(id_cliente, data, id_servico, id_funcionario, hora, servico, funcionario):
+def db_verificar_agendamento(data1, hora, id_cliente, id_servico, id_funcionario):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT id_agendamento, id_cliente, data, id_servico, id_funcionario, hora, servico, funcionario FROM agendamento WHERE data = ? AND hora = ? AND funcionario = ?", [data, hora, funcionario])
+        cur.execute("SELECT id_agendamento, data1, hora, id_cliente, id_servico, id_funcionario FROM agendamento WHERE data1 = ? AND hora = ? AND id_funcionario = ?", [data1, hora, id_funcionario])
         return row_to_dict(cur.description, cur.fetchone())
+
+
+def db_verificar_servico(nome_servico, preco_servico, duracao_servico, status):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_servico, nome_servico, preco_servico, duracao_servico, status FROM servico WHERE nome_servico = ? AND preco_servico = ? AND duracao_servico = ? AND status = ?", [nome_servico, preco_servico, duracao_servico, status])
+        return row_to_dict(cur.description, cur.fetchone())
+
+
+
 
 
 def db_criar_cliente(nome, email, data_nascimento, senha):
@@ -326,12 +365,23 @@ def db_criar_cliente(nome, email, data_nascimento, senha):
         return {'id_cliente': id_cliente, 'nome': nome, 'email': email, 'data_nascimento': data_nascimento, 'senha':senha}
 
 
-def db_criar_agendamento(id_cliente, data, hora, id_servico, servico, id_funcionario, funcionario):
+def db_criar_agendamento(data1,hora, id_cliente, id_servico, id_funcionario):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("INSERT INTO agendamento (id_cliente, data, hora, id_servico, id_funcionario, servico, funcionario) VALUES (?, ?, ?, ?, ?, ?, ?)", [id_cliente, data, hora, servico, id_funcionario, id_servico, funcionario])
+        cur.execute("INSERT INTO agendamento (data1,hora, id_cliente, id_servico, id_funcionario) VALUES (?, ?, ?, ?, ?)", [data1,hora, id_cliente, id_servico, id_funcionario])
         id_agendamento = cur.lastrowid
         con.commit()
-        return {'id_agendamento':id_agendamento, 'data':data, 'hora':hora, 'id_cliente':id_cliente, 'id_servico':id_servico, 'id_funcionario':id_funcionario, 'servico':servico, 'funcionario':funcionario}
+        return {'id_agendamento':id_agendamento, 'data1':data1, 'hora':hora, 'id_cliente':id_cliente, 'id_servico':id_servico, 'id_funcionario':id_funcionario}
+
+
+def db_criar_servico(nome_servico, preco_servico, duracao_servico, status):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("INSERT INTO servico (nome_servico, preco_servico, duracao_servico, status) VALUES (?, ?, ?, ?)", [nome_servico, preco_servico, duracao_servico, status])
+        id_servico = cur.lastrowid
+        con.commit()
+        return {'id_servico':id_servico, 'nome_servico':nome_servico, 'preco_servico':preco_servico, 'duracao_servico':duracao_servico, 'status':status}
+
+
+
 
 
 def db_fazer_login(email, senha):
@@ -350,6 +400,13 @@ def db_listar_cliente():
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("SELECT id_cliente, nome, email, data_nascimento FROM cliente")
         return rows_to_dict(cur.description, cur.fetchall())
+
+
+def db_listar_servico():
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_servico, nome_servico, preco_servico, duracao_servico, status FROM servico")
+        return rows_to_dict(cur.description, cur.fetchall())
+
 
 
 
