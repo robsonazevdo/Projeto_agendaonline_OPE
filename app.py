@@ -37,7 +37,9 @@ def cadastro_funcionario():
 
 @app.route('/servico')
 def cadastro_servico():
-    return render_template('servico.html')
+    
+    lista = db_listar_funcionarios()
+    return render_template('servico.html', funcionarios = lista)
     
 
 @app.route('/funcao')
@@ -115,7 +117,7 @@ def criar_cliente():
     # Faz o processamento.
     ja_existia, cliente = criar_cliente(nome, email, data_nascimento, senha)
     
-    print(ja_existia)
+   
     # Monta a resposta.
     mensagem = f"O email já existe." if ja_existia else f"O login foi criada com sucesso."
     return render_template("login.html", mensagem = mensagem)
@@ -157,16 +159,20 @@ def criar_servico_api():
     preco_servico = request.form["preco"]
     duracao_servico = request.form["duracao"]
     status = request.form["status"]
-    
+    id_funcionario = request.form["id_funcionario"]
+
+    id = db_trazer_ultimo_id_servico()
+    i = id["id_servico"] 
     
     # Faz o processamento.
-    lista = db_listar_funcionarios()
-    ja_existia, servico = criar_servico(nome_servico, preco_servico, duracao_servico, status)
+    
 
+    ja_existia, servico = criar_servico(nome_servico, preco_servico, duracao_servico, status), db_criar_servico_funcionario(i, id_funcionario)
+    
 
     # Monta a resposta.
     mensagem = f"o serviço {nome_servico} já existe." if ja_existia else f"O serviço {nome_servico} foi criada com sucesso."
-    return render_template("servico.html", funcionarios = lista, mensagem = mensagem)
+    return render_template("servico.html", mensagem = mensagem)
 
 
 
@@ -225,12 +231,18 @@ def criar_agendamento(data1,hora, id_cliente, id_servico, id_funcionario):
     return False, novo_agendamento
 
 
-
 def criar_servico(nome_servico, preco_servico, duracao_servico, status):
     servico_ja_existe = db_verificar_servico(nome_servico, preco_servico, duracao_servico, status)
     if servico_ja_existe is not None: return True, servico_ja_existe
     novo_servico = db_criar_servico(nome_servico, preco_servico, duracao_servico, status)
     return False, novo_servico
+
+
+def criar_servico_funcionario(i, id_funcionario):
+    servico_ja_existe = db_verificar_servico_funcionario(i, id_funcionario)
+    if servico_ja_existe is not None: return True, servico_ja_existe
+    novo_servico = db_criar_servico_funcionario(i, id_funcionario)
+    return False, novo_servico    
 
 
 ###############################################
@@ -267,7 +279,6 @@ CREATE TABLE IF NOT EXISTS cliente (
 CREATE TABLE IF NOT EXISTS funcao (
     id_funcao INTEGER PRIMARY KEY AUTOINCREMENT,
     nome_funcao VARCHAR(50) NOT NULL
-
 );
 
 CREATE TABLE IF NOT EXISTS servico (
@@ -276,7 +287,6 @@ CREATE TABLE IF NOT EXISTS servico (
     preco_servico REAL NOT NULL,
     duracao_servico TEXT NOT NULL,
     status VARCHAR(7) NOT NULL
-
 );
 
 CREATE TABLE IF NOT EXISTS funcionario (
@@ -291,7 +301,6 @@ CREATE TABLE IF NOT EXISTS funcionario (
     senha VARCHAR(8) NOT NULL,
     UNIQUE(email),
     FOREIGN KEY (id_funcao) REFERENCES funcao(id_funcao)
-
 );
 
 CREATE TABLE IF NOT EXISTS servico_funcionario (
@@ -320,7 +329,6 @@ CREATE TABLE IF NOT EXISTS agendamento (
     REPLACE INTO funcionario (id_funcionario,id_funcao,nome,cpf,email,endereco,telefone,status,senha) VALUES ('5','1','Tony Stark', '31737797895', 'spveiok@hotmail.com','rua das camelis', '235645', 'ativo', '123456');
     REPLACE INTO funcionario (id_funcionario,id_funcao,nome,cpf,email,endereco,telefone,status,senha) VALUES ('10','2','steve rogers', '00000000000', 'capitao@america.com','rua das camelis', '123456', 'ativo', '123456');
     
-
     
 """
 
@@ -348,12 +356,16 @@ def db_verificar_agendamento(data1, hora, id_cliente, id_servico, id_funcionario
         return row_to_dict(cur.description, cur.fetchone())
 
 
+def db_verificar_servico_funcionario(i, id_funcionario):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_servico_funcionario, id_servico, id_funcionario FROM servico_funcionario WHERE id_servico_funcionario = id_servico_funcionario AND id_servico = ? AND id_funcionario = ? ", [i, id_funcionario])
+        return row_to_dict(cur.description, cur.fetchone())
+
+
 def db_verificar_servico(nome_servico, preco_servico, duracao_servico, status):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("SELECT id_servico, nome_servico, preco_servico, duracao_servico, status FROM servico WHERE nome_servico = ? AND preco_servico = ? AND duracao_servico = ? AND status = ?", [nome_servico, preco_servico, duracao_servico, status])
         return row_to_dict(cur.description, cur.fetchone())
-
-
 
 
 
@@ -381,6 +393,12 @@ def db_criar_servico(nome_servico, preco_servico, duracao_servico, status):
         return {'id_servico':id_servico, 'nome_servico':nome_servico, 'preco_servico':preco_servico, 'duracao_servico':duracao_servico, 'status':status}
 
 
+def db_criar_servico_funcionario(i, id_funcionario):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("INSERT INTO servico_funcionario (id_servico, id_funcionario) VALUES (?, ?)", [i, id_funcionario])
+        id_servico_funcionario = cur.lastrowid
+        con.commit()
+        return {'id_servico_funcionario':id_servico_funcionario, 'id_servico':i, 'id_funcinario':id_funcionario}
 
 
 
@@ -407,6 +425,11 @@ def db_listar_servico():
         cur.execute("SELECT id_servico, nome_servico, preco_servico, duracao_servico, status FROM servico")
         return rows_to_dict(cur.description, cur.fetchall())
 
+
+def db_trazer_ultimo_id_servico():
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT * FROM servico ORDER BY id_servico DESC LIMIT 1")
+        return row_to_dict(cur.description, cur.fetchone())
 
 
 

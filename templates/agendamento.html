@@ -57,7 +57,7 @@
 
             <label for="id_funcionario" class="form-label">Escolha o Profissional</label>
 
-            <select name="id_funcionario" id=" ">
+            <select name="id_funcionario" id="id_funcionario">
                 <option value="escolha">Escolha o Profissional</option>
                 {% for funcionario in funcionarios %}
                     <option value="{{funcionario['id_funcionario']}}"{% if funcionario['id_funcionario'] == funcionario['funcionario'] %}selected="selected"{% endif %}>{{funcionario['nome']}}</option>

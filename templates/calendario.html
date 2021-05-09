@@ -2,11 +2,9 @@
 <!---->
 
 
-{% block title %} Histórico {% endblock title %}
-{% block head%} {{super()}}
+{% block title %} Histórico {% endblock title %} {% block head%} {{super()}}
 
-<link rel="stylesheet" type="text/css" href="/static/css/style-calendar.css">
-{% endblock head%}
+<link rel="stylesheet" type="text/css" href="/static/css/style-calendar.css"> {% endblock head%}
 
 <!-- estilos-->
 
@@ -17,16 +15,16 @@
 <!--inicio cadastro-->
 <div class="form-table">
 
-    <form action="" method="POST" class="form-agenda">
+    <form action="/calendario/{{ cliente['id_cliente'] }}" method=" GET" class="form-agenda">
 
 
-       
-       <div class="calendar">
+
+        <div class="calendar">
             <div class="calendar-info">
                 <div class="calendar-prev" id="prev-month">&#9664;</div>
                 <div class="calendar-month" id="month"></div>
                 <div class="calendar-year" id="year"> </div>
-                <div class="calendar-next" id="next-month">&#9654;</div>
+                <div class="calendar-nex " id="next-month">&#9654;</div>
             </div>
         </div>
 
@@ -49,12 +47,14 @@
 
 
         <div class="calender__period">
-            
+
         </div>
 
 
+
     </form>
-</div>-->
+
+</div>
 
 
 <!--fim cadastro-->
