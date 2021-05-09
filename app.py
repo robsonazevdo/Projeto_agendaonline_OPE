@@ -162,13 +162,14 @@ def criar_servico_api():
     id_funcionario = request.form["id_funcionario"]
 
     id = db_trazer_ultimo_id_servico()
-    i = id["id_servico"] 
+    i = id["id_servico"] + 1
     
     # Faz o processamento.
     
-
-    ja_existia, servico = criar_servico(nome_servico, preco_servico, duracao_servico, status), db_criar_servico_funcionario(i, id_funcionario)
+    ja_existia, servico = criar_servico(nome_servico, preco_servico, duracao_servico, status)
     
+    if servico['id_servico'] == i:
+        db_criar_servico_funcionario(i, id_funcionario)
 
     # Monta a resposta.
     mensagem = f"o serviço {nome_servico} já existe." if ja_existia else f"O serviço {nome_servico} foi criada com sucesso."
@@ -358,7 +359,7 @@ def db_verificar_agendamento(data1, hora, id_cliente, id_servico, id_funcionario
 
 def db_verificar_servico_funcionario(i, id_funcionario):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT id_servico_funcionario, id_servico, id_funcionario FROM servico_funcionario WHERE id_servico_funcionario = id_servico_funcionario AND id_servico = ? AND id_funcionario = ? ", [i, id_funcionario])
+        cur.execute("SELECT sf.id_servico, sf.id_funcionario FROM servico_funcionario as sf INNER JOIN servico AS s ON s.id_servico = sf.id_servico WHERE s.id_servico = ? AND id_funcionario = ? ", [i - 1, id_funcionario])
         return row_to_dict(cur.description, cur.fetchone())
 
 
