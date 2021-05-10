@@ -41,9 +41,9 @@
             <div class="mb-3">
                 <label for="id_funcionario" class="form-label">Escolha o Profissional</label>
                 <select name="id_funcionario" id="id_funcionario">
-                    <option value="escolha">Escolha o Profissional</option>
+                    <option required value="escolha">Escolha o Profissional</option>
                     {% for f in funcionarios %}
-                        <option value="{{f['id_funcionario']}}"{% if f['id_funcionario'] == f['f'] %}selected="selected"{% endif %}>{{f['nome']}}</option>
+                        <option required value="{{f['id_funcionario']}}"{% if f['id_funcionario'] == f['f'] %}selected="selected"{% endif %}>{{f['nome']}}</option>
                     {% endfor %}
                 </select>
             </div>

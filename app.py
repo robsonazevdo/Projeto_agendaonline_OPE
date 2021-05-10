@@ -20,6 +20,8 @@ def inicio():
 def agenda():
     return render_template('calendario.html')
 
+
+
 @app.route('/cadastro')
 def cadastro():
     return render_template('cadastro_cliente.html')
@@ -32,7 +34,10 @@ def contato():
 
 @app.route('/cadastro_funcionario')
 def cadastro_funcionario():
-    return render_template('cadastro_funcionario.html')
+    lista = db_listar_cargo()
+    lista2 = db_listar_servico()
+
+    return render_template('cadastro_funcionario.html', cargos = lista, servicos = lista2)
 
 
 @app.route('/servico')
@@ -41,12 +46,7 @@ def cadastro_servico():
     lista = db_listar_funcionarios()
     return render_template('servico.html', funcionarios = lista)
     
-
-@app.route('/funcao')
-def cadastro_funcao():
-    return render_template('funcao.html')    
-
-
+ 
 
 
 @app.route('/agendamento')
@@ -138,8 +138,6 @@ def criar_agendamento_api():
     id_funcionario = request.form["id_funcionario"]
     
 
-
-
     # Faz o processamento.
     lista = db_listar_funcionarios()
     ja_existia, agendamento = criar_agendamento(data1, hora, id_cliente, id_servico, id_funcionario)
@@ -162,7 +160,10 @@ def criar_servico_api():
     id_funcionario = request.form["id_funcionario"]
 
     id = db_trazer_ultimo_id_servico()
-    i = id["id_servico"] + 1
+    if id is not None:
+        i = id["id_servico"] + 1
+    else:
+        i = 1
     
     # Faz o processamento.
     
@@ -177,6 +178,44 @@ def criar_servico_api():
 
 
 
+@app.route('/add_funcionario', methods=['GET', 'POST'])
+def criar_funcionario_api():
+
+    # Extrai os dados do formulário.
+    nome = request.form["nome"]
+    email = request.form["email"]
+    endereco = request.form["endereco"]
+    cpf = request.form["cpf"]
+    telefone = request.form["telefone"]
+    id_cargo = request.form["id_cargo"]
+    status = request.form["status"]
+    senha = request.form["senha"]
+
+
+
+    # Faz o processamento.
+    ja_existia, funcionario = criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status, senha)
+    
+
+    # Monta a resposta.
+    mensagem = f"O Funcionario {nome} e {email} já existe." if ja_existia else f"O Funcionario {nome} foi criada com sucesso."
+    return render_template("cadastro_funcionario.html.html", mensagem = mensagem)
+
+
+@app.route('/add_cargo', methods=['GET', 'POST'])
+def criar_cargo_api():
+
+    # Extrai os dados do formulário.
+    nome_cargo = request.form["nome"]
+    
+
+    # Faz o processamento.
+    ja_existia, cargo = criar_cargo(nome_cargo)
+    
+
+    # Monta a resposta.
+    mensagem = f"O Funcionario {nome_cargo} já existe." if ja_existia else f"O Funcionario {nome_cargo} foi criada com sucesso."
+    return render_template("cadastro_funcionario.html", mensagem = mensagem)
 
 
 
@@ -243,7 +282,21 @@ def criar_servico_funcionario(i, id_funcionario):
     servico_ja_existe = db_verificar_servico_funcionario(i, id_funcionario)
     if servico_ja_existe is not None: return True, servico_ja_existe
     novo_servico = db_criar_servico_funcionario(i, id_funcionario)
-    return False, novo_servico    
+    return False, novo_servico  
+
+
+def criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status, senha):
+    funcionario_ja_existe = db_verificar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status, senha)
+    if funcionario_ja_existe is not None: return True, funcionario_ja_existe
+    novo_funcionario = db_criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status, senha)
+    return False, novo_funcionario   
+
+
+def criar_cargo(nome_cargo):
+    cargo_ja_existe = db_verificar_cargo(nome_cargo)
+    if cargo_ja_existe is not None: return True, cargo_ja_existe
+    novo_cargo = db_criar_cargo(nome_cargo)
+    return False, novo_cargo
 
 
 ###############################################
@@ -268,6 +321,8 @@ def rows_to_dict(description, rows):
 #### Definições básicas do banco. ####
 
 sql_create = """ 
+
+
 CREATE TABLE IF NOT EXISTS cliente (
     id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
     nome VARCHAR(50) NOT NULL,
@@ -277,9 +332,9 @@ CREATE TABLE IF NOT EXISTS cliente (
     UNIQUE(email)
 );
 
-CREATE TABLE IF NOT EXISTS funcao (
-    id_funcao INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome_funcao VARCHAR(50) NOT NULL
+CREATE TABLE IF NOT EXISTS cargo (
+    id_cargo INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome_cargo VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS servico (
@@ -292,7 +347,7 @@ CREATE TABLE IF NOT EXISTS servico (
 
 CREATE TABLE IF NOT EXISTS funcionario (
     id_funcionario INTEGER PRIMARY KEY AUTOINCREMENT,
-    id_funcao INTEGER NOT NULL,
+    id_cargo INTEGER NOT NULL,
     nome VARCHAR(50) NOT NULL,
     cpf VARCHAR(14) NOT NULL,
     email VARCHAR(50) NOT NULL,
@@ -301,7 +356,7 @@ CREATE TABLE IF NOT EXISTS funcionario (
     status VARCHAR(7) NOT NULL,
     senha VARCHAR(8) NOT NULL,
     UNIQUE(email),
-    FOREIGN KEY (id_funcao) REFERENCES funcao(id_funcao)
+    FOREIGN KEY (id_cargo) REFERENCES cargo(id_cargo)
 );
 
 CREATE TABLE IF NOT EXISTS servico_funcionario (
@@ -326,10 +381,8 @@ CREATE TABLE IF NOT EXISTS agendamento (
 
 );
 
-    
-    REPLACE INTO funcionario (id_funcionario,id_funcao,nome,cpf,email,endereco,telefone,status,senha) VALUES ('5','1','Tony Stark', '31737797895', 'spveiok@hotmail.com','rua das camelis', '235645', 'ativo', '123456');
-    REPLACE INTO funcionario (id_funcionario,id_funcao,nome,cpf,email,endereco,telefone,status,senha) VALUES ('10','2','steve rogers', '00000000000', 'capitao@america.com','rua das camelis', '123456', 'ativo', '123456');
-    
+REPLACE INTO funcionario (id_cargo,nome,cpf,email,endereco,telefone,status,senha) VALUES ('1','Tony Stark', '31737797895', 'spveiok@hotmail.com','rua das camelis', '235645', 'ativo', '123456');
+
     
 """
 
@@ -369,6 +422,19 @@ def db_verificar_servico(nome_servico, preco_servico, duracao_servico, status):
         return row_to_dict(cur.description, cur.fetchone())
 
 
+def db_verificar_cargo(nome_cargo):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_cargo, nome_cargo FROM cargo WHERE nome_cargo = ?", [nome_cargo])
+        return row_to_dict(cur.description, cur.fetchone())
+
+
+def db_verificar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status, senha):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_funcionario, id_cargo, nome, cpf, email, endereco, telefone, status, senha FROM funcionario WHERE id_cargo = ? AND nome = ? AND cpf = ? email = ? AND endereco = ? AND telefone = ? status = ? AND senha = ?", [nome, email, endereco, cpf, telefone, id_cargo, status, senha])
+        return row_to_dict(cur.description, cur.fetchone())
+
+
+
 
 def db_criar_cliente(nome, email, data_nascimento, senha):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
@@ -402,6 +468,24 @@ def db_criar_servico_funcionario(i, id_funcionario):
         return {'id_servico_funcionario':id_servico_funcionario, 'id_servico':i, 'id_funcinario':id_funcionario}
 
 
+def db_criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status, senha):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("INSERT INTO funcionario (id_cargo, nome, cpf, email, endereco, telefone, status, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [id_cargo, nome, cpf, email, endereco, telefone, status, senha])
+        id_funcionario = cur.lastrowid
+        con.commit()
+        return {'id_funcionario':id_funcionario, 'id_cargo':id_cargo, 'nome':nome, 'cpf':cpf, 'email':email, 'endereco':endereco, 'telefone':telefone, 'status':status, 'senha':senha}
+
+
+def db_criar_cargo(nome_cargo):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("INSERT INTO cargo(nome_cargo) VALUES (?)", [nome_cargo])
+        id_cargo = cur.lastrowid
+        con.commit()
+        return {'id_cargo':id_cargo,'nome_cargo':nome_cargo}
+
+
+
+
 
 def db_fazer_login(email, senha):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
@@ -409,9 +493,15 @@ def db_fazer_login(email, senha):
         return row_to_dict(cur.description, cur.fetchone())
 
 
+def db_fazer_login_funcionario(email, senha):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT email, senha, nome FROM cargo WHERE email = ? AND senha = ?", [email, senha])
+        return row_to_dict(cur.description, cur.fetchone())
+
+
 def db_listar_funcionarios():
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT id_funcionario, id_funcao, nome, cpf, email, endereco FROM funcionario")
+        cur.execute("SELECT id_funcionario, id_cargo, nome, cpf, email, endereco FROM funcionario")
         return rows_to_dict(cur.description, cur.fetchall())
 
 
@@ -424,6 +514,12 @@ def db_listar_cliente():
 def db_listar_servico():
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("SELECT id_servico, nome_servico, preco_servico, duracao_servico, status FROM servico")
+        return rows_to_dict(cur.description, cur.fetchall())
+
+
+def db_listar_cargo():
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_cargo, nome_cargo FROM cargo")
         return rows_to_dict(cur.description, cur.fetchall())
 
 
