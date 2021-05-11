@@ -226,15 +226,19 @@ def criar_cargo_api():
 
 
 
-@app.route('/buscar_cliente/<nome>', methods=['GET', 'POST'])
+@app.route('/buscar_cliente/<string:nome>', methods=['GET']) 
 def buscar_cliente_api(nome):
 
-    a = str(nome)
-    
+
+
+
     # Faz o processamento.
-    cliente = db_historico_cliente(a)
-   
-    print(cliente)
+    h_cliente = db_listar_cliente()
+    print(h_cliente,str(nome))
+    if h_cliente['nome'] == nome:
+        cliente = db_historico_cliente(h_cliente['id_cliente'])
+
+    print(cliente, h_cliente)
  # Monta a resposta.
     if cliente is None:
         return render_template("historico.html", mensagem = f"Esse aluno não existe."), 404
@@ -550,9 +554,9 @@ def db_trazer_ultimo_id_servico():
         return row_to_dict(cur.description, cur.fetchone())
 
 
-def db_historico_cliente(a):
+def db_historico_cliente(id_cliente):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, f.nome AS nome_funcionario, s.preco_servico FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente inner join funcionario as f on a.id_funcionario = f.id_funcionario INNER join servico as s ON a.id_agendamento = s.id_servico where c.nome = ?",[a])
+        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, f.nome AS nome_funcionario, s.preco_servico FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente inner join funcionario as f on a.id_funcionario = f.id_funcionario INNER join servico as s ON a.id_agendamento = s.id_servico where c.id_cliente = ?",[id_cliente])
         return row_to_dict(cur.description, cur.fetchone())
 
 
