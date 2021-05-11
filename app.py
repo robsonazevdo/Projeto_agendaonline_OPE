@@ -32,6 +32,13 @@ def contato():
     return render_template('contato.html')
 
 
+@app.route('/historico')
+def historico():
+
+    return render_template('historico.html')
+
+
+
 @app.route('/cadastro_funcionario')
 def cadastro_funcionario():
     lista = db_listar_cargo()
@@ -199,7 +206,7 @@ def criar_funcionario_api():
 
     # Monta a resposta.
     mensagem = f"O Funcionario {nome} e {email} já existe." if ja_existia else f"O Funcionario {nome} foi criada com sucesso."
-    return render_template("cadastro_funcionario.html.html", mensagem = mensagem)
+    return render_template("cadastro_funcionario.html", mensagem = mensagem)
 
 
 @app.route('/add_cargo', methods=['GET', 'POST'])
@@ -218,6 +225,20 @@ def criar_cargo_api():
     return render_template("cadastro_funcionario.html", mensagem = mensagem)
 
 
+
+@app.route('/buscar_cliente/<nome>', methods=['GET', 'POST'])
+def buscar_cliente_api(nome):
+
+    a = str(nome)
+    
+    # Faz o processamento.
+    cliente = db_historico_cliente(a)
+   
+    print(cliente)
+ # Monta a resposta.
+    if cliente is None:
+        return render_template("historico.html", mensagem = f"Esse aluno não existe."), 404
+    return render_template("historico.html", cliente = cliente)
 
 
 
@@ -381,7 +402,7 @@ CREATE TABLE IF NOT EXISTS agendamento (
 
 );
 
-REPLACE INTO funcionario (id_cargo,nome,cpf,email,endereco,telefone,status,senha) VALUES ('1','Tony Stark', '31737797895', 'spveiok@hotmail.com','rua das camelis', '235645', 'ativo', '123456');
+
 
     
 """
@@ -430,7 +451,7 @@ def db_verificar_cargo(nome_cargo):
 
 def db_verificar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status, senha):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT id_funcionario, id_cargo, nome, cpf, email, endereco, telefone, status, senha FROM funcionario WHERE id_cargo = ? AND nome = ? AND cpf = ? email = ? AND endereco = ? AND telefone = ? status = ? AND senha = ?", [nome, email, endereco, cpf, telefone, id_cargo, status, senha])
+        cur.execute("SELECT id_funcionario, id_cargo, nome, cpf, email, endereco, telefone, status, senha FROM funcionario WHERE id_cargo = ? AND nome = ? AND cpf = ? AND email = ? AND endereco = ? AND telefone = ? AND status = ? AND senha = ?", [id_cargo, nome, cpf, email, endereco, telefone, status, senha])
         return row_to_dict(cur.description, cur.fetchone())
 
 
@@ -526,6 +547,12 @@ def db_listar_cargo():
 def db_trazer_ultimo_id_servico():
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("SELECT * FROM servico ORDER BY id_servico DESC LIMIT 1")
+        return row_to_dict(cur.description, cur.fetchone())
+
+
+def db_historico_cliente(a):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, f.nome AS nome_funcionario, s.preco_servico FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente inner join funcionario as f on a.id_funcionario = f.id_funcionario INNER join servico as s ON a.id_agendamento = s.id_servico where c.nome = ?",[a])
         return row_to_dict(cur.description, cur.fetchone())
 
 

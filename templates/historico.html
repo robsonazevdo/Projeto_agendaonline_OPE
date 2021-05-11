@@ -16,14 +16,14 @@
 <!--inicio cadastro-->
 <div class="conteudo">
 
-    <form action="" method="GET" class="text-center form-contato" class="was-validated">
+    <form action="/buscar_cliente/nome" method="GET" class="text-center form-contato" class="was-validated">
 
 
         <label for="id_nome" class="form-label">Buscar histórico de cliente</label>
         <input type="text" id="id_nome" placeholder="Buscar histórico de cliente*" autocomplete="off" required autofocus class="input-fun" name="nome">
 
 
-        <button type="submit" class="btn btn-form "><i class="fas fa-search"></i></button>
+        <button type="submit" class="btn btn-form"><i class="fas fa-search"></i></button>
 
     </form>
     <table class="table">
@@ -38,46 +38,16 @@
             </tr>
         </thead>
         <tbody>
+            {% for cliente in cliente %}
             <tr>
-                <td>Elton</td>
-                <td>05/05/2021</td>
-                <td>16:20</td>
-                <td>Depilação</td>
-                <td>João e Felipe</td>
-                <td>5$</td>
+                <td>{{cliente['nome_cliente']}}</td>
+                <td>{{cliente['data1']}}</td>
+                <td>{{cliente['hora']}}</td>
+                <td>{{cliente['nome_serviço']}}</td>
+                <td>{{cliente['nome']}}</td>
+                <td>R$ {{cliente['preco_servico']}}</td>
             </tr>
-            <tr>
-                <td>Elton</td>
-                <td>05/05/2021</td>
-                <td>16:20</td>
-                <td>Unhas</td>
-                <td>João e Felipe</td>
-                <td>5$</td>
-            </tr>
-            <tr>
-                <td>Elton</td>
-                <td>05/05/2021</td>
-                <td>16:20</td>
-                <td>Sarrada</td>
-                <td>João e Felipe</td>
-                <td>5$</td>
-            </tr>
-            <tr>
-                <td>Elton</td>
-                <td>05/05/2021</td>
-                <td>16:20</td>
-                <td>Limpeza de Pele</td>
-                <td>João e Felipe</td>
-                <td>5$</td>
-            </tr>
-            <tr>
-                <td>Elton</td>
-                <td>05/05/2021</td>
-                <td>16:20</td>
-                <td>Corte</td>
-                <td>João e Felipe</td>
-                <td>5$</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 
