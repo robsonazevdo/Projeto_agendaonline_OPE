@@ -1,0 +1,53 @@
+{%extends'_base.html'%}
+
+<!---->
+
+{% block title %} Agendamento{% endblock title %} {% block head%} {{super()}}
+<link rel="stylesheet" type="text/css" href="/static/css/style-historico.css"> {% block estilos %} {% endblock estilos %} {% endblock head%}
+
+<!---->
+
+<!---->
+
+{% block content %} {% if mensagem %}
+<p class="mensagem">{{mensagem}}</p>
+{% endif %} {% if erro %}
+<p class="erro">{{erro}}</p>
+{% endif %}
+
+<h2>Seja bem-vindo, {{logado['nome']}}!</h2>
+
+<div class="container ">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Data Agendamento</th>
+                <th>Horário Agendamento</th>
+                <th>Serviço</th>
+                <th>Profissional</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr>
+                <td>{{cliente['nome_cliente']}}</td>
+                <td>{{cliente['data1']}}</td>
+                <td>{{cliente['hora']}}</td>
+                <td>{{cliente['nome_servico']}}</td>
+                <td>{{cliente['nome_funcionario']}}</td>
+                <td>R$ {{cliente['preco_servico']}}</td>
+            </tr>
+           
+        </tbody>
+    </table>
+
+</div>
+
+
+
+{% endblock content %} 
+
+{% block scripts %} {% endblock scripts %}

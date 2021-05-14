@@ -21,7 +21,6 @@ def agenda():
     return render_template('calendario.html')
 
 
-
 @app.route('/cadastro')
 def cadastro():
     return render_template('cadastro_cliente.html')
@@ -34,8 +33,8 @@ def contato():
 
 @app.route('/historico')
 def historico():
-
-    return render_template('historico.html')
+    cliente = db_listar_cliente()
+    return render_template('historico.html', cliente = cliente)
 
 
 
@@ -54,8 +53,6 @@ def cadastro_servico():
     return render_template('servico.html', funcionarios = lista)
     
  
-
-
 @app.route('/agendamento')
 def agendamento():
     # Autenticação.
@@ -73,7 +70,22 @@ def agendamento():
     return render_template("agendamento.html", logado = logado, mensagem = "", funcionarios = lista, cliente = lista2, servicos = lista3)
     
 
+@app.route('/meus_agendamentos/<int:id_cliente>', methods = ["GET"])
+def meu_agendamento(id_cliente):
+    # Autenticação.
+    logado = autenticar_login()
+    if logado is None:
+        return render_template("/login.html", erro="")
 
+        # Faz o processamento.
+    
+    lista2 = db_meu_agendamento(id_cliente)
+     
+    print(db_meu_agendamento(id_cliente))
+
+        # Monta a resposta.
+    return render_template("meu_agendamento.html", logado = logado, mensagem = "", cliente = lista2)
+    
 
 
 @app.route("/login", methods = ["POST"])
@@ -229,24 +241,18 @@ def criar_cargo_api():
 @app.route('/buscar_cliente/<string:nome>', methods=['GET']) 
 def buscar_cliente_api(nome):
 
-
-
-
-    # Faz o processamento.
-    h_cliente = db_listar_cliente()
-    print(h_cliente,str(nome))
-    if h_cliente['nome'] == nome:
-        cliente = db_historico_cliente(h_cliente['id_cliente'])
-
-    print(cliente, h_cliente)
+# Faz o processamento.
+    nome_cliente = request.args.get('nome')
+    
+    cliente = db_historico_cliente(nome_cliente)
  # Monta a resposta.
     if cliente is None:
-        return render_template("historico.html", mensagem = f"Esse aluno não existe."), 404
+        return render_template("historico.html", mensagem = f"Esse cliente não existe.", cliente = cliente), 404
     return render_template("historico.html", cliente = cliente)
 
 
 
-###############################################
+############################################### 
 #### Coisas internas da controller da API. ####
 ###############################################
 
@@ -554,11 +560,15 @@ def db_trazer_ultimo_id_servico():
         return row_to_dict(cur.description, cur.fetchone())
 
 
-def db_historico_cliente(id_cliente):
+def db_historico_cliente(nome_cliente):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, f.nome AS nome_funcionario, s.preco_servico FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente inner join funcionario as f on a.id_funcionario = f.id_funcionario INNER join servico as s ON a.id_agendamento = s.id_servico where c.id_cliente = ?",[id_cliente])
+        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_agendamento = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where nome_cliente = ?",[nome_cliente])
         return row_to_dict(cur.description, cur.fetchone())
 
+def db_meu_agendamento(id_cliente):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome FROM servico_funcionario as sf inner JOIN funcionario as f on sf.id_funcionario = sf.id_funcionario inner join servico as s on sf.id_servico = s.id_servico LEFT join agendamento as a on a.id_servico = s.id_servico WHERE a.id_cliente = ?  GROUP BY a.id_cliente, a.id_funcionario",[id_cliente])
+        return row_to_dict(cur.description, cur.fetchone())
 
 
 if __name__ == '__main__':

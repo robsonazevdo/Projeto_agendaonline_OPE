@@ -14,13 +14,15 @@ input:focus {
     outline: none;
 }
 
-a,
+
 label {
     font-size: 0.8rem;
 }
 
-a:hover {
-    color: #08558b;
+a{
+    text-decoration: none;
+    color:#fff;
+    
 }
 
 .container {
@@ -97,4 +99,35 @@ input:focus {
 .btn-agendamento {
     font-size: 1.5rem;
     margin-top: 20px;
+}
+
+.btn_funcao {margin-top: 7px;
+    background-color: #323232;
+    border: 2px solid #b4918f;
+    box-shadow: 2px 2px black;
+    font-size: 10px;
+    margin-left: 300px;
+    text-shadow: black 2px 2px 2px;
+}
+
+.btn_funcao:hover {
+    background-color: #b4918f;
+    border: 2px solid #323232;
+}
+
+.btn_funcao2 {margin-top: 7px;
+    background-color: #323232;
+    border: 2px solid #b4918f;
+    box-shadow: 2px 2px black;
+    font-size: 10px;
+    margin-left: -175px;
+    text-shadow: black 2px 2px 2px;
+}
+
+.btn_funcao2:hover {
+    background-color: #b4918f;
+    border: 2px solid #323232;
+}
+.botoes{
+    display:flex
 }

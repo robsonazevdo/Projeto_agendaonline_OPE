@@ -16,6 +16,13 @@
 <!--inicio cadastro-->
 <div class="conteudo">
 
+    {% if mensagem %}
+    <p class="mensagem">{{mensagem}}</p>
+    {% endif %}
+    {% if erro %}
+        <p class="erro">{{erro}}</p>
+    {% endif %}
+    
     <form action="/buscar_cliente/nome" method="GET" class="text-center form-contato" class="was-validated">
 
 
@@ -26,6 +33,8 @@
         <button type="submit" class="btn btn-form"><i class="fas fa-search"></i></button>
 
     </form>
+    
+    
     <table class="table">
         <thead>
             <tr>
@@ -38,16 +47,16 @@
             </tr>
         </thead>
         <tbody>
-            {% for cliente in cliente %}
+            
             <tr>
                 <td>{{cliente['nome_cliente']}}</td>
                 <td>{{cliente['data1']}}</td>
                 <td>{{cliente['hora']}}</td>
-                <td>{{cliente['nome_serviço']}}</td>
-                <td>{{cliente['nome']}}</td>
+                <td>{{cliente['nome_servico']}}</td>
+                <td>{{cliente['nome_funcionario']}}</td>
                 <td>R$ {{cliente['preco_servico']}}</td>
             </tr>
-            {% endfor %}
+           
         </tbody>
     </table>
 
