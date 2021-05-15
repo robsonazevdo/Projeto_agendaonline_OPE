@@ -10,4 +10,8 @@
 
 .container h1 {
     text-align: center;
+    
+}
+.container{
+    padding: 35px;
 }

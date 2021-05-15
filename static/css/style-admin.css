@@ -9,10 +9,10 @@
 }
 
 body {
-    background-image: url(/static/img/tratamento-facial.jpg);
+    background-image: url(/static/img/salão-de-beleza.jpeg);
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center;
+    
 }
 
 .container {

@@ -47,16 +47,18 @@
             </tr>
         </thead>
         <tbody>
+            {% for c in cliente %}
             
             <tr>
-                <td>{{cliente['nome_cliente']}}</td>
-                <td>{{cliente['data1']}}</td>
-                <td>{{cliente['hora']}}</td>
-                <td>{{cliente['nome_servico']}}</td>
-                <td>{{cliente['nome_funcionario']}}</td>
-                <td>R$ {{cliente['preco_servico']}}</td>
+                <td>{{cliente[c][0]}}</td>
+                <td>{{cliente[c][1]}}</td>
+                <td>{{cliente[c][2]}}</td>
+                <td>{{cliente[c][3]}}</td>
+                <td>{{cliente[c][5]}}</td>
+                <td>R$ {{cliente[c][4]}}</td>
             </tr>
            
+           {% endfor %}
         </tbody>
     </table>
 

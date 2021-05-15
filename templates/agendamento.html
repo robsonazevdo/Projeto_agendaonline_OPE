@@ -72,12 +72,13 @@
 
     </form>
     <div class="botoes">
-        <a class="btn_funcao btn btn-primary" href="/logout">Sair</a>
+        <a class="btn_funcao" href="/logout">Sair</a>
 
-        <form action=/meus_agendamentos/{{ cliente['id_cliente'] }} class="form">
-            <button class="btn_funcao2 btn btn-primary" href="/meus_agendamentos/{{ cliente['id_cliente'] }}">Meus Agendamentos</a>
-        </form>
-        <a class="btn_funcao2 btn btn-primary" href="/meus_agendamentos/{{ cliente['id_cliente'] }}">Meus Agendamentos</a>
+        {% for c in cliente %} {% if c['nome'] == logado['nome'] %}
+        <a class="btn_funcao2 btn btn-primary" href="/meus_agendamentos/{{c['id_cliente']}}">Meus Agendamentos</a> {% endif %} {% endfor %}
+
+        
+        
     </div>
     
 </div>

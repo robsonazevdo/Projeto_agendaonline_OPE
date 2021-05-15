@@ -16,8 +16,9 @@
     padding: 20px 30px 20px 30px;
     border-radius: 10px;
     text-align: center;
-    opacity: .7;
+    opacity: .9;
     background-color: #545252;
+    padding: 45px
 }
 
 form {
