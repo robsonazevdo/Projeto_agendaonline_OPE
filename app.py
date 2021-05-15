@@ -83,7 +83,26 @@ def meus_agendamentos(id_cliente):
     
         # Monta a resposta.
     return render_template("meu_agendamento.html", logado = logado, mensagem = "", cliente = lista2)
-    
+
+
+# Processa o botão de excluir um aluno.
+@app.route("/apagar_agendamento/<int:id_agendamento>")
+def deletar_agendamento_api(id_agendamento):
+    # Autenticação.
+    logado = autenticar_login()
+    if logado is None:
+        return redirect("/")
+        
+    print(id_agendamento)
+    # Faz o processamento.
+    agendamento = apagar_agendamento(id_agendamento)
+    print(agendamento)
+
+    # Monta a resposta.
+    if agendamento is None:
+        return render_template("meu_agendamento.html", logado = logado, mensagem = "Esse aluno nem mesmo existia mais."), 404
+    mensagem = f"O aluno com o id {id_agendamento} foi excluído." if agendamento['data1'] == "M" else f"O agendamento com o id {id_agendamento} foi excluída."
+    return render_template("meu_agendamento.html", logado = logado, mensagem = mensagem)
 
 
 @app.route("/login", methods = ["POST"])
@@ -162,7 +181,7 @@ def criar_agendamento_api():
 
     # Monta a resposta.
     mensagem = f"o agendamento {data1}{hora} já existia com o id {agendamento['id_servico']}." if ja_existia else f"O agendamento {data1}{hora} foi criada."
-    return render_template("agendamento.html", logado = logado, funcionarios = lista, mensagem = mensagem)
+    return redirect(url_for("agendamento", logado = logado, funcionarios = lista, mensagem = mensagem))
 
 
 
@@ -273,7 +292,7 @@ def salvar_arquivo_upload():
 
 def deletar_foto(id_foto):
     if id_foto == '': return
-    p = os.path.join("alunos_fotos", id_foto)
+    p = os.path.join("funcionario_fotos", id_foto)
     if os.path.exists(p):
         os.remove(p)
 
@@ -327,6 +346,12 @@ def criar_cargo(nome_cargo):
     if cargo_ja_existe is not None: return True, cargo_ja_existe
     novo_cargo = db_criar_cargo(nome_cargo)
     return False, novo_cargo
+
+def apagar_agendamento(id_agendamento):
+    agendamento = db_meu_agendamento(id_agendamento)
+    if agendamento is not None: db_deletar_agendamento(id_agendamento)
+    return agendamento
+
 
 
 ###############################################
@@ -514,9 +539,6 @@ def db_criar_cargo(nome_cargo):
         return {'id_cargo':id_cargo,'nome_cargo':nome_cargo}
 
 
-
-
-
 def db_fazer_login(email, senha):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("SELECT c.email, c.senha, c.nome FROM cliente c WHERE c.email = ? AND c.senha = ?", [email, senha])
@@ -527,6 +549,21 @@ def db_fazer_login_funcionario(email, senha):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("SELECT email, senha, nome FROM cargo WHERE email = ? AND senha = ?", [email, senha])
         return row_to_dict(cur.description, cur.fetchone())
+
+
+
+def db_historico_cliente(nome_cliente):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where nome_cliente = ?",[nome_cliente])
+        return row_to_dict(cur.description, cur.fetchall())
+
+
+
+def db_meu_agendamento(id_cliente):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario, a.id_agendamento FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where a.id_cliente = ?",[id_cliente])
+        return row_to_dict(cur.description, cur.fetchall())
+
 
 
 def db_listar_funcionarios():
@@ -559,15 +596,10 @@ def db_trazer_ultimo_id_servico():
         return row_to_dict(cur.description, cur.fetchone())
 
 
-def db_historico_cliente(nome_cliente):
+def db_deletar_agendamento(id_agendamento):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where nome_cliente = ?",[nome_cliente])
-        return row_to_dict(cur.description, cur.fetchall())
-
-def db_meu_agendamento(id_cliente):
-    with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where a.id_cliente = ?",[id_cliente])
-        return row_to_dict(cur.description, cur.fetchall()) 
+        cur.execute("DELETE FROM agendamento WHERE id_agendamento = ?", [id_agendamento])
+        con.commit()
 
 
 

@@ -17,12 +17,9 @@
 <p class="erro">{{erro}}</p>
 {% endif %}
 
-<h2>Seja bem-vindo, {{logado['nome']}}!</h2>
-
+<h2 class="mensagem">Seja bem-vindo, {{logado['nome']}}!</h2>
 
 <div class="container ">
-
-
 
     <form action="/add_agendamento" class="form" method="POST">
 
@@ -71,19 +68,20 @@
         <button type="submit" class="btn-agendamento btn-primary btn1">Enviar</button>
 
     </form>
+
     <div class="botoes">
-        <a class="btn_funcao" href="/logout">Sair</a>
+
+        <a class="btn_funcao btn btn-primary" href="/logout">Sair</a>
 
         {% for c in cliente %} {% if c['nome'] == logado['nome'] %}
         <a class="btn_funcao2 btn btn-primary" href="/meus_agendamentos/{{c['id_cliente']}}">Meus Agendamentos</a> {% endif %} {% endfor %}
 
-        
-        
     </div>
-    
 </div>
 
 
-{% endblock content %} {% block scripts %}
-<script src="/static/js/script_combobox.js">
-</script> {% endblock scripts %}
+{% endblock content %}
+
+
+{% block scripts %}
+ {% endblock scripts %}
