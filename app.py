@@ -8,7 +8,13 @@ import werkzeug
 app = Flask(__name__)
 
 
-
+events = [ 
+    { 'todo': 'tutorial',
+      'date':'2021-05-17',
+      },
+{'todo':'começo',
+'date': '2021-05-18',
+}]
 
 
 @app.route('/')
@@ -18,7 +24,7 @@ def inicio():
 
 @app.route('/calendario')
 def agenda():
-    return render_template('calendario.html')
+    return render_template('agenda.html',events = events)
 
 
 @app.route('/cadastro')

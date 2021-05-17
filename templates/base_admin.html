@@ -15,7 +15,7 @@
         {% block title %} {% endblock title %}
     </title>
 
-    {% endblock head %}
+    {% block script %} {% endblock script %} {% endblock head %}
 </head>
 
 <body>
@@ -53,16 +53,11 @@
     <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js "></script>
     <script src="/static/js/script_funcionario.js"></script>
     <script src="/static/js/script.js"></script>
-    
+    <script src="/static/js/script-calendar.js"></script>
 
-    <script> 
-        
-        {% block script %} 
 
-        {% endblock script %}
 
-    </script>
-    
+
 </body>
 
 </html>
