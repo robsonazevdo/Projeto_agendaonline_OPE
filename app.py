@@ -8,13 +8,16 @@ import werkzeug
 app = Flask(__name__)
 
 
-events = [ 
+events = [
+    
+    {'todo':'começo', 'date': '2021-05-18'},
+   
     { 'todo': 'tutorial',
-      'date':'2021-05-17',
+      'date':'2021-06-21'
       },
-{'todo':'começo',
-'date': '2021-05-18',
-}]
+   
+      
+]
 
 
 @app.route('/')
