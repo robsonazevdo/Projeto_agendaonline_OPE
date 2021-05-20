@@ -102,32 +102,47 @@ input:focus {
 }
 
 .btn_funcao {margin-top: 7px;
-    background-color: #323232;
-    border: 2px solid #b4918f;
+    background-color: #3f3f3f;
+    border: 2px solid #3f3f3f;
+    color:#f3f3f3;
     box-shadow: 2px 2px black;
-    font-size: 10px;
-    margin-left: 300px;
     text-shadow: black 2px 2px 2px;
+    margin-left: 280px;
+    font-size: 12px;
+    font-family:'Courier New', Courier, monospace;
 }
 
 .btn_funcao:hover {
-    background-color: #b4918f;
-    border: 2px solid #323232;
+    background-color: #3f3f3f;
+    color:#f3f3f3;
+    
+    background: #232323;
+    text-shadow: 0 0 5px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #b4918f, 0 0 30px #b4918f, 0 0 40px #b4918f, 0 0 55px #b4918f, 0 0 75px #b4918f;
+    border: 2px solid #3f3f3f;
 }
 
-.btn_funcao2 {margin-top: 7px;
-    background-color: #323232;
-    border: 2px solid #b4918f;
+
+.btn_funcao2 {
+    font-size: 12px;
+    margin-top: 7px;
+    background-color: #3f3f3f;
+    border: 2px solid #3f3f3f;
+    color:#f3f3f3;
     box-shadow: 2px 2px black;
-    font-size: 10px;
-    margin-left: -175px;
     text-shadow: black 2px 2px 2px;
+    margin-left: -230px;
+    font-family:'Courier New', Courier, monospace;
 }
 
 .btn_funcao2:hover {
-    background-color: #b4918f;
-    border: 2px solid #323232;
+    background-color: #3f3f3f;
+    color:#f3f3f3;
+    
+    background: #232323;
+    text-shadow: 0 0 5px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #b4918f, 0 0 30px #b4918f, 0 0 40px #b4918f, 0 0 55px #b4918f, 0 0 75px #b4918f;
+    border: 2px solid #3f3f3f;
 }
+
 .botoes{
     display:flex
 }

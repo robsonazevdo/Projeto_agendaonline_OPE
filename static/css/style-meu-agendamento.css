@@ -95,3 +95,22 @@ tr:nth-child(even) {
 .fas {
     padding: 0.3rem;
 }
+
+.btn_funcao2 {margin-top: 7px;
+    background-color: #3f3f3f;
+    border: 2px solid #3f3f3f;
+    color:#f3f3f3;
+    box-shadow: 2px 2px black;
+    text-shadow: black 2px 2px 2px;
+    
+    font-family:'Courier New', Courier, monospace;
+}
+
+.btn_funcao2:hover {
+    background-color: #3f3f3f;
+    color:#f3f3f3;
+    
+    background: #232323;
+    text-shadow: 0 0 5px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #b4918f, 0 0 30px #b4918f, 0 0 40px #b4918f, 0 0 55px #b4918f, 0 0 75px #b4918f;
+    border: 2px solid #3f3f3f;
+}

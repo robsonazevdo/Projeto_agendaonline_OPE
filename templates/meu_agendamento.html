@@ -20,6 +20,7 @@
 <div class="container">
 
     <table class="table">
+        
         <thead>
             <tr>
                 <th>Nome</th>
@@ -35,14 +36,14 @@
             {% for c in cliente %}
             
             <tr>
-                <td>{{cliente[c][0]}}</td>
-                <td>{{cliente[c][1]}}</td>
-                <td>{{cliente[c][2]}}</td>
-                <td>{{cliente[c][3]}}</td>
-                <td>{{cliente[c][5]}}</td>
-                <td>R$ {{cliente[c][4]}}</td>
-                <td><a href="/editar_agendamentos/{{cliente[c][6]}}"><i class="fas fa-pencil-alt"></i></a>
-                    <a href="/apagar_agendamento/{{cliente[c][6]}}"><i class="fas fa-trash-alt"></i></a>
+                <td>{{c.nome_cliente}}</td>
+                <td>{{c.data1}}</td>
+                <td>{{c.hora}}</td>
+                <td>{{c.nome_servico}}</td>
+                <td>{{c.nome_funcionario}}</td>
+                <td>R$ {{c.preco_servico}} </td>
+                <td><a href="/editar_agendamentos/{{c.id_agendamento}}"><i class="fas fa-pencil-alt"></i></a>
+                    <a href="/apagar_agendamento/{{c.id_agendamento}}"><i class="fas fa-trash-alt"></i></a>
                 </td>
                 
             </tr>
@@ -50,7 +51,7 @@
            {% endfor %}
         </tbody>
     </table>
-
+    <a class="btn_funcao2 btn btn-primary" href="/agendamento">Voltar</a>
 </div>
 
 

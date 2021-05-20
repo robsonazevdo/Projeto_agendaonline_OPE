@@ -369,6 +369,7 @@ def apagar_agendamento(id_agendamento):
 # Converte uma linha em um dicionário.
 def row_to_dict(description, row):
     if row is None: return None
+    print(row)
     d = {}
     for i in range(0, len(row)):
         d[description[i][0]] = row[i]
@@ -563,19 +564,14 @@ def db_fazer_login_funcionario(email, senha):
 def db_historico_cliente(nome_cliente):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario FROM cliente AS c LEFT JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where c.nome = ?",[nome_cliente])
-        return row_to_dict(cur.description, cur.fetchall())
+        return rows_to_dict(cur.description, cur.fetchall())
 
-
-def db_lista_cliente_agenda():
-    with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario")
-        return row_to_dict(cur.description, cur.fetchall())
 
 
 def db_meu_agendamento(id_cliente):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario, a.id_agendamento FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where a.id_cliente = ?",[id_cliente])
-        return row_to_dict(cur.description, cur.fetchall())
+        return rows_to_dict(cur.description, cur.fetchall())
 
 
 

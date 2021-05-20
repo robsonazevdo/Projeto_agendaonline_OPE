@@ -50,14 +50,14 @@
             {% for c in cliente %}
             
             <tr>
-                <td>{{cliente[c][0]}}</td>
-                <td>{{cliente[c][1]}}</td>
-                <td>{{cliente[c][2]}}</td>
-                <td>{{cliente[c][3]}}</td>
-                <td>{{cliente[c][5]}}</td>
-                <td>R$ {{cliente[c][4]}}</td>
+                <td>{{c.nome_cliente}}</td>
+                <td>{{c.data1}}</td>
+                <td>{{c.hora}}</td>
+                <td>{{c.nome_servico}}</td>
+                <td>{{c.nome_funcionario}}</td>
+                <td>R$ {{c.preco_servico}} </td>
             </tr>
-           
+            
            {% endfor %}
         </tbody>
     </table>
