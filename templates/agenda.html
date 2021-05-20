@@ -78,7 +78,7 @@
               
               events: [
               {% for event in events %}
-                { id: '{{event.id_agendamento}}', description: 'Lecture', resourceId: '{{event.id_funcionario}}', start: '{{event.data1}}T{{event.hora}}', end: '{{event.data1}}T{% for s in servico %}{% if event.id_servico == s.id_servico %}{{s.duracao_servico}}{% endif %}{% endfor %}', title: "{% for s in servico %}{% if event.id_servico == s.id_servico %}{{s.nome_servico}}{% endif %}{% endfor %}" },
+                { id: '{{event.id_agendamento}}', description: 'Lecture', resourceId: '{{event.id_funcionario}}', start: '{{event.data1}}T{{event.hora}}', end: '{{event.data1}}T{% for s in servico %}{% if event.id_servico == s.id_servico %}{{s.duracao_servico}}{% endif %}{% endfor %}', title: "{% for s in servico %}{% if event.id_servico == s.id_servico %}{{s.nome_servico}} - {{event.id_cliente}}{% endif %}{% endfor %} , cliente" },
                 {% endfor %}
               ],
 
