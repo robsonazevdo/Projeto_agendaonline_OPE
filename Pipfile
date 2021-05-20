@@ -4,12 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
-werkzeug = "*"
-closing = "*"
 gunicorn = "*"
+flask = "*"
+flask-sqlalchemy = "*"
+flask-script = "*"
+flask-wtf = "*"
+wtforms = "*"
+flask-login = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = "3.7"
