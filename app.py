@@ -24,8 +24,9 @@ def agenda():
     resources = db_listar_funcionarios()
     events = db_listar_agendamentos()
     servico = db_listar_servico()
+    cliente = db_listar_cliente()
      
-    return render_template('agenda.html',resources = resources, events = events, color = color, servico = servico)
+    return render_template('agenda.html',resources = resources, events = events, color = color, servico = servico, cliente = cliente)
 
 
 @app.route('/cadastro')
@@ -561,7 +562,7 @@ def db_fazer_login_funcionario(email, senha):
 
 def db_historico_cliente(nome_cliente):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where nome_cliente = ?",[nome_cliente])
+        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario FROM cliente AS c LEFT JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where c.nome = ?",[nome_cliente])
         return row_to_dict(cur.description, cur.fetchall())
 
 

@@ -11,6 +11,8 @@ flask-script = "*"
 flask-wtf = "*"
 wtforms = "*"
 flask-login = "*"
+closing = "*"
+werkzeug = "*"
 
 [dev-packages]
 
