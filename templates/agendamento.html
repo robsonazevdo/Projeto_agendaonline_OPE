@@ -28,12 +28,12 @@
 
         <div class="mb-3">
             <label for="id_data" class="form-label">Escolha a Data</label>
-            <input type="date" class="form-control" id="id_data" name="data">
+            <input type="date" required class="form-control" id="id_data" name="data">
 
         </div>
         <div class="mb-3">
             <label for="id_hora" class="form-label">Escolha a hora</label>
-            <input type="time" class="form-control" id="id_hora" name="hora">
+            <input type="time" min="09:00" max="18:00" required class="form-control timepicker" id="id_hora" name="hora">
         </div>
 
         <div class="mb-3">
@@ -71,10 +71,10 @@
 
     <div class="botoes">
 
-        <a class="btn_funcao btn btn-primary" href="/logout">Sair</a>
+        <a class="btn_funcao btn" href="/logout">Sair</a>
 
         {% for c in cliente %} {% if c['nome'] == logado['nome'] %}
-        <a class="btn_funcao2 btn btn-primary" href="/meus_agendamentos/{{c['id_cliente']}}">Meus Agendamentos</a> {% endif %} {% endfor %}
+        <a class="btn_funcao2 btn" href="/meus_agendamentos/{{c['id_cliente']}}">Meus Agendamentos</a> {% endif %} {% endfor %}
 
     </div>
 </div>

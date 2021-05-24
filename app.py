@@ -5,9 +5,10 @@ import os
 import werkzeug
 
 
+
+
+
 app = Flask(__name__)
-
-
 
 
 
@@ -25,6 +26,7 @@ def agenda():
     events = db_listar_agendamentos()
     servico = db_listar_servico()
     cliente = db_listar_cliente()
+    
      
     return render_template('agenda.html',resources = resources, events = events, color = color, servico = servico, cliente = cliente)
 
@@ -37,6 +39,22 @@ def cadastro():
 @app.route('/contato')
 def contato():
     return render_template('contato.html')
+
+
+@app.route('/receber_contato', methods=['GET', 'POST'])
+def criar_contato_api():
+
+    # Extrai os dados do formulário.
+    nome = request.form["nome"]
+    sobrenome = request.form["sobrenome"]
+    email = request.form["email"]
+    telefone = request.form["telefone"]
+    mensagem = request.form["mensagem"]
+
+    # Faz o processamento.
+    contato = criar_contato(nome, sobrenome, email, telefone, mensagem)
+
+    return render_template('agradecimento.html', nome=nome, sobrenome=sobrenome)
 
 
 @app.route('/historico')
@@ -101,15 +119,15 @@ def deletar_agendamento_api(id_agendamento):
     if logado is None:
         return redirect("/")
         
-    print(id_agendamento)
+   
     # Faz o processamento.
     agendamento = apagar_agendamento(id_agendamento)
-    print(agendamento)
+    
 
     # Monta a resposta.
     if agendamento is None:
         return render_template("meu_agendamento.html", logado = logado, mensagem = "Esse aluno nem mesmo existia mais."), 404
-    mensagem = f"O aluno com o id {id_agendamento} foi excluído." if agendamento['data1'] == "M" else f"O agendamento com o id {id_agendamento} foi excluída."
+    mensagem = f"O agendamento foi excluído."
     return render_template("meu_agendamento.html", logado = logado, mensagem = mensagem)
 
 
@@ -270,7 +288,7 @@ def buscar_cliente_api(nome):
     nome_cliente = request.args.get('nome')
     
     clientes = db_historico_cliente(nome_cliente)
-    print(clientes)
+    
  # Monta a resposta.
     if clientes is None:
         return render_template("historico.html", mensagem = f"Esse cliente não existe.", cliente = clientes), 404
@@ -355,11 +373,11 @@ def criar_cargo(nome_cargo):
     novo_cargo = db_criar_cargo(nome_cargo)
     return False, novo_cargo
 
+
 def apagar_agendamento(id_agendamento):
     agendamento = db_meu_agendamento(id_agendamento)
     if agendamento is not None: db_deletar_agendamento(id_agendamento)
     return agendamento
-
 
 
 ###############################################
@@ -369,7 +387,6 @@ def apagar_agendamento(id_agendamento):
 # Converte uma linha em um dicionário.
 def row_to_dict(description, row):
     if row is None: return None
-    print(row)
     d = {}
     for i in range(0, len(row)):
         d[description[i][0]] = row[i]
@@ -385,7 +402,6 @@ def rows_to_dict(description, rows):
 #### Definições básicas do banco. ####
 
 sql_create = """ 
-
 
 CREATE TABLE IF NOT EXISTS cliente (
     id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -445,6 +461,17 @@ CREATE TABLE IF NOT EXISTS agendamento (
 
 );
 
+CREATE TABLE IF NOT EXISTS agendamento (
+    id_contato INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome VARCHAR(30) NOT NULL,
+    sobrenome VARCHAR(100) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    telefone VARCHAR(12) NOT NULL,
+    mensagem VARCHAR(300) NOT NULL,
+    status VARCHAR(7) NULL
+    
+);
+
 
 
     
@@ -499,7 +526,6 @@ def db_verificar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, sta
 
 
 
-
 def db_criar_cliente(nome, email, data_nascimento, senha):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("INSERT INTO cliente (nome, email, data_nascimento, senha) VALUES (?, ?, ?, ?)", [nome, email, data_nascimento, senha])
@@ -546,6 +572,14 @@ def db_criar_cargo(nome_cargo):
         id_cargo = cur.lastrowid
         con.commit()
         return {'id_cargo':id_cargo,'nome_cargo':nome_cargo}
+
+
+def criar_contato(nome, sobrenome, email, telefone, mensagem):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("INSERT INTO contato(nome, sobrenome, email, telefone, mensagem) VALUES (?)", [nome, sobrenome, email, telefone, mensagem])
+        id_contato = cur.lastrowid
+        con.commit()
+        return {'id_contato':id_contato,'nome':nome, 'sobrenome':sobrenome, 'email':email, 'telefone':telefone, 'mensagem':mensagem}
 
 
 def db_fazer_login(email, senha):
@@ -620,4 +654,5 @@ def db_deletar_agendamento(id_agendamento):
 
 if __name__ == '__main__':
     db_inicializar()
-    app.run(debug=True)    
+    app.run(debug=True) 
+     

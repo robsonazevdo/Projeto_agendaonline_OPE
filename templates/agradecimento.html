@@ -1,0 +1,31 @@
+{% extends "_base.html" %}
+
+<!---->
+
+{% block title %} Contato {% endblock title %}
+
+<!---->
+
+{% block head%} {{super()}}
+<link rel="stylesheet" type="text/css" href="/static/css/style_contato.css">{% endblock head%}
+
+<!---->
+
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6 coluna">
+            <img src="/static/img/avatar.svg" alt="logo empresa" height="300">
+        </div>
+
+        <div class="col-12 col-md-6 coluna">
+            
+<h2 class="mt-5">{{nome}}{{sobrenome}}! <br>Obrigado por entrar em contato, em breve retornaremos o Contato.</h2>
+            
+        </div>
+    </div>
+</div> 
+
+{% endblock content %}
