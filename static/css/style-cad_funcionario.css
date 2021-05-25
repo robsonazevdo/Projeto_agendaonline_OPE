@@ -9,7 +9,7 @@
 }
 
 .conteudo {
-    width: 400px;
+    width: 600px;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: auto;
@@ -64,9 +64,10 @@ input:focus {
 
 .form_funcao {
     border-radius: 15px;
-    height: 100vh;
+    height: 80%;
     width: 80%;
     background-color: #DCDCDC;
+    opacity: .9;
     position: fixed;
     z-index: 12;
 }
@@ -96,15 +97,14 @@ i {
 
 .btn_funcao {
     background-color: #323232;
-    border: 2px solid #b4918f;
+    border: 2px solid #545252;
     box-shadow: 2px 2px black;
     font-size: 10px;
-    margin-left: 210px;
-    margin-left: 210px;
+    margin-left: 400px;
     text-shadow: black 2px 2px 2px;
 }
 
 .btn_funcao:hover {
-    background-color: #b4918f;
+    background-color: #545252;
     border: 2px solid #323232;
 }

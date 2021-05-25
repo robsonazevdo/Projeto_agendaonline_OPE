@@ -4,7 +4,7 @@
     box-sizing: border-box;
     border: none;
     font-family: helvetica;
-    color: #323232;
+    color: #000;
     border: none;
 }
 
@@ -71,6 +71,7 @@ td {
 tr:nth-child(even) {
     background-color: #e0e0e0
 }
+
 .fas {
     padding: 0.3rem;
 }

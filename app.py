@@ -461,20 +461,18 @@ CREATE TABLE IF NOT EXISTS agendamento (
 
 );
 
-CREATE TABLE IF NOT EXISTS agendamento (
+CREATE TABLE IF NOT EXISTS contato (
     id_contato INTEGER PRIMARY KEY AUTOINCREMENT,
     nome VARCHAR(30) NOT NULL,
     sobrenome VARCHAR(100) NOT NULL,
     email VARCHAR(50) NOT NULL,
     telefone VARCHAR(12) NOT NULL,
     mensagem VARCHAR(300) NOT NULL,
-    status VARCHAR(7) NULL
+    status VARCHAR(7) NOT NULL
     
 );
 
 
-
-    
 """
 
 
@@ -576,7 +574,7 @@ def db_criar_cargo(nome_cargo):
 
 def criar_contato(nome, sobrenome, email, telefone, mensagem):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("INSERT INTO contato(nome, sobrenome, email, telefone, mensagem) VALUES (?)", [nome, sobrenome, email, telefone, mensagem])
+        cur.execute("INSERT INTO contato(nome, sobrenome, email, telefone, mensagem) VALUES (?, ?, ?, ?, ?)", [nome, sobrenome, email, telefone, mensagem])
         id_contato = cur.lastrowid
         con.commit()
         return {'id_contato':id_contato,'nome':nome, 'sobrenome':sobrenome, 'email':email, 'telefone':telefone, 'mensagem':mensagem}

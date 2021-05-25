@@ -22,16 +22,11 @@
 
     <form action="/add_cargo" method="POST" class="text-center form-contato" class="was-validated">
 
-        <h1 class=" ">Adicione uma Função</h1>
+        <h1 class=" ">Adicione uma Cargo</h1>
 
-        <label for="id_nomefuncao" class="form-label-funcao">Função</label>
-        <input type="text" id="id_nomefuncao" placeholder='Adicione uma Função*' autocomplete="off" required autofocus class="input-funcao" name="nome">
+        <label for="id_nomefuncao" class="form-label-funcao">Cargo</label>
+        <input type="text" id="id_nomefuncao" placeholder='Adicione uma Cargo*' autocomplete="off" required autofocus class="input-funcao" name="nome">
 
-        <div class="mb-3">
-            <label for="id_servico" class="form-label">Qual é o Serviço? </label> {% for s in servicos %}
-            <!---->
-            {{s['nome_servico']}}: <input type="checkbox" value="{{s['id_servico']}}">{% endfor %}<br>
-        </div>
 
         <button type="submit" class="btn btn-form btn-primary">Enviar</button>
 
