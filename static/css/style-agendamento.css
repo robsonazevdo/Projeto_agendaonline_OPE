@@ -26,7 +26,7 @@ a{
 }
 
 .container {
-    width: 400px;
+    width: 500px;
     margin-left: auto;
     margin-right: auto;
     padding: 20px 30px;
@@ -144,4 +144,12 @@ input:focus {
 
 .botoes{
     display:flex
+}
+
+select{
+    width: 450px;
+    height: 30px;
+    font-size: 20px;
+    background: #f2f2f3;
+    
 }

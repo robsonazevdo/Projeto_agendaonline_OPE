@@ -7,6 +7,15 @@
     color: #000;
     border: none;
 }
+
+body {
+    background-image: url(/static/img/salão-de-beleza.jpeg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+}
+
 .mensagem, .erro {
     font-weight: bold;
     padding: 10px;
@@ -33,7 +42,8 @@
     width: 90%;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: auto;
+    margin-bottom: auto;    
+    margin-top: 56px;
     padding: 35px;
     border-radius: 10px;
     text-align: center;

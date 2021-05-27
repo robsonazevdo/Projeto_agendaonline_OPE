@@ -3,13 +3,87 @@ from contextlib import closing
 import sqlite3
 import os
 import werkzeug
-
+from flask_mail import Mail, Message
 
 
 
 
 app = Flask(__name__)
 
+
+app.config['DEBUG'] = True
+app.config['TESTING'] = False
+app.config['MAIL_SERVER'] = 'smtp.hushmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USERNAME'] = 'movowi7120@frnla.com'
+app.config['MAIL_PASSWORD'] = 'kmp198385'
+app.config['MAIL_DEFAULT_SENDER'] = 'movowi7120@frnla.com'
+app.config['MAIL_ASCII_ATTACHMENTS'] = False
+
+
+
+mail = Mail(app)
+
+def sendTestEmail():
+    msg = Message("Our first Python Email",
+                  
+                  recipients=["kassapete@hotmail.com"])
+
+    msg.body = """ 
+    Hello there,
+
+    I am sending this message from python.
+
+    say Hello
+
+    regards,
+    Me
+    """
+
+
+    msg.html = """
+
+    <div>
+    <h5>Hello there</h5>
+    <br>
+
+    <p>
+    I am sending this message from Python 
+    <br>
+    Say hello 
+    <br>
+    Regards
+    </p>
+    </div>
+
+    """
+
+    mail.send(msg)
+
+
+def sendContactForm(result):
+    msg = Message("Contact Form from Skolo Website",
+                  
+                  recipients=["spveiok@hotmail.com"])
+
+    msg.body = """
+    Hello there,
+
+    You just received a contact form.
+
+    Name: {}
+    Email: {}
+    Message: {}
+
+
+    regards,
+    Webmaster
+
+    """.format(result['nome'],result['sobrenome'], result['email'], result['telefone'], result['message'])
+
+    mail.send(msg)
 
 
 @app.route('/')
@@ -19,6 +93,13 @@ def inicio():
 
 @app.route('/inicio_admin')
 def inicio_admin():
+
+    # Autenticação.
+    logado = autenticar_login()
+    if logado is None:
+
+        return render_template("/login.html", erro="")
+
     return render_template('admin.html')
     
 
@@ -69,15 +150,25 @@ def contato():
 @app.route('/receber_contato', methods=['GET', 'POST'])
 def criar_contato_api():
 
+    result = {}
+
+    result['nome'] = request.form["nome"]
+    result['sobrenome'] = request.form["sobrenome"]
+    result['email'] = request.form["email"].replace(' ', '').lower()
+    result['telefone'] = request.form["telefone"]
+    result['message'] = request.form["mensagem"]
+
     # Extrai os dados do formulário.
     nome = request.form["nome"]
     sobrenome = request.form["sobrenome"]
-    email = request.form["email"]
+    email = request.form["email"].replace(' ', '').lower()
     telefone = request.form["telefone"]
     mensagem = request.form["mensagem"]
 
     # Faz o processamento.
     contato = criar_contato(nome, sobrenome, email, telefone, mensagem)
+
+    sendContactForm(result)
 
     return render_template('agradecimento.html', nome=nome, sobrenome=sobrenome)
 
