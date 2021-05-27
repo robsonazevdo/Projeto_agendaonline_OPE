@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <link rel="stylesheet" href="" class="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="/static/css/style_admin.css">
+
+    <title>Cadastro Admin</title>
+
+</head>
+
+<body>
+
+    <div class="conteudo">
+    
+        <div class="form">
+
+            <form action="/add_admin" method="POST" class="text-center form-contato" class="was-validated">
+
+                <h1 class=" ">Cadastro</h1>
+
+                <label for="id_nome" class="form-label">Nome Completo</label>
+                <input type="text" id="id_nome" placeholder="Nome Completo* " autocomplete="off" required autofocus class="input-fun" name="nome">
+
+
+                <label for="id_email" class="form-label">Email</label>
+                <input type="email" id="id_email" placeholder="Email * " autocomplete="off" required autofocus class="input-fun" name="email">
+
+                <label for="password" class="form-label" >Senha</label>
+                <input class="input-fun  password" type="password" id="password"  placeholder="Senha * "required  name="senha">
+
+                <label for="password" class="form-label">Confirmar senha</label>
+                <input class="input-fun confirmar-senha" type="password" id="password"  placeholder="Confirmar senha * "required  name="confirmar-senha">
+
+
+                <button type="submit " class="btn btn-form btn-primary ">Enviar</button>
+
+            </form>
+        </div>
+    </div>
+        
+        <link rel="stylesheet " href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css " />
+        <script src="http://code.jquery.com/jquery-1.8.2.js "></script>
+        <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js "></script>
+        <script src="/static/js/script-cadastro.js"></script>
+        
+</body>
+
+</html>
+
+
+
+

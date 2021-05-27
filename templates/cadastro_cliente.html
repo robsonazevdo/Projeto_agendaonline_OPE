@@ -1,4 +1,4 @@
- {%extends '_base.html'%}
+ {%extends 'base_admin.html'%}
 <!---->
 
 
@@ -13,33 +13,33 @@
 <!---->
 
 {% block content %}
+
+<div class="conteudo">
 <!--inicio cadastro-->
-<div class="form">
-    <fieldset>
-        <form action="/users" method="POST" class="text-center form-contato" class="was-validated">
+    <div class="form">
+        <fieldset>
+            <form action="/users" method="POST" class="text-center form-contato" class="was-validated">
 
-            <h1 class=" ">Cadastro</h1>
+                <h1 class=" ">Cadastro</h1>
 
-            <label for="id_nome" >Nome</label>
-            <input type="text" id="id_nome" placeholder="Nome*" autocomplete="off" required autofocus name="nome">
+                <label for="id_nome" >Nome Completo</label>
+                <input class="input-fun" type="text" id="id_nome" placeholder="Nome Completo*" autocomplete="off" required autofocus name="nome">
 
-            <label for="id_email" >Email</label>
-            <input type="email" id="id_email" placeholder="Email*" autocomplete="off" required autofocus name="email">
+                <label for="id_email" >Email</label>
+                <input class="input-fun" type="email" id="id_email" placeholder="Email*" autocomplete="off" required autofocus name="email">
 
-            <label for="id_cep" >Data Nascimento</label>
-            <input type="date" id="id_dt-nascimento" placeholder="DATA NASCIMENTO* " autocomplete="off" required autofocus name="data_nascimento">
+                <label for="id_cep" >Data Nascimento</label>
+                <input class="input-fun" type="date" id="id_dt-nascimento" placeholder="DATA NASCIMENTO* " autocomplete="off" required autofocus name="data_nascimento">
 
-            <label for="password" >Senha</label>
-            <input type="password" id="password" class="password" placeholder="Crie uma Senha* "required  name="senha">
+                <label for="telefone" >Telefone/Whats'App</label>
+                <input class="input-fun" type="tel" id="telefone"  placeholder="Telefone/Whats'App* "required  name="telefone">
 
-            <label for="confirmar-senha">Confirmar Senha</label>
-            <input type="password" id="confirmar-senha" class="confirmar-senha" placeholder="Confirmar Senha* "required   name="confirmar-senha" >
+                
+                <button type="submit " class="btn btn-form btn-primary">Enviar</button>
 
-
-            <button type="submit " class="btn btn-form btn-primary">Enviar</button>
-
-        </form>
-    </fieldset>
+            </form>
+        </fieldset>
+    </div>
 </div>
 
 <!--fim cadastro-->

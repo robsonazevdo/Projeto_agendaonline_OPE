@@ -4,7 +4,7 @@
     box-sizing: border-box;
     border: none;
     font-family: helvetica;
-    color: #323232;
+    color: #000;
     border: none;
 }
 .mensagem, .erro {
@@ -71,6 +71,10 @@ input:focus {
     color: #ffffff;
 }
 
+.table{
+    width: 97%;
+}
+
 table {
     border-collapse: collapse;
     width: 100%;
@@ -113,4 +117,14 @@ tr:nth-child(even) {
     background: #232323;
     text-shadow: 0 0 5px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #b4918f, 0 0 30px #b4918f, 0 0 40px #b4918f, 0 0 55px #b4918f, 0 0 75px #b4918f;
     border: 2px solid #3f3f3f;
+}
+.form_busca{
+    border: solid #3f3f3f;
+    border-style: double;
+    border-bottom-width: 10px;
+    border-top-width: 10px;
+    border-right-width: 10px;
+    border-left-width: 10px;
+    margin: 15px;
+    padding:1rem;
 }

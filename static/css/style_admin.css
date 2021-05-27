@@ -12,14 +12,14 @@
     width: 600px;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 50px;
-    margin-top: 60px;
+    margin-bottom: auto;
+    margin-top: 50px;
     padding: 20px 30px 20px 30px;
     border-radius: 10px;
     text-align: center;
     opacity: .9;
     background-color: #545252;
-    
+    padding: 45px
 }
 
 form {
@@ -27,14 +27,13 @@ form {
     margin-bottom: 0;
 }
 
-label,
-input {
+.form-label {
     display: block;
     width: 100%;
     text-align: left;
 }
 
-label {
+.form-label {
     font-weight: bold;
     color: #ffffff;
 }
@@ -46,6 +45,9 @@ label {
     margin-bottom: 20px;
     background-color: #323232;
     color: #fff;
+    display: block;
+    width: 100%;
+    text-align: left;
 }
 
 input:focus {
@@ -56,3 +58,41 @@ input:focus {
     font-weight: bold;
     color: #ffffff;
 }
+
+.aparecer {
+    display: none;
+}
+
+.form_funcao {
+    border-radius: 15px;
+    height: 80%;
+    width: 80%;
+    background-color: #DCDCDC;
+    opacity: .9;
+    position: fixed;
+    z-index: 12;
+}
+
+i {
+    padding: 1.5rem;
+}
+
+.far:hover {
+    cursor: pointer;
+}
+
+.input-funcao {
+    border-bottom: 2px solid #ffffff;
+    padding: 5px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    background-color: #323232;
+    color: #fff;
+    display: block;
+    width: 80%;
+    text-align: left;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: 5px;
+}
+

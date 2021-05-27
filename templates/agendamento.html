@@ -1,30 +1,39 @@
-{%extends'_base.html'%}
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<!---->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <link rel="stylesheet" href="" class="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-{% block title %} Agendamento{% endblock title %} {% block head%} {{super()}}
-<link rel="stylesheet" type="text/css" href="/static/css/style-agendamento.css"> {% block estilos %} {% endblock estilos %} {% endblock head%}
+    <link rel="stylesheet" href="/static/css/style-agendamento.css">
 
-<!---->
-
+    <title>Agendamento</title>
 
 
-<!---->
+  </head>
 
-{% block content %} {% if mensagem %}
-<p class="mensagem">{{mensagem}}</p>
-{% endif %} {% if erro %}
-<p class="erro">{{erro}}</p>
-{% endif %}
-
-<h2 class="mensagem">Seja bem-vindo, {{logado['nome']}}!</h2>
-
-<div class="container ">
-
+  
+  <body>
+ 
+    <div class="container">
+    
     <form action="/add_agendamento" class="form" method="POST">
 
-        {% for c in cliente %} {% if c['nome'] == logado['nome'] %}
-        <input type="hidden" name='id_cliente' value="{{c['id_cliente']}}"> {% endif %} {% endfor %}
+        <div class="mb-3">
+            <label for="cliente" class="form-label">Lista cliente</label>
+       
+            <select name="id_cliente" id="id_cliente">
+                    <option value="escolha">lista clientes</option>
+                    {% for c in cliente %}
+                        <option value="{{c['id_cliente']}}"{% if c['id_cliente'] == c['cliente'] %}selected="selected"{% endif %}>{{c['nome']}}</option>
+                        {% endfor %}
+                </select>
+        </div>
 
         <div class="mb-3">
             <label for="id_data" class="form-label">Escolha a Data</label>
@@ -69,19 +78,18 @@
 
     </form>
 
-    <div class="botoes">
-
-        <a class="btn_funcao btn" href="/logout">Sair</a>
-
-        {% for c in cliente %} {% if c['nome'] == logado['nome'] %}
-        <a class="btn_funcao2 btn" href="/meus_agendamentos/{{c['id_cliente']}}">Meus Agendamentos</a> {% endif %} {% endfor %}
-
-    </div>
 </div>
 
 
-{% endblock content %}
 
 
-{% block scripts %}
- {% endblock scripts %}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
+
+
+

@@ -17,6 +17,31 @@ def inicio():
     return render_template('index.html')
 
 
+@app.route('/inicio_admin')
+def inicio_admin():
+    return render_template('admin.html')
+    
+
+@app.route('/admin')
+def cadastro_admin():
+    return render_template('cadastro_admin.html')
+
+
+@app.route('/add_admin', methods=['GET', 'POST'])
+def criar_admin_api():
+
+    # Extrai os dados do formulário.
+    nome = request.form["nome"]
+    email = request.form["email"]
+    senha = request.form["confirmar-senha"]
+    
+
+    # Faz o processamento.
+    db_criar_admin(nome, email, senha)
+    
+    return render_template('login.html')
+
+
 @app.route('/calendario')
 def agenda():
 
@@ -96,19 +121,17 @@ def agendamento():
     return render_template("agendamento.html", logado = logado, mensagem = "", funcionarios = lista, cliente = lista2, servicos = lista3)
     
 
-@app.route("/meus_agendamentos/<int:id_cliente>", methods = ["GET"])
-def meus_agendamentos(id_cliente):
+@app.route("/meus_agendamentos", methods = ["GET"])
+def meus_agendamentos():
     
     # Autenticação.
     logado = autenticar_login()
     if logado is None:
         return render_template("/login.html", erro="")
 
-        # Faz o processamento.
-    lista2 = db_meu_agendamento(id_cliente)
     
         # Monta a resposta.
-    return render_template("meu_agendamento.html", logado = logado, mensagem = "", cliente = lista2)
+    return render_template("meu_agendamento.html", logado = logado, mensagem = "")
 
 
 # Processa o botão de excluir um aluno.
@@ -141,12 +164,12 @@ def login():
     senha = f["senha"]
 
     # Faz o processamento.
-    logado = db_fazer_login(login, senha)
+    logado = db_fazer_login_admin(login, senha)
 
     # Monta a resposta.
     if logado is None:
-        return render_template("login.html", erro = "Ops. A senha estava errada.")
-    resposta = make_response(redirect("/agendamento"))
+        return render_template("login.html", erro = "Ops. A senha ou o email deve está errado.")
+    resposta = make_response(redirect("/inicio_admin"))
 
     # Armazena o login realizado com sucesso em cookies (autenticação).
     resposta.set_cookie("login", login, samesite = "Strict")
@@ -174,14 +197,14 @@ def criar_cliente():
     nome = request.form["nome"]
     email = request.form["email"]
     data_nascimento = request.form["data_nascimento"]
-    senha = request.form["confirmar-senha"]
+    telefone = request.form["telefone"]
     
     # Faz o processamento.
-    ja_existia, cliente = criar_cliente(nome, email, data_nascimento, senha)
+    ja_existia, cliente = criar_cliente(nome, email, data_nascimento, telefone)
     
    
     # Monta a resposta.
-    mensagem = f"O email já existe." if ja_existia else f"O login foi criada com sucesso."
+    mensagem = f"O email já existe." if ja_existia else f"O Cadastro foi criada com sucesso."
     return render_template("login.html", mensagem = mensagem)
 
 
@@ -295,9 +318,24 @@ def buscar_cliente_api(nome):
     return render_template("historico.html", cliente = clientes)
 
 
+@app.route('/buscar_cliente_editar', methods=['GET', 'POST']) 
+def buscar_cliente_editar_api():
+
+    # Faz o processamento.
+    nome_cliente = request.form["nome"]
+    data_agendamento = request.form['data']
+    
+    editar_agendamentos = db_meu_agendamento(nome_cliente, data_agendamento)
+    
+    # Monta a resposta.
+    if editar_agendamentos is None:
+        return render_template("meu_agendamento.html", mensagem = f"Esse cliente não existe.", cliente = editar_agendamentos), 404
+    return render_template("meu_agendamento.html", cliente = editar_agendamentos)
+
+
 
 ############################################### 
-#### Coisas internas da controller da API. ####
+#### Coisas internas do API. ####
 ###############################################
 
 def extensao_arquivo(filename):
@@ -325,7 +363,7 @@ def deletar_foto(id_foto):
 def autenticar_login():
     login = request.cookies.get("login", "")
     senha = request.cookies.get("senha", "")
-    return db_fazer_login(login, senha)
+    return db_fazer_login_admin(login, senha)
 
 
 ##########################################
@@ -409,6 +447,14 @@ CREATE TABLE IF NOT EXISTS cliente (
     email VARCHAR(50) NOT NULL,
     senha VARCHAR(10) NOT NULL,
     data_nascimento TEXT NOT NULL,
+    UNIQUE(email)
+);
+
+CREATE TABLE IF NOT EXISTS tb_admin (
+    id_admin INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    senha VARCHAR(10) NOT NULL,
     UNIQUE(email)
 );
 
@@ -532,6 +578,14 @@ def db_criar_cliente(nome, email, data_nascimento, senha):
         return {'id_cliente': id_cliente, 'nome': nome, 'email': email, 'data_nascimento': data_nascimento, 'senha':senha}
 
 
+def db_criar_admin(nome, email, senha):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("INSERT INTO tb_admin (nome, email, senha) VALUES (?, ?, ?)", [nome, email, senha])
+        id_cliente = cur.lastrowid
+        con.commit()
+        return {'id_admin': id_cliente, 'nome': nome, 'email': email, 'senha':senha}
+
+
 def db_criar_agendamento(data1,hora, id_cliente, id_servico, id_funcionario):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("INSERT INTO agendamento (data1,hora, id_cliente, id_servico, id_funcionario) VALUES (?, ?, ?, ?, ?)", [data1,hora, id_cliente, id_servico, id_funcionario])
@@ -580,7 +634,7 @@ def criar_contato(nome, sobrenome, email, telefone, mensagem):
         return {'id_contato':id_contato,'nome':nome, 'sobrenome':sobrenome, 'email':email, 'telefone':telefone, 'mensagem':mensagem}
 
 
-def db_fazer_login(email, senha):
+def db_fazer_login_admin(email, senha):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("SELECT c.email, c.senha, c.nome FROM cliente c WHERE c.email = ? AND c.senha = ?", [email, senha])
         return row_to_dict(cur.description, cur.fetchone())
@@ -600,9 +654,9 @@ def db_historico_cliente(nome_cliente):
 
 
 
-def db_meu_agendamento(id_cliente):
+def db_meu_agendamento(nome_cliente, data_agendamento):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario, a.id_agendamento FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where a.id_cliente = ?",[id_cliente])
+        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario, a.id_agendamento FROM cliente AS c INNER JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where nome_cliente = ? AND a.data1 = ?",[nome_cliente, data_agendamento])
         return rows_to_dict(cur.description, cur.fetchall())
 
 

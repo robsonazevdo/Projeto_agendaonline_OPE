@@ -13,7 +13,7 @@
     
 
 
-    <title>Agendamento</title>
+    <title>Agenda</title>
     <style>
 
       body {
@@ -27,15 +27,59 @@
         max-width: 1100px;
         margin: 50px auto;
       }
+
+      .aparecer {
+      display: none;
+      }
+      .form_funcao{ 
+      position: fixed;
+    width: 80%;
+    height: 80%;
+    z-index: 85;
+    margin-top:50px;
+    opacity: .9;
+
+    }
+
+    iframe{
+          width: 100%;
+    height: 100%;
+    border: none;
+    }
+
+    .far{ 
+    padding: 20px;
+    position: absolute;
+    margin: 20px;
+    }
+
+    .btn_funcao{
+      color:#fff;
+    }
     
     </style>
 </head>
 
 <body>
+
 <div class="container">
-    <div id="calendar">
+
+ <div class="form_funcao aparecer">
+ <i class="far fa-window-close"></i>
+<iframe class="" src="/agendamento"></iframe>
+</div>
+
+    <div class="link">
+
+        <a class="btn btn-secondary" href="/inicio_admin">Voltar</a>
+        <a class="btn btn-secondary" href="/meus_agendamentos">Remarcar/Editar agendamento</a>
+        <a class="btn btn-secondary btn_funcao">Novo Agendamento</a>
 
     </div>
+
+        <div id="calendar"></div>
+
+
 </div>
     <script>
 
@@ -122,6 +166,7 @@
     <script src="http://code.jquery.com/jquery-1.8.2.js "></script>
     <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js "></script>
    <script src="/static/js/main.min.js"></script>
+   <script src="/static/js/script_funcionario.js"></script>
   
 
 </body>
