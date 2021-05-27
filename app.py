@@ -17,9 +17,9 @@ app.config['MAIL_SERVER'] = 'smtp.hushmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USERNAME'] = 'movowi7120@frnla.com'
+app.config['MAIL_USERNAME'] = 'kassapet@hotmail.com'
 app.config['MAIL_PASSWORD'] = 'kmp198385'
-app.config['MAIL_DEFAULT_SENDER'] = 'movowi7120@frnla.com'
+app.config['MAIL_DEFAULT_SENDER'] = 'kassapet@hotmail.com'
 app.config['MAIL_ASCII_ATTACHMENTS'] = False
 
 
@@ -29,7 +29,7 @@ mail = Mail(app)
 def sendTestEmail():
     msg = Message("Our first Python Email",
                   
-                  recipients=["kassapete@hotmail.com"])
+                  recipients=["spveiok@hotmail.com"])
 
     msg.body = """ 
     Hello there,
