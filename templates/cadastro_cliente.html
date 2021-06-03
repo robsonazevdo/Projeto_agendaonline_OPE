@@ -14,6 +14,13 @@
 
 {% block content %}
 
+ {% if mensagem %}
+    <p class="mensagem">{{mensagem}}</p>
+    {% endif %}
+    {% if erro %}
+        <p class="erro">{{erro}}</p>
+    {% endif %}
+
 <div class="conteudo">
 <!--inicio cadastro-->
     <div class="form">

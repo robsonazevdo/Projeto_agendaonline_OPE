@@ -14,15 +14,32 @@
 
     <title>Agendamento</title>
 
+    
 
   </head>
 
   
   <body>
+
+  {% if mensagem %}
+    <p class="mensagem">{{mensagem}}</p>
+    {% endif %}
+    {% if erro %}
+        <p class="erro">{{erro}}</p>
+    {% endif %}
  
-    <div class="container">
-    
+   <div class="container">
+
+   {% if agendamento['id_agendamento'] != 'novo' %}
+
+        <form action="/editar_agendamentos/{{ agendamento['id_agendamento'] }}" class="form" method="POST">
+
+   {% else %}
+
     <form action="/add_agendamento" class="form" method="POST">
+
+    {% endif %}
+
 
         <div class="mb-3">
             <label for="cliente" class="form-label">Lista cliente</label>
@@ -30,7 +47,7 @@
             <select name="id_cliente" id="id_cliente">
                     <option value="escolha">lista clientes</option>
                     {% for c in cliente %}
-                        <option value="{{c['id_cliente']}}"{% if c['id_cliente'] == c['cliente'] %}selected="selected"{% endif %}>{{c['nome']}}</option>
+                        <option value="{{c['id_cliente']}}"{% if c['id_cliente'] == agendamento['id_cliente'] %}selected="selected"{% endif %}>{{c['nome']}}</option>
                         {% endfor %}
                 </select>
         </div>
@@ -51,7 +68,7 @@
             <select name="id_servico" id="id_servico">
                 <option value="escolha">Escolha o serviço</option>
                 {% for s in servicos %}
-                    <option value="{{s['id_servico']}}"{% if s['id_servico'] == s['servico'] %}selected="selected"{% endif %}>{{s['nome_servico']}}</option>
+                    <option value="{{s['id_servico']}}"{% if s['id_servico'] == agendamento['id_servico'] %}selected="selected"{% endif %}>{{s['nome_servico']}}</option>
                     {% endfor %}
                 
             </select>
@@ -66,11 +83,9 @@
             <select name="id_funcionario" id="id_funcionario">
                 <option value="escolha">Escolha o Profissional</option>
                 {% for funcionario in funcionarios %}
-                    <option value="{{funcionario['id_funcionario']}}"{% if funcionario['id_funcionario'] == funcionario['funcionario'] %}selected="selected"{% endif %}>{{funcionario['nome']}}</option>
+                    <option value="{{funcionario['id_funcionario']}}"{% if funcionario['id_funcionario'] == agendamento['id_funcionario'] %}selected="selected"{% endif %}>{{funcionario['nome']}}</option>
                 {% endfor %}
             </select>
-
-
 
         </div>
 

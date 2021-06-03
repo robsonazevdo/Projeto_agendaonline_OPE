@@ -3,7 +3,6 @@ from contextlib import closing
 import sqlite3
 import os
 import werkzeug
-from flask_mail import Mail, Message
 
 
 
@@ -11,79 +10,7 @@ from flask_mail import Mail, Message
 app = Flask(__name__)
 
 
-app.config['DEBUG'] = True
-app.config['TESTING'] = False
-app.config['MAIL_SERVER'] = 'smtp.hushmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USERNAME'] = 'kassapet@hotmail.com'
-app.config['MAIL_PASSWORD'] = 'kmp198385'
-app.config['MAIL_DEFAULT_SENDER'] = 'kassapet@hotmail.com'
-app.config['MAIL_ASCII_ATTACHMENTS'] = False
 
-
-
-mail = Mail(app)
-
-def sendTestEmail():
-    msg = Message("Our first Python Email",
-                  
-                  recipients=["spveiok@hotmail.com"])
-
-    msg.body = """ 
-    Hello there,
-
-    I am sending this message from python.
-
-    say Hello
-
-    regards,
-    Me
-    """
-
-
-    msg.html = """
-
-    <div>
-    <h5>Hello there</h5>
-    <br>
-
-    <p>
-    I am sending this message from Python 
-    <br>
-    Say hello 
-    <br>
-    Regards
-    </p>
-    </div>
-
-    """
-
-    mail.send(msg)
-
-
-def sendContactForm(result):
-    msg = Message("Contact Form from Skolo Website",
-                  
-                  recipients=["spveiok@hotmail.com"])
-
-    msg.body = """
-    Hello there,
-
-    You just received a contact form.
-
-    Name: {}
-    Email: {}
-    Message: {}
-
-
-    regards,
-    Webmaster
-
-    """.format(result['nome'],result['sobrenome'], result['email'], result['telefone'], result['message'])
-
-    mail.send(msg)
 
 
 @app.route('/')
@@ -147,30 +74,22 @@ def contato():
     return render_template('contato.html')
 
 
-@app.route('/receber_contato', methods=['GET', 'POST'])
+@app.route('/receber_contato', methods=['POST'])
 def criar_contato_api():
 
-    result = {}
-
-    result['nome'] = request.form["nome"]
-    result['sobrenome'] = request.form["sobrenome"]
-    result['email'] = request.form["email"].replace(' ', '').lower()
-    result['telefone'] = request.form["telefone"]
-    result['message'] = request.form["mensagem"]
-
     # Extrai os dados do formulário.
-    nome = request.form["nome"]
-    sobrenome = request.form["sobrenome"]
-    email = request.form["email"].replace(' ', '').lower()
-    telefone = request.form["telefone"]
-    mensagem = request.form["mensagem"]
+    nome = request.form.get("nome")
+    sobrenome = request.form.get("sobrenome")
+    email = request.form.get("email").replace(' ', '').lower()
+    telefone = request.form.get("telefone")
+    mensagem = request.form.get("mensagem")
 
+
+    return redirect("https://api.whatsapp.com/send?phone=5511980795796&text=" + nome +  "%20" + sobrenome + "%0D%20" + email + "%0D%20" + telefone + "%0D%20" + mensagem ,code=302)
     # Faz o processamento.
-    contato = criar_contato(nome, sobrenome, email, telefone, mensagem)
+    #contato = criar_contato(nome, sobrenome, email, telefone, mensagem)
 
-    sendContactForm(result)
-
-    return render_template('agradecimento.html', nome=nome, sobrenome=sobrenome)
+    #return render_template('agradecimento.html', nome=nome, sobrenome=sobrenome)  
 
 
 @app.route('/historico')
@@ -206,10 +125,11 @@ def agendamento():
     lista = db_listar_funcionarios()
     lista2 = db_listar_cliente()
     lista3 = db_listar_servico() 
+    agendamento = {'id_agendamento': "novo", 'id_cliente': "", 'id_servico':'', 'id_funcionario':''}
 
 
         # Monta a resposta.
-    return render_template("agendamento.html", logado = logado, mensagem = "", funcionarios = lista, cliente = lista2, servicos = lista3)
+    return render_template("agendamento.html", logado = logado, mensagem = "", funcionarios = lista, cliente = lista2, servicos = lista3, agendamento = agendamento)
     
 
 @app.route("/meus_agendamentos", methods = ["GET"])
@@ -225,24 +145,25 @@ def meus_agendamentos():
     return render_template("meu_agendamento.html", logado = logado, mensagem = "")
 
 
-# Processa o botão de excluir um aluno.
-@app.route("/apagar_agendamento/<int:id_agendamento>")
-def deletar_agendamento_api(id_agendamento):
+# Processa o botão de excluir um agendamento.
+@app.route("/apagar_agendamento/<int:id_agendamento>/<string:data_agendamento>",  methods = ["DELETE"])
+def deletar_agendamento_api(id_agendamento, data_agendamento):
     # Autenticação.
     logado = autenticar_login()
+ 
     if logado is None:
         return redirect("/")
         
    
     # Faz o processamento.
-    agendamento = apagar_agendamento(id_agendamento)
+    agendamento = apagar_agendamento(id_agendamento, data_agendamento)
     
 
     # Monta a resposta.
     if agendamento is None:
-        return render_template("meu_agendamento.html", logado = logado, mensagem = "Esse aluno nem mesmo existia mais."), 404
+        return render_template("meu_agendamento.html", mensagem = "Esse agendamento nem mesmo existia mais."), 404
     mensagem = f"O agendamento foi excluído."
-    return render_template("meu_agendamento.html", logado = logado, mensagem = mensagem)
+    return render_template("meu_agendamento.html", mensagem = mensagem)
 
 
 @app.route("/login", methods = ["POST"])
@@ -296,7 +217,7 @@ def criar_cliente():
    
     # Monta a resposta.
     mensagem = f"O email já existe." if ja_existia else f"O Cadastro foi criada com sucesso."
-    return render_template("login.html", mensagem = mensagem)
+    return render_template("cadastro_cliente.html", mensagem = mensagem)
 
 
 
@@ -321,7 +242,8 @@ def criar_agendamento_api():
 
     # Monta a resposta.
     mensagem = f"o agendamento {data1}{hora} já existia com o id {agendamento['id_servico']}." if ja_existia else f"O agendamento {data1}{hora} foi criada."
-    return redirect(url_for("agendamento", logado = logado, funcionarios = lista, mensagem = mensagem))
+    return render_template("agradecimento.html", funcionarios = lista, mensagem = mensagem)
+
 
 
 
@@ -416,12 +338,59 @@ def buscar_cliente_editar_api():
     nome_cliente = request.form["nome"]
     data_agendamento = request.form['data']
     
-    editar_agendamentos = db_meu_agendamento(nome_cliente, data_agendamento)
+    apagar_agendamentos = db_meu_agendamento(nome_cliente, data_agendamento)
     
     # Monta a resposta.
-    if editar_agendamentos is None:
-        return render_template("meu_agendamento.html", mensagem = f"Esse cliente não existe.", cliente = editar_agendamentos), 404
-    return render_template("meu_agendamento.html", cliente = editar_agendamentos)
+    if apagar_agendamento is None:
+        return render_template("meu_agendamento.html", mensagem = f"Esse cliente não existe.", cliente = apagar_agendamentos), 404
+    return render_template("meu_agendamento.html", cliente = apagar_agendamentos)
+
+
+@app.route("/alterar_agendamentos/<int:id_agendamento>", methods = ["GET"])
+def alterar_agendamento_api(id_agendamento):
+    # Autenticação.
+    logado = autenticar_login()
+    if logado is None:
+        return redirect("/")
+
+    
+    agendamento = db_consultar_agendamento(id_agendamento)
+    clientes = db_listar_cliente()
+    servico = db_listar_servico()
+    funcionario = db_listar_funcionarios()
+
+    # Monta a resposta.
+    if agendamento is None:
+        return render_template("meu_agendamento.html", mensagem = f"Esse cliente não existe."), 404
+    return render_template("agendamento.html",  agendamento = agendamento, funcionarios = funcionario, servicos = servico,  cliente = clientes)
+
+
+
+@app.route("/editar_agendamentos/<int:id_agendamento>", methods = ["POST"])
+def editar_agendamento_api(id_agendamento):
+    # Autenticação.
+    logado = autenticar_login()
+    if logado is None:
+        return redirect("/")
+
+    # Extrai os dados do formulário.
+    id_cliente = request.form["id_cliente"]
+    data1 = request.form["data"]
+    hora = request.form["hora"]
+    id_servico = request.form["id_servico"]
+    id_funcionario = request.form["id_funcionario"]
+
+    
+
+    # Faz o processamento.
+    status, agendamento = editar_agendamento(id_agendamento, data1, hora, id_cliente, id_servico, id_funcionario)
+
+    # Monta a resposta.
+    if status == 'não existe':
+        mensagem = "Esse cliente não existia mais." 
+        return render_template("meu_agendamento.html", mensagem = mensagem), 404
+    mensagem = f"O Cliente {id_cliente} com o id {id_agendamento} foi editado." 
+    return render_template("meu_agendamento.html", mensagem = mensagem)
 
 
 
@@ -441,7 +410,7 @@ def salvar_arquivo_upload():
         if e in ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp']:
             u = uuid.uuid1()
             n = f"{u}.{e}"
-            foto.save(os.path.join("alunos_fotos", n))
+            foto.save(os.path.join("funcionario_fotos", n))
             return n
     return ""
 
@@ -503,10 +472,20 @@ def criar_cargo(nome_cargo):
     return False, novo_cargo
 
 
-def apagar_agendamento(id_agendamento):
-    agendamento = db_meu_agendamento(id_agendamento)
+def apagar_agendamento(id_agendamento, data_agendamento):
+    agendamento = db_meu_agendamento(id_agendamento, data_agendamento)
     if agendamento is not None: db_deletar_agendamento(id_agendamento)
     return agendamento
+
+
+def editar_agendamento(id_agendamento, data1, hora, id_cliente, id_servico, id_funcionario):
+    agendamento = db_consultar_agendamento(id_agendamento)
+    
+    if agendamento is None:
+        return 'não existe', None
+    
+    db_editar_agendamento(id_agendamento, data1, hora, id_cliente, id_servico, id_funcionario)
+    return 'alterado', agendamento
 
 
 ###############################################
@@ -738,6 +717,13 @@ def db_fazer_login_funcionario(email, senha):
 
 
 
+def db_consultar_agendamento(id_agendamento):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT a.id_agendamento, c.nome AS nome_cliente, c.id_cliente, a.data1, a.hora, s.nome_servico, s.id_servico, s.preco_servico, f.id_funcionario, f.nome AS nome_funcionario FROM cliente AS c LEFT JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where a.id_agendamento = ?",[id_agendamento])
+        return row_to_dict(cur.description, cur.fetchone())
+
+
+
 def db_historico_cliente(nome_cliente):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario FROM cliente AS c LEFT JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where c.nome = ?",[nome_cliente])
@@ -793,6 +779,12 @@ def db_deletar_agendamento(id_agendamento):
         cur.execute("DELETE FROM agendamento WHERE id_agendamento = ?", [id_agendamento])
         con.commit()
 
+
+def db_editar_agendamento(id_agendamento, data1, hora, id_cliente, id_servico, id_funcionario):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("UPDATE agendamento SET data1 = ?, hora = ?, id_cliente = ?, id_servico = ?, id_funcionario = ? WHERE id_agendamento = ?", [data1, hora, id_cliente, id_servico, id_funcionario, id_agendamento])
+        con.commit()
+        return {'id_agendamento':id_agendamento, 'data1': data1, 'hora': hora, 'id_cliente': id_cliente, 'id_servico': id_servico, 'id_funcionario': id_funcionario}
 
 
 if __name__ == '__main__':
