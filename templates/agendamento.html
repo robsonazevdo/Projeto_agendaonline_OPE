@@ -10,12 +10,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
     <link rel="stylesheet" href="" class="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/i18n/pt-BR.js"></script>
+
+
     <link rel="stylesheet" href="/static/css/style-agendamento.css">
 
     <title>Agendamento</title>
 
-    
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/i18n/defaults-pt_BR.min.js"></script>
+
+    
   </head>
 
   
@@ -28,15 +41,16 @@
         <p class="erro">{{erro}}</p>
     {% endif %}
  
-   <div class="container">
+   <div class="conteudo">
+   
 
    {% if agendamento['id_agendamento'] != 'novo' %}
 
-        <form action="/editar_agendamentos/{{ agendamento['id_agendamento'] }}" class="form" method="POST">
+        <form action="/editar_agendamentos/{{agendamento['id_agendamento']}}" method="POST">
 
    {% else %}
 
-    <form action="/add_agendamento" class="form" method="POST">
+    <form action="/add_agendamento"  method="POST">
 
     {% endif %}
 
@@ -44,8 +58,8 @@
         <div class="mb-3">
             <label for="cliente" class="form-label">Lista cliente</label>
        
-            <select name="id_cliente" id="id_cliente">
-                    <option value="escolha">lista clientes</option>
+            <select name="id_cliente" id="id_cliente" class="selectpicker" data-live-search="true">
+                   
                     {% for c in cliente %}
                         <option value="{{c['id_cliente']}}"{% if c['id_cliente'] == agendamento['id_cliente'] %}selected="selected"{% endif %}>{{c['nome']}}</option>
                         {% endfor %}
@@ -54,19 +68,19 @@
 
         <div class="mb-3">
             <label for="id_data" class="form-label">Escolha a Data</label>
-            <input type="date" required class="form-control" id="id_data" name="data">
+            <input type="date" required class="input-fun" id="id_data" name="data">
 
         </div>
         <div class="mb-3">
             <label for="id_hora" class="form-label">Escolha a hora</label>
-            <input type="time" min="09:00" max="18:00" required class="form-control timepicker" id="id_hora" name="hora">
+            <input type="time" min="09:00" max="18:00" required class="input-fun" id="id_hora" name="hora">
         </div>
 
         <div class="mb-3">
             <label for="servico" class="form-label">Escolha o Serviço</label>
 
-            <select name="id_servico" id="id_servico">
-                <option value="escolha">Escolha o serviço</option>
+            <select name="id_servico" id="id_servico"class="selectpicker" data-live-search="true">
+               
                 {% for s in servicos %}
                     <option value="{{s['id_servico']}}"{% if s['id_servico'] == agendamento['id_servico'] %}selected="selected"{% endif %}>{{s['nome_servico']}}</option>
                     {% endfor %}
@@ -80,8 +94,8 @@
 
             <label for="id_funcionario" class="form-label">Escolha o Profissional</label>
 
-            <select name="id_funcionario" id="id_funcionario">
-                <option value="escolha">Escolha o Profissional</option>
+            <select name="id_funcionario" id="id_funcionario"class="selectpicker" data-live-search="true">
+                
                 {% for funcionario in funcionarios %}
                     <option value="{{funcionario['id_funcionario']}}"{% if funcionario['id_funcionario'] == agendamento['id_funcionario'] %}selected="selected"{% endif %}>{{funcionario['nome']}}</option>
                 {% endfor %}
@@ -90,7 +104,7 @@
         </div>
 
         <button type="submit" class="btn-agendamento btn-primary btn1">Agendar</button>
-
+        <a class="btn_funcao2 btn" href="/calendario">Voltar a Agenda</a>
     </form>
 
 </div>
@@ -103,6 +117,14 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script>
+
+      $(document).ready(function() {
+            $('.selectpicker').selectpicker();
+        });
+    </script>
+
   </body>
 </html>
 

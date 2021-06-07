@@ -53,7 +53,7 @@ def criar_admin_api():
 @app.route('/calendario')
 def agenda():
 
-    color = ['Brown', 'Navy blue', 'Beige', 'Gray', 'Gold', 'Orange', 'Silver', 'Pink','Purple', 'Green', 'Red', 'Violet']
+    color = ['Brown', 'Navy blue', 'Orange', 'Gray', 'Gold', 'Orange', 'Silver', 'Pink','Purple', 'Green', 'Red', 'Violet']
 
     resources = db_listar_funcionarios()
     events = db_listar_agendamentos()
@@ -242,7 +242,7 @@ def criar_agendamento_api():
 
     # Monta a resposta.
     mensagem = f"o agendamento {data1}{hora} já existia com o id {agendamento['id_servico']}." if ja_existia else f"O agendamento {data1}{hora} foi criada."
-    return render_template("agradecimento.html", funcionarios = lista, mensagem = mensagem)
+    return render_template("agenda.html", funcionarios = lista, mensagem = mensagem)
 
 
 
