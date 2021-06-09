@@ -316,6 +316,26 @@ def criar_cargo_api():
     return render_template("cadastro_funcionario.html", mensagem = mensagem)
 
 
+@app.route('/editar_funcionario') 
+def editar_funcionario_api():
+
+    return render_template("editar_funcionario.html")
+
+
+@app.route('/buscar_funcionario', methods=['POST'])
+def buscar_funcionario_api():
+
+# Faz o processamento.
+    nome = request.form['nome']  
+    funcionario = db_historico_funcionario(nome)
+    print(funcionario)
+    
+ # Monta a resposta.
+    if funcionario is None:
+        return render_template("editar_funcionario.html", mensagem = f"Esse cliente não existe.", funcionario = funcionario), 404
+    return render_template("editar_funcionario.html", funcionario = funcionario)
+
+
 
 @app.route('/buscar_cliente/<string:nome>', methods=['GET']) 
 def buscar_cliente_api(nome):
@@ -355,6 +375,25 @@ def alterar_agendamento_api(id_agendamento):
 
     
     agendamento = db_consultar_agendamento(id_agendamento)
+    clientes = db_listar_cliente()
+    servico = db_listar_servico()
+    funcionario = db_listar_funcionarios()
+
+    # Monta a resposta.
+    if agendamento is None:
+        return render_template("meu_agendamento.html", mensagem = f"Esse cliente não existe."), 404
+    return render_template("agendamento.html",  agendamento = agendamento, funcionarios = funcionario, servicos = servico,  cliente = clientes)
+
+
+@app.route("/alterar_funcionario/<int:id_funcionario>", methods = ["GET"])
+def alterar_funcionario_api(id_funcionario):
+    # Autenticação.
+    logado = autenticar_login()
+    if logado is None:
+        return redirect("/")
+
+    
+    agendamento = db_consultar_funcionario(id_funcionario)
     clientes = db_listar_cliente()
     servico = db_listar_servico()
     funcionario = db_listar_funcionarios()
@@ -727,6 +766,12 @@ def db_consultar_agendamento(id_agendamento):
 def db_historico_cliente(nome_cliente):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario FROM cliente AS c LEFT JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where c.nome = ?",[nome_cliente])
+        return rows_to_dict(cur.description, cur.fetchall())
+
+
+def db_historico_funcionario(nome_funcionario):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT f.nome, f.email, f.endereco, f.telefone, f.cpf, cg.nome_cargo, f.status FROM funcionario AS f inner join cargo As cg ON f.id_cargo = cg.id_cargo  where f.nome = ?",[nome_funcionario])
         return rows_to_dict(cur.description, cur.fetchall())
 
 
