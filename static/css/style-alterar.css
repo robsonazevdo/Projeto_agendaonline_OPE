@@ -8,6 +8,14 @@
     border: none;
 }
 
+body {
+    background-image: url(/static/img/salão-de-beleza.jpeg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+}
+
 .conteudo {
     width: 600px;
     margin-left: auto;
@@ -102,7 +110,6 @@ i {
     font-size: 10px;
     margin-left: 400px;
     text-shadow: black 2px 2px 2px;
-    color: #fff;
 }
 
 .btn_funcao:hover {

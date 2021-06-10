@@ -21,23 +21,33 @@
   </head>
   <body>
 
-  {% if mensagem %}
+  
+
+
+
+<div class="conteudo">
+
+{% if mensagem %}
 <p class="mensagem">{{mensagem}}</p>
 {% endif %} {% if erro %}
 <p class="erro">{{erro}}</p>
 {% endif %}
 
 
-
-<div class="container">
     <div class="form_busca">
         <form action="/buscar_funcionario" method="POST" class="text-center form-contato" class="was-validated">
 
-            <label for="id_nome" class="form-label">Buscar Cliente</label>
-            <input type="text" id="id_nome" placeholder="Buscar Cliente *" autocomplete="off" required autofocus class="input-fun" name="nome">
+            <label for="id_nome" class="form-label">Buscar Funcionário</label>
+            <label for="id_funcionario" class="form-label">Escolha o Profissional</label>
+                <select name="nome" id="id_funcionario">
+                    <option required value="escolha">Escolha o Profissional</option>
+                    {% for f in funcionarios %}
+                        <option required value="{{f['nome']}}"{% if f['id_funcionario'] == f['f'] %}selected="selected"{% endif %}>{{f['nome']}}</option>
+                    {% endfor %}
+                </select>
 
 
-            <button type="submit" class="btn btn-primary btn-form">Buscar</button>
+            <button type="submit" class="btn btn-form"><i class="fas fa-search"></i></button>
 
         </form>
 

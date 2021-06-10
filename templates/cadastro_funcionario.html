@@ -35,13 +35,22 @@
 
 <div class="conteudo">
 
+
+    {% if mensagem %}
+    <p class="mensagem">{{mensagem}}</p>
+    {% endif %}
+    {% if erro %}
+        <p class="erro">{{erro}}</p>
+    {% endif %}
+ 
+
     <div class="form">
 
         <form action="/add_funcionario" method="POST" class="text-center form-contato" class="was-validated">
 
             <h1 class=" ">Funcionário</h1>
 
-            <button class="btn_funcao btn btn-primary">Adicionar Cargo</button>
+            <a class="btn_funcao btn btn-primary">Adicionar Cargo</a>
 
             <label for="id_nome" class="form-label">Nome</label>
             <input type="text" id="id_nome" placeholder="Nome*" autocomplete="off" required autofocus class="input-fun" name="nome">
@@ -80,10 +89,6 @@
                   Inativo
                 </label>
             </div>
-
-            <label for="password" class="form-label">Senha</label>
-            <input type="password" id="password " placeholder="Crie uma Senha* " class="input-fun" name="senha">
-
 
             <button type="submit" class="btn btn-primary">Enviar</button>
 

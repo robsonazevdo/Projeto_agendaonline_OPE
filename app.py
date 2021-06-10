@@ -20,7 +20,6 @@ def inicio():
 
 @app.route('/inicio_admin')
 def inicio_admin():
-
     # Autenticação.
     logado = autenticar_login()
     if logado is None:
@@ -102,9 +101,13 @@ def historico():
 @app.route('/cadastro_funcionario')
 def cadastro_funcionario():
     lista = db_listar_cargo()
-    lista2 = db_listar_servico()
+    lista2 = db_listar_funcionarios()
 
-    return render_template('cadastro_funcionario.html', cargos = lista, servicos = lista2)
+    funcionario = {'id_funcionario': "novo", 'id_cargo':'', 'nome': "", 'cpf':'', 'email':'', 'endereco':'', 'telefone':'' }
+
+    print(lista2,funcionario)
+
+    return render_template('cadastro_funcionario.html', cargos = lista, funci = lista2, lista3 = funcionario)
 
 
 @app.route('/servico')
@@ -237,12 +240,17 @@ def criar_agendamento_api():
 
     # Faz o processamento.
     lista = db_listar_funcionarios()
+    lista2 = db_listar_cliente()
+    lista3 = db_listar_servico() 
+
+    lista4 = {'id_agendamento': "novo", 'id_cliente': "", 'id_servico':'', 'id_funcionario':''}
+    
     ja_existia, agendamento = criar_agendamento(data1, hora, id_cliente, id_servico, id_funcionario)
 
 
     # Monta a resposta.
-    mensagem = f"o agendamento {data1}{hora} já existia com o id {agendamento['id_servico']}." if ja_existia else f"O agendamento {data1}{hora} foi criada."
-    return render_template("agenda.html", funcionarios = lista, mensagem = mensagem)
+    mensagem = f"o agendamento {data1}{hora} já existia com o id {agendamento['id_servico']}." if ja_existia else f"O Agendamento foi criada."
+    return render_template("agendamento.html", mensagem = mensagem, funcionarios = lista, cliente = lista2, servicos = lista3, agendamento = lista4)
 
 
 
@@ -287,12 +295,12 @@ def criar_funcionario_api():
     telefone = request.form["telefone"]
     id_cargo = request.form["id_cargo"]
     status = request.form["status"]
-    senha = request.form["senha"]
+    
 
 
 
     # Faz o processamento.
-    ja_existia, funcionario = criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status, senha)
+    ja_existia, funcionario = criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status)
     
 
     # Monta a resposta.
@@ -312,14 +320,15 @@ def criar_cargo_api():
     
 
     # Monta a resposta.
-    mensagem = f"O Funcionario {nome_cargo} já existe." if ja_existia else f"O Funcionario {nome_cargo} foi criada com sucesso."
+    mensagem = f"O Cargo {nome_cargo} já existe." if ja_existia else f"O Cargo {nome_cargo} foi criada com sucesso."
     return render_template("cadastro_funcionario.html", mensagem = mensagem)
 
 
 @app.route('/editar_funcionario') 
 def editar_funcionario_api():
+    lista = db_listar_funcionarios()
 
-    return render_template("editar_funcionario.html")
+    return render_template("editar_funcionario.html",funcionarios = lista)
 
 
 @app.route('/buscar_funcionario', methods=['POST'])
@@ -327,8 +336,10 @@ def buscar_funcionario_api():
 
 # Faz o processamento.
     nome = request.form['nome']  
+
     funcionario = db_historico_funcionario(nome)
-    print(funcionario)
+
+    print(nome,funcionario)
     
  # Monta a resposta.
     if funcionario is None:
@@ -393,15 +404,42 @@ def alterar_funcionario_api(id_funcionario):
         return redirect("/")
 
     
-    agendamento = db_consultar_funcionario(id_funcionario)
-    clientes = db_listar_cliente()
-    servico = db_listar_servico()
-    funcionario = db_listar_funcionarios()
+    funcionario = db_consultar_funcionario(id_funcionario)
+    cargos = db_listar_cargo()
+    
 
     # Monta a resposta.
     if agendamento is None:
         return render_template("meu_agendamento.html", mensagem = f"Esse cliente não existe."), 404
-    return render_template("agendamento.html",  agendamento = agendamento, funcionarios = funcionario, servicos = servico,  cliente = clientes)
+    return render_template("alterar-funcionario.html",  funcionario = funcionario, cargos = cargos)
+    
+
+@app.route("/edicao_funcionario/<int:id_funcionario>", methods = ["POST"])
+def edicao_funcionario_api(id_funcionario):
+    # Autenticação.
+    logado = autenticar_login()
+    if logado is None:
+        return redirect("/")
+
+    # Extrai os dados do formulário.
+    nome = request.form["nome"]
+    email = request.form["email"]
+    endereco = request.form["endereco"]
+    cpf = request.form["cpf"]
+    telefone = request.form["telefone"]
+    id_cargo = request.form["id_cargo"]
+    status = request.form["status"]
+    
+
+    # Faz o processamento.
+    status, funcionario = editar_funcionario(id_funcionario, nome, email, endereco, cpf, telefone, id_cargo, status)
+
+    # Monta a resposta.
+    if status == 'não existe':
+        mensagem = "Esse Funcionário não existia mais." 
+        return render_template("meu_agendamento.html", mensagem = mensagem), 404
+    mensagem = f"O Funcionário foi editado." 
+    return render_template("editar_funcionario.html", mensagem = mensagem)
 
 
 
@@ -428,7 +466,7 @@ def editar_agendamento_api(id_agendamento):
     if status == 'não existe':
         mensagem = "Esse cliente não existia mais." 
         return render_template("meu_agendamento.html", mensagem = mensagem), 404
-    mensagem = f"O Cliente {id_cliente} com o id {id_agendamento} foi editado." 
+    mensagem = f"O Cliente foi editado." 
     return render_template("meu_agendamento.html", mensagem = mensagem)
 
 
@@ -497,10 +535,10 @@ def criar_servico_funcionario(i, id_funcionario):
     return False, novo_servico  
 
 
-def criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status, senha):
-    funcionario_ja_existe = db_verificar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status, senha)
+def criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status):
+    funcionario_ja_existe = db_verificar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status)
     if funcionario_ja_existe is not None: return True, funcionario_ja_existe
-    novo_funcionario = db_criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status, senha)
+    novo_funcionario = db_criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status)
     return False, novo_funcionario   
 
 
@@ -526,6 +564,15 @@ def editar_agendamento(id_agendamento, data1, hora, id_cliente, id_servico, id_f
     db_editar_agendamento(id_agendamento, data1, hora, id_cliente, id_servico, id_funcionario)
     return 'alterado', agendamento
 
+
+def editar_funcionario(id_funcionario, nome, email, endereco, cpf, telefone, id_cargo, status):
+    funcionario = db_consultar_funcionario(id_funcionario)
+
+    if funcionario is None:
+        return 'não existe', None
+
+    db_editar_funcionario(id_funcionario, nome, email, endereco, cpf, telefone, id_cargo, status)
+    return 'alterado', funcionario
 
 ###############################################
 #### Funções auxiliares de banco de dados. ####
@@ -589,7 +636,6 @@ CREATE TABLE IF NOT EXISTS funcionario (
     endereco VARCHAR(50) NOT NULL,
     telefone VARCHAR(12) NOT NULL,
     status VARCHAR(7) NOT NULL,
-    senha VARCHAR(8) NOT NULL,
     UNIQUE(email),
     FOREIGN KEY (id_cargo) REFERENCES cargo(id_cargo)
 );
@@ -614,17 +660,6 @@ CREATE TABLE IF NOT EXISTS agendamento (
     FOREIGN KEY (id_servico) REFERENCES servico(id_servico),
     FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_funcionario)
 
-);
-
-CREATE TABLE IF NOT EXISTS contato (
-    id_contato INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome VARCHAR(30) NOT NULL,
-    sobrenome VARCHAR(100) NOT NULL,
-    email VARCHAR(50) NOT NULL,
-    telefone VARCHAR(12) NOT NULL,
-    mensagem VARCHAR(300) NOT NULL,
-    status VARCHAR(7) NOT NULL
-    
 );
 
 
@@ -672,9 +707,9 @@ def db_verificar_cargo(nome_cargo):
         return row_to_dict(cur.description, cur.fetchone())
 
 
-def db_verificar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status, senha):
+def db_verificar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT id_funcionario, id_cargo, nome, cpf, email, endereco, telefone, status, senha FROM funcionario WHERE id_cargo = ? AND nome = ? AND cpf = ? AND email = ? AND endereco = ? AND telefone = ? AND status = ? AND senha = ?", [id_cargo, nome, cpf, email, endereco, telefone, status, senha])
+        cur.execute("SELECT id_funcionario, id_cargo, nome, cpf, email, endereco, telefone, status FROM funcionario WHERE id_cargo = ? AND nome = ? AND cpf = ? AND email = ? AND endereco = ? AND telefone = ? AND status = ?", [id_cargo, nome, cpf, email, endereco, telefone, status])
         return row_to_dict(cur.description, cur.fetchone())
 
 
@@ -719,12 +754,12 @@ def db_criar_servico_funcionario(i, id_funcionario):
         return {'id_servico_funcionario':id_servico_funcionario, 'id_servico':i, 'id_funcinario':id_funcionario}
 
 
-def db_criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status, senha):
+def db_criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("INSERT INTO funcionario (id_cargo, nome, cpf, email, endereco, telefone, status, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [id_cargo, nome, cpf, email, endereco, telefone, status, senha])
+        cur.execute("INSERT INTO funcionario (id_cargo, nome, cpf, email, endereco, telefone, status) VALUES (?, ?, ?, ?, ?, ?, ?)", [id_cargo, nome, cpf, email, endereco, telefone, status])
         id_funcionario = cur.lastrowid
         con.commit()
-        return {'id_funcionario':id_funcionario, 'id_cargo':id_cargo, 'nome':nome, 'cpf':cpf, 'email':email, 'endereco':endereco, 'telefone':telefone, 'status':status, 'senha':senha}
+        return {'id_funcionario':id_funcionario, 'id_cargo':id_cargo, 'nome':nome, 'cpf':cpf, 'email':email, 'endereco':endereco, 'telefone':telefone}
 
 
 def db_criar_cargo(nome_cargo):
@@ -735,17 +770,10 @@ def db_criar_cargo(nome_cargo):
         return {'id_cargo':id_cargo,'nome_cargo':nome_cargo}
 
 
-def criar_contato(nome, sobrenome, email, telefone, mensagem):
-    with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("INSERT INTO contato(nome, sobrenome, email, telefone, mensagem) VALUES (?, ?, ?, ?, ?)", [nome, sobrenome, email, telefone, mensagem])
-        id_contato = cur.lastrowid
-        con.commit()
-        return {'id_contato':id_contato,'nome':nome, 'sobrenome':sobrenome, 'email':email, 'telefone':telefone, 'mensagem':mensagem}
-
 
 def db_fazer_login_admin(email, senha):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT c.email, c.senha, c.nome FROM cliente c WHERE c.email = ? AND c.senha = ?", [email, senha])
+        cur.execute("SELECT email, senha, nome FROM tb_admin WHERE email = ? AND senha = ?", [email, senha])
         return row_to_dict(cur.description, cur.fetchone())
 
 
@@ -762,6 +790,11 @@ def db_consultar_agendamento(id_agendamento):
         return row_to_dict(cur.description, cur.fetchone())
 
 
+def db_consultar_funcionario(id_funcionario):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT f.id_funcionario, f.nome, f.email, f.endereco, f.telefone, f.cpf, cg.nome_cargo, f.status, cg.id_cargo FROM funcionario AS f inner join cargo As cg ON f.id_cargo = cg.id_cargo  where f.id_funcionario = ?",[id_funcionario])
+        return row_to_dict(cur.description, cur.fetchone())
+
 
 def db_historico_cliente(nome_cliente):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
@@ -771,7 +804,7 @@ def db_historico_cliente(nome_cliente):
 
 def db_historico_funcionario(nome_funcionario):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT f.nome, f.email, f.endereco, f.telefone, f.cpf, cg.nome_cargo, f.status FROM funcionario AS f inner join cargo As cg ON f.id_cargo = cg.id_cargo  where f.nome = ?",[nome_funcionario])
+        cur.execute("SELECT f.id_funcionario, f.nome, f.email, f.endereco, f.telefone, f.cpf, cg.nome_cargo, f.status FROM funcionario AS f inner join cargo As cg ON f.id_cargo = cg.id_cargo  where f.nome = ?",[nome_funcionario])
         return rows_to_dict(cur.description, cur.fetchall())
 
 
@@ -785,7 +818,7 @@ def db_meu_agendamento(nome_cliente, data_agendamento):
 
 def db_listar_funcionarios():
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT id_funcionario, id_cargo, nome, cpf, email, endereco FROM funcionario")
+        cur.execute("SELECT id_funcionario, id_cargo, nome, cpf, email, endereco, telefone FROM funcionario")
         return rows_to_dict(cur.description, cur.fetchall())
 
 
@@ -830,6 +863,14 @@ def db_editar_agendamento(id_agendamento, data1, hora, id_cliente, id_servico, i
         cur.execute("UPDATE agendamento SET data1 = ?, hora = ?, id_cliente = ?, id_servico = ?, id_funcionario = ? WHERE id_agendamento = ?", [data1, hora, id_cliente, id_servico, id_funcionario, id_agendamento])
         con.commit()
         return {'id_agendamento':id_agendamento, 'data1': data1, 'hora': hora, 'id_cliente': id_cliente, 'id_servico': id_servico, 'id_funcionario': id_funcionario}
+
+def db_editar_funcionario(id_funcionario, nome, email, endereco, cpf, telefone, id_cargo, status):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("UPDATE funcionario SET id_cargo = ?, nome = ?, cpf = ?, email = ?, endereco = ?, telefone = ?, status = ? WHERE id_funcionario = ?", [id_cargo, nome, cpf, email, endereco, telefone, status, id_funcionario])
+        id_funcionario = cur.lastrowid
+        con.commit()
+        return {'id_funcionario':id_funcionario, 'id_cargo':id_cargo, 'nome':nome, 'cpf':cpf, 'email':email, 'endereco':endereco, 'telefone':telefone, 'status':status}
+
 
 
 if __name__ == '__main__':

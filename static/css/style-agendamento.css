@@ -149,6 +149,28 @@ label {
     display:flex
 }
 
+.mensagem, .erro {
+    font-weight: bold;
+    padding: 10px;
+    margin: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.mensagem {
+    color: #545252;
+    background-color: #ebddcd;
+    border-color: #FDE910;
+}
+
+.erro {
+    color: #800000;
+    background-color: #ff8080;
+    border-color: #800000;
+}
 
                    
                     
