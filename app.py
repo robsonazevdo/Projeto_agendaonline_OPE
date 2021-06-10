@@ -339,7 +339,7 @@ def buscar_funcionario_api():
 
     funcionario = db_historico_funcionario(nome)
 
-    print(nome,funcionario)
+   
     
  # Monta a resposta.
     if funcionario is None:

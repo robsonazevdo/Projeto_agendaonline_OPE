@@ -96,13 +96,14 @@ i {
 }
 
 .btn_funcao {
+    color:#ffffff;
     background-color: #323232;
     border: 2px solid #545252;
     box-shadow: 2px 2px black;
-    font-size: 10px;
+    font-size: 12px;
     margin-left: 400px;
     text-shadow: black 2px 2px 2px;
-    color: #fff;
+    
 }
 
 .btn_funcao:hover {
@@ -121,4 +122,6 @@ select{
 h1{
     color:#fff;
 }
+
+
 

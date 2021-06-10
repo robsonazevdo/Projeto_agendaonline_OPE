@@ -22,7 +22,7 @@
 
     <form action="/add_cargo" method="POST" class="text-center form-contato" class="was-validated">
 
-        <h1 class=" ">Adicione uma Cargo</h1>
+        <h1 class="add ">Adicione uma Cargo</h1>
 
         <label for="id_nomefuncao" class="form-label-funcao">Cargo</label>
         <input type="text" id="id_nomefuncao" placeholder='Adicione uma Cargo*' autocomplete="off" required autofocus class="input-funcao" name="nome">
@@ -50,7 +50,7 @@
 
             <h1 class=" ">Funcionário</h1>
 
-            <a class="btn_funcao btn btn-primary">Adicionar Cargo</a>
+            <div class="btn_funcao btn">Adicionar Cargo</div>
 
             <label for="id_nome" class="form-label">Nome</label>
             <input type="text" id="id_nome" placeholder="Nome*" autocomplete="off" required autofocus class="input-fun" name="nome">
@@ -70,7 +70,7 @@
             <div class="mb-3">
                 <label for="id_cargo" class="form-label">Qual é o Cargo </label>
                 <select name="id_cargo" id="id_cargo">
-                    <option value="escolha">Escolha o Profissional</option>
+                    <option value="escolha">Escolha o Cargo</option>
                     {% for c in cargos %}
                         <option value="{{c['id_cargo']}}"{% if c['id_cargo'] == c['c'] %}selected="selected"{% endif %}>{{c['nome_cargo']}}</option>
                     {% endfor %}
