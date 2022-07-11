@@ -3,7 +3,9 @@
 
 
 {% block title %} Histórico {% endblock title %} {% block head%} {{super()}}
-<link rel="stylesheet" type="text/css" href="/static/css/style-historico.css">{% endblock head%}
+<link rel="stylesheet" type="text/css" href="/static/css/style-historico.css">
+
+{% endblock head%}
 
 <!-- estilos-->
 
@@ -23,27 +25,17 @@
         <p class="erro">{{erro}}</p>
     {% endif %}
     
-    <form action="/buscar_cliente/nome" method="GET" class="text-center form-contato" class="was-validated">
-
-
-        <label for="id_nome" class="form-label">Buscar histórico de cliente</label>
-        <input type="text" id="id_nome" placeholder="Buscar histórico de cliente*" autocomplete="off" required autofocus class="input-fun" name="nome">
-
-
-        <button type="submit" class="btn btn-form"><i class="fas fa-search"></i></button>
-
-    </form>
     
-    
+
     <table class="table">
         <thead>
             <tr>
-                <th>Nome</th>
-                <th>Data Agendamento</th>
-                <th>Horário Agendamento</th>
-                <th>Serviço</th>
-                <th>Profissional</th>
-                <th>Valor</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Data Agendamento</th>
+                <th scope="col">Horário Agendamento</th>
+                <th scope="col">Serviço</th>
+                <th scope="col">Profissional</th>
+                <th scope="col">Valor</th>
             </tr>
         </thead>
         <tbody>
@@ -67,7 +59,33 @@
 <!--fim cadastro-->
 {% endblock content %}
 
+
+{% block formularios %} 
+<div class="formulario">
+
+    <form action="/buscar_cliente/nome" method="GET"  class="was-validated">
+
+
+        <label for="nome" class="form-label h3">Histórico de Pagamento</label>
+        <!--<input type="text" id="id_nome" placeholder="Histórico de Pagamento*" 
+            autocomplete="off" required autofocus class="input-fun" name="nome">-->
+
+        <div class="seletor">
+       
+            <select name="nome" data-width="100%"  title="Lista Cliente*" id="id_cliente" class="selectpicker"  data-live-search="true">
+                   
+                    {% for c in listar %}
+                        <option value="{{c['nome']}}">{{c['nome']}}</option>
+                        {% endfor %}
+                </select>
+        </div>
+        <button type="submit" class="btn btn-form"><i class="fas fa-search"></i></button>
+
+    </form>
+</div>
+{% endblock formularios %}
 <!-- scripts-->
 
-{% block scripts %} {% endblock scripts %}
+{% block scripts %} 
+{% endblock scripts %}
 <!-- scripts-->

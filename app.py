@@ -93,8 +93,13 @@ def criar_contato_api():
 
 @app.route('/historico')
 def historico():
+
+    lista = db_listar_cliente()
     
-    return render_template('historico.html')
+    return render_template('historico.html', listar=lista)
+
+
+
 
    
 
@@ -355,11 +360,18 @@ def buscar_cliente_api(nome):
     nome_cliente = request.args.get('nome')
     
     clientes = db_historico_cliente(nome_cliente)
+    lista = db_listar_cliente()
     
  # Monta a resposta.
     if clientes is None:
         return render_template("historico.html", mensagem = f"Esse cliente não existe.", cliente = clientes), 404
-    return render_template("historico.html", cliente = clientes)
+    return render_template("historico.html", cliente = clientes, listar = lista)
+
+
+
+
+
+
 
 
 @app.route('/buscar_cliente_editar', methods=['GET', 'POST']) 
@@ -798,7 +810,7 @@ def db_consultar_funcionario(id_funcionario):
 
 def db_historico_cliente(nome_cliente):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario FROM cliente AS c LEFT JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where c.nome = ?",[nome_cliente])
+        cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario FROM cliente AS c LEFT JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where c.nome = ? ORDER BY a.data1 desc",[nome_cliente])
         return rows_to_dict(cur.description, cur.fetchall())
 
 
