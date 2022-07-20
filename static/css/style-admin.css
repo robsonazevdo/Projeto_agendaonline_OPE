@@ -8,11 +8,6 @@
     border: none;
 }
 
-nav{
-    border-bottom: #a8a4a4 solid 1px;
-    
-    
-}
 
 
 .mensagem,
@@ -43,49 +38,50 @@ nav{
 
 .rodape{
     background-color: #4876FF;
-    height: 50px;
+    height: 10vh;
     
 
 }
 
 .head{
     height: 80vh;
-    background-color: #545252;
+    background-image: linear-gradient(to bottom right, #ebddcd , #545252);
 }
 
-
-
-
-.content{
-    height: 80vh;
-    /*background-image: url(/static/img/salão-de-beleza.jpeg);
+/*body{
+    position: absolute;
+    display: flex;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
     background-size: cover;
-    -webkit-filter: grayscale(100%);
+   
+    /*-webkit-filter: grayscale(100%);
   filter: grayscale(100%);
   filter: gray; 
-  
-  */
+
  
 }
 
+*/
+
 .formularios{
-    height: 100%;
-    
+   
+    background-color: #ffffff;
+    height: 80vh;
     
 }
 
 
 .main{
-    margin-top: 1px;
+    
+    margin-top: -20px;
     display: grid;
     grid-template-columns: 1fr 8fr 3fr;
     grid-template-rows: 2;
     grid-row: auto;
     grid-column:auto;
-   
+
    
     
     

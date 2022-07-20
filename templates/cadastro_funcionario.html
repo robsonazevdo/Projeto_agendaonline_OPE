@@ -2,8 +2,17 @@
 <!---->
 
 
-{% block title %} Cad-funcionario {% endblock title %} {% block head%} {{super()}}
-<link rel="stylesheet" type="text/css" href="/static/css/style-cad_funcionario.css">{% endblock head%}
+{% block title %}
+
+Cadastro Funcionário
+{% endblock title %}
+
+{% block head%} {{super()}}
+<link rel="stylesheet" type="text/css" href="/static/css/style-cad_funcionario.css">
+ 
+
+
+{% endblock head%}
 
 <!-- estilos-->
 
@@ -15,24 +24,6 @@
 {% block content %}
 <!--inicio cadastro-->
 
-
-<div class="form_funcao aparecer" id="form_funcao">
-
-    <i class="far fa-window-close"></i>
-
-    <form action="/add_cargo" method="POST" class="text-center form-contato" class="was-validated">
-
-        <h1 class="add ">Adicione uma Cargo</h1>
-
-        <label for="id_nomefuncao" class="form-label-funcao">Cargo</label>
-        <input type="text" id="id_nomefuncao" placeholder='Adicione uma Cargo*' autocomplete="off" required autofocus class="input-funcao" name="nome">
-
-
-        <button type="submit" class="btn btn-form btn-primary">Enviar</button>
-
-    </form>
-</div>
-
 <div class="conteudo">
 
 
@@ -42,64 +33,106 @@
     {% if erro %}
         <p class="erro">{{erro}}</p>
     {% endif %}
- 
+    <table class="table table-striped">
+                
+        <thead>
+            
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Endereço</th>
+                <th>Telefone</th>
+                <th>CPF</th>
+                <th>Cargo</th>
+                <th>Status</th>
+                <th>Alterar</th>
+            </tr>
+        </thead>
+        <tbody >
+            {% for f in funci %}
+            
+            <tr>
+                <td >{{f.nome}}</td>
+                <td>{{f.email}}</td>
+                <td>{{f.endereco}}</td>
+                <td>{{f.telefone}}</td>
+                <td>{{f.cpf}}</td>
+                <td>{{f.nome_cargo}}</td>
+                <td>{{f.status}}</td>
+            
+                <td><a href="/alterar_funcionario/{{f.id_funcionario}}"><i class="fas fa-pencil-alt"></i></a>
+        
+                
+                </td>
+                
+            </tr>
+        
+        {% endfor %}
+        </tbody>
+    </table>
 
-    <div class="form">
 
-        <form action="/add_funcionario" method="POST" class="text-center form-contato" class="was-validated">
 
-            <h1 class=" ">Funcionário</h1>
-
-            <div class="btn_funcao btn">Adicionar Cargo</div>
-
-            <label for="id_nome" class="form-label">Nome</label>
-            <input type="text" id="id_nome" placeholder="Nome*" autocomplete="off" required autofocus class="input-fun" name="nome">
-
-            <label for="id_email" class="form-label">Email</label>
-            <input type="email" id="id_email" placeholder="Email*" autocomplete="off" required autofocus class="input-fun" name="email">
-
-            <label for="id_endereco" class="form-label">Endereço</label>
-            <input type="text" id="id_endereco" placeholder="Endereço* " autocomplete="off" required autofocus class="input-fun" name="endereco">
-
-            <label for="id_telefone" class="form-label">Telefone</label>
-            <input type="tel" id="id_telefone" placeholder="Telefone* " autocomplete="off" required autofocus class="input-fun" name="telefone">
-
-            <label for="id_cpf" class="form-label">CPF</label>
-            <input type="text" id="id_cpf" placeholder="CPF* " autocomplete="off" required autofocus class="input-fun" name="cpf">
-
-            <div class="mb-3">
-                <label for="id_cargo" class="form-label">Qual é o Cargo </label>
-                <select name="id_cargo" id="id_cargo">
-                    <option value="escolha">Escolha o Cargo</option>
-                    {% for c in cargos %}
-                        <option value="{{c['id_cargo']}}"{% if c['id_cargo'] == c['c'] %}selected="selected"{% endif %}>{{c['nome_cargo']}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="form-check">
-                <input type="radio" id="id_status" name="status" checked="yes" value="Ativo">
-                <label class="form-check-label" for="exampleRadios1">
-                  Ativo
-                </label>
-            </div>
-            <div class="form-check">
-                <input type="radio" id="id_status" name="status" value="Inativo">
-                <label class="form-check-label" for="exampleRadios1">
-                  Inativo
-                </label>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Enviar</button>
-
-        </form>
-    </div>
 </div>
 
 <!--fim cadastro-->
 {% endblock content %}
 
+
+{% block formularios %} 
+
+<div class="formulario">
+
+    <form action="/add_funcionario" method="POST" class="text-center form-contato" class="was-validated">
+
+        <h3 class="h3">Funcionário</h3>
+
+        <button type="submit" class="btn btn-primary">Novo cadastro</button>
+
+
+        <label for="id_nome" class="form-label">Nome</label>
+        <input type="text" id="id_nome" placeholder="Nome*" autocomplete="off" required autofocus class="input-fun" name="nome">
+
+        <label for="id_email" class="form-label">Email</label>
+        <input type="email" id="id_email" placeholder="Email*" autocomplete="off" required autofocus class="input-fun" name="email">
+
+        <label for="id_endereco" class="form-label">Endereço</label>
+        <input type="text" id="id_endereco" placeholder="Endereço* " autocomplete="off" required autofocus class="input-fun" name="endereco">
+
+        <label for="id_telefone" class="form-label">Telefone</label>
+        <input type="tel" id="id_telefone" placeholder="Telefone* " autocomplete="off" required autofocus class="input-fun" name="telefone">
+
+        <label for="id_cpf" class="form-label">CPF</label>
+        <input type="text" id="id_cpf" placeholder="CPF* " autocomplete="off" required autofocus class="input-fun" name="cpf">
+
+        <div class="mb-3">
+            <label for="id_cargo" class="form-label">Qual é o Cargo </label>
+            <select name="id_cargo" id="id_cargo">
+                <option value="escolha">Escolha o Cargo</option>
+                {% for c in cargos %}
+                    <option value="{{c['id_cargo']}}"{% if c['id_cargo'] == c['c'] %}selected="selected"{% endif %}>{{c['nome_cargo']}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-check">
+            <input type="radio" id="id_status" name="status" checked="yes" value="Ativo">
+            <label class="form-check-label" for="exampleRadios1">
+              Ativo
+            </label>
+            <input type="radio" id="id_status" name="status" value="Inativo">
+            <label class="form-check-label" for="exampleRadios1">
+              Inativo
+            </label>
+        </div>
+        
+    </form>
+</div>
+
+{% endblock formularios %}
+
 <!-- scripts-->
 
 {% block scripts %}
-<script src="/static/js/script_funcionario.js"></script> {% endblock scripts %}
+<script src="/static/js/script_funcionario.js"></script> 
+{% endblock scripts %}

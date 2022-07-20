@@ -2,8 +2,13 @@
 
   
     
-{% block title %} Histórico {% endblock title %} {% block head%} {{super()}}
-<link rel="stylesheet" type="text/css" href="/static/css/style-historico.css">{% endblock head%}
+ {% block head%} {{super()}}
+<link rel="stylesheet" type="text/css" href="/static/css/style-historico.css">
+
+{% block title %}
+<title>Cadsatro Funcionário</title>
+{% endblock title %}
+{% endblock head%}
 
 <!-- estilos-->
 
@@ -24,7 +29,7 @@
             <table class="table table-striped">
                 
                 <thead>
-                    {% for f in funcionario %}
+                    
                     <tr>
                         <th>Nome</th>
                         <th>Email</th>
@@ -37,7 +42,7 @@
                     </tr>
                 </thead>
                 <tbody >
-                    
+                    {% for f in funcionario %}
                     
                     <tr>
                         <td >{{f.nome}}</td>
@@ -68,10 +73,24 @@
     <form action="/buscar_funcionario" method="POST" class="text-center form-contato" class="was-validated">
 
         <label for="id_nome" class="form-label">Buscar Funcionário</label>
-        <input type="text" id="id_nome" placeholder="Buscar Cliente *" autocomplete="off" required autofocus class="input-fun" name="nome">
+
+        <div class="mb-3">
+           
+            <div class="seletor">
+       
+                <select name="nome" data-width="100%"  title="Lista Funcionário*" id="id_cliente" class="selectpicker"  data-live-search="true">
+                       
+                        {% for c in funcionarios %}
+                            <option value="{{c['nome']}}">{{c['nome']}}</option>
+                            {% endfor %}
+                    </select>
+            </div>
+        </div>
+
+        
 
 
-        <button type="submit" class="btn btn-form"><i class="fas fa-search"></i></button>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
 
     </form>
 

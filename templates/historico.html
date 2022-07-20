@@ -5,6 +5,7 @@
 {% block title %} Histórico {% endblock title %} {% block head%} {{super()}}
 <link rel="stylesheet" type="text/css" href="/static/css/style-historico.css">
 
+
 {% endblock head%}
 
 <!-- estilos-->
@@ -27,7 +28,7 @@
     
     
 
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th scope="col">Nome</th>
@@ -79,7 +80,7 @@
                         {% endfor %}
                 </select>
         </div>
-        <button type="submit" class="btn btn-form"><i class="fas fa-search"></i></button>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
 
     </form>
 </div>

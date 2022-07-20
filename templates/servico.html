@@ -12,66 +12,106 @@
 
 <!---->
 
+
 {% block content %} {% if mensagem %}
 <p class="mensagem">{{mensagem}}</p>
 {% endif %} {% if erro %}
 <p class="erro">{{erro}}</p>
 {% endif %}
-
-<!--inicio cadastro-->
-<div class="conteudo">
+<table class="table table-striped">
+                
+    <thead>
+        
+        <tr>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Duração</th>
+            <th>Categoria</th>
+            <th>Situação</th>
+        </tr>
+    </thead>
+    <tbody >
+        {% for s in servico %}
+        
+        <tr>
+            <td >{{s.nome_servico}}</td>
+            <td>{{s.preco_servico}}</td>
+            <td>{{s.duracao_servico}}</td>
+            <td>{{s.nome_cargo}}</td>
+            <td>{{s.status}}</td>
+            
+        
+            <td><a href="/alterar_funcionario/{{s.id_servico}}"><i class="fas fa-pencil-alt"></i></a>
     
-    <div class="form">
+            
+            </td>
+            
+        </tr>
+    
+    {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+{% endblock content %}
+
+{% block formularios %}
+<!--inicio cadastro-->
+
+    
+    <div class="formulario">
 
         <form action="/add_servico" method="POST" class="text-center form-contato" class="was-validated">
 
-            <h1 class=" ">Cadastro serviço</h1>
+            <h3 class=" ">Cadastro serviço</h3>
+
+            <button type="submit " class="btn btn-form btn-primary ">Enviar</button>
 
             <label for="id_nomeservico" class="form-label">Serviço</label>
             <input type="text" id="id_nomeservico" placeholder="Serviço* " autocomplete="off" required autofocus class="input-fun" name="nome">
 
 
             <label for="id_preco" class="form-label">Preço</label>
-            <input type="text" id="id_preco" placeholder="Preço* " autocomplete="off" required autofocus class="input-fun" name="preco">
+            <input type="number" min="0" max="100" step=".01" id="id_preco" placeholder="Preço* " autocomplete="off" required autofocus class="input-fun" name="preco">
 
             <label for="id_duracao " class="form-label ">Duração</label>
-            <input type="text" id="id_duracao" placeholder="Durção do serviço* " autocomplete="off" required autofocus class="input-fun" name="duracao">
+            <input type="number" id="id_duracao" placeholder="Durção do serviço* " autocomplete="off" required autofocus class="input-fun" name="duracao">
 
 
             <div class="mb-3">
-                <label for="id_funcionario" class="form-label">Escolha o Profissional</label>
-                <select name="id_funcionario" id="id_funcionario">
-                    <option required value="escolha">Escolha o Profissional</option>
-                    {% for f in funcionarios %}
-                        <option required value="{{f['id_funcionario']}}"{% if f['id_funcionario'] == f['f'] %}selected="selected"{% endif %}>{{f['nome']}}</option>
+                <label for="id_funcionario" class="form-label">Escolha Categoria</label>
+                <select name="id_cargo" id="id_cargo">
+                    <option required value="escolha">Escolha o Categoria</option>
+                    {% for c in cargo %}
+                        <option required value="{{c['id_cargo']}}"{% if c['id_cargo'] == c['c'] %}selected="selected"{% endif %}>{{c['nome_cargo']}}</option>
                     {% endfor %}
                 </select>
             </div>
 
 
-            <div class="">
+            <div class="form-check">
                 <input type="radio" id="id_status" checked="yes" name="status" value="Ativo">
                 <label class="form-check-label" for="exampleRadios1">
                   Ativo
                 </label>
-            </div>
-
-
-            <div class="">
+            
                 <input type="radio" id="id_status" name="status" value="Inativo">
                 <label class="form-check-label" for="exampleRadios1">
                   Inativo
                 </label>
             </div>
 
-            <button type="submit " class="btn btn-form btn-primary ">Enviar</button>
+            
 
         </form>
     </div>
-</div>
+
 
 <!--fim cadastro-->
-{% endblock content %}
+{% endblock formularios %}
+
 
 <!-- scripts-->
 
