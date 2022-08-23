@@ -3,7 +3,7 @@
     padding: 0;
     box-sizing: border-box;
     border: none;
-    font-family: helvetica;
+    font-family: helvetica,'Poppins', sans-serif;
     color: #323232;
     border: none;
 }
@@ -48,22 +48,12 @@
     background-image: linear-gradient(to bottom right, #ebddcd , #545252);
 }
 
-/*body{
-    position: absolute;
-    display: flex;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
-    background-size: cover;
-   
-    /*-webkit-filter: grayscale(100%);
-  filter: grayscale(100%);
-  filter: gray; 
-
+.content{
+    height: 80vh;
  
 }
 
-*/
+
 
 .formularios{
    
@@ -82,11 +72,51 @@
     grid-row: auto;
     grid-column:auto;
 
-   
-    
     
 }
 
 
+.janela-modal{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    background-color: #00000080;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
 
+.modal-t{
+    width: 60%;
+    min-width: 450px;
+    min-height: 200px;
+    background-color: #ffffff96;
+    backdrop-filter: blur(10px);
+    padding: 50px;
+    border-radius: 20px;
+}
 
+.fechar{
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 0;
+    background-color: red;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+
+}
+
+.abrir{
+    display: flex;
+}
+.fechar_x{
+    display: none;
+}

@@ -18,6 +18,7 @@ def inicio():
     return render_template('index.html')
 
 
+
 @app.route('/inicio_admin')
 def inicio_admin():
     # Autenticação.
@@ -68,7 +69,9 @@ def agenda():
 
 @app.route('/cadastro')
 def cadastro():
-    return render_template('cadastro_cliente.html')
+    cliente = db_listar_cliente()
+   
+    return render_template('cadastro_cliente.html',cliente = cliente)
 
 
 @app.route('/contato')
@@ -102,7 +105,124 @@ def historico():
     return render_template('historico.html', listar=lista)
 
 
+@app.route('/addItems')
+def addItems():
 
+    cliente = db_listar_cliente()
+    funcionario = db_listar_funcionarios()
+    servico = db_listar_servico()
+    num = db_verificar_num_comanda(45)
+    print(num['id_comanda'])
+    print(num['id_cliente'])
+
+    return render_template('add_items.html', cliente=cliente, funcionario=funcionario, servico=servico, num=num)
+
+
+@app.route('/add_items', methods=['POST'])
+def add_items_api():
+
+    
+    
+    # Extrai os dados do formulário.
+    
+    id_comanda = request.form.get("id_comanda")
+    quantidade = request.form.get("quantidade")
+    id_servico = request.form.get("id_servico")
+    id_funcionario = request.form.get("id_funcionario")
+    
+
+    # Faz o processamento.
+    ja_existia, additems = criar_additems(id_comanda, id_servico, quantidade, id_funcionario)
+    
+   
+    # Monta a resposta.
+    mensagem = f"Serviço já foi adicionado." if ja_existia else f"criada com sucesso."
+   
+
+    return render_template('add_items.html', mensagem = mensagem)
+
+
+
+@app.route('/verefica_id_comanda',methods=['GET',"POST"])
+def verifica_id_comanda():
+
+    numero_comanda = request.form.get("numero_comanda")
+    num = db_verificar_num_comanda(numero_comanda)
+    print(num)
+    if num is None:
+        mensagem = 'Pode ser aberta'
+        number = numero_comanda
+    else:
+        mensagem = 'Comanda está sendo usada'
+        number = ''
+        
+    
+    lista = db_listar_cliente()
+    lista2 = db_listar_operacao()
+    lista3 = db_listar_situacao()
+    
+    return render_template('add_items.html', cliente=lista, operacao=lista2, situacao=lista3, num=number, mensagem=mensagem)
+
+
+
+
+
+@app.route('/comanda')
+def comanda():
+
+    lista = db_listar_cliente()
+    lista2 = db_listar_operacao()
+    lista3 = db_listar_situacao()
+    num = {'numero_comanda': 0}
+    return render_template('comanda.html', cliente=lista, operacao=lista2, situacao=lista3,num='')
+
+
+
+@app.route('/verefica_comanda',methods=['GET',"POST"])
+def verifica_comanda():
+
+    numero_comanda = request.form.get("numero_comanda")
+    num = db_verificar_num_comanda(numero_comanda)
+    
+    if num is None:
+        mensagem = 'Pode ser aberta'
+        number = numero_comanda
+    else:
+        mensagem = 'Comanda está sendo usada'
+        number = ''
+        
+    
+    lista = db_listar_cliente()
+    lista2 = db_listar_operacao()
+    lista3 = db_listar_situacao()
+    
+    return render_template('comanda.html', cliente=lista, operacao=lista2, situacao=lista3, num=number, mensagem=mensagem)
+
+
+
+@app.route('/criar_comanda', methods=['POST'])
+def criar_comando_api():
+
+    
+    
+    # Extrai os dados do formulário.
+    id_cliente = request.form.get("id_cliente")
+    numero_comanda = request.form.get("numero_comanda")
+    data_venda = request.form.get("data")
+    id_operacao = request.form.get("id_operacao")
+    id_situacao = request.form.get("id_situacao")
+    id_funcionario = 1
+
+
+    # Faz o processamento.
+    ja_existia, comanda = criar_comanda(id_cliente, numero_comanda, data_venda, id_operacao, id_situacao, id_funcionario)
+    
+   
+    # Monta a resposta.
+    mensagem = f"O email já existe." if ja_existia else f"O Cadastro foi criada com sucesso."
+   
+
+    return render_template('comanda.html', mensagem = mensagem)
 
    
 
@@ -221,15 +341,16 @@ def criar_cliente():
     nome = request.form["nome"]
     email = request.form["email"]
     data_nascimento = request.form["data_nascimento"]
-    telefone = request.form["telefone"]
+    senha = request.form["telefone"]
     
     # Faz o processamento.
-    ja_existia, cliente = criar_cliente(nome, email, data_nascimento, telefone)
+    ja_existia, cliente = criar_cliente(nome, email, data_nascimento, senha)
     
    
     # Monta a resposta.
     mensagem = f"O email já existe." if ja_existia else f"O Cadastro foi criada com sucesso."
-    return render_template("cadastro_cliente.html", mensagem = mensagem)
+    lista = db_listar_cliente()
+    return render_template("cadastro_cliente.html", mensagem = mensagem, cliente = lista)
 
 
 
@@ -568,7 +689,23 @@ def criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status):
     funcionario_ja_existe = db_verificar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status)
     if funcionario_ja_existe is not None: return True, funcionario_ja_existe
     novo_funcionario = db_criar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, status)
-    return False, novo_funcionario   
+    return False, novo_funcionario
+
+
+def criar_comanda(id_cliente, numero_comanda, data_venda, id_operacao, id_situacao, id_funcionario):
+    comanda_ja_existe = db_verificar_comanda(id_cliente, numero_comanda, data_venda, id_operacao, id_situacao, id_funcionario)
+    if comanda_ja_existe is not None: return True, comanda_ja_existe
+    nova_comanda = db_criar_comanda(id_cliente, numero_comanda, data_venda, id_operacao, id_situacao, id_funcionario)
+    return False, nova_comanda   
+
+
+
+def criar_additems(id_comanda, id_servico, quantidade, id_funcionario):
+    additems_ja_existe = db_verificar_additems(id_comanda, id_servico, quantidade, id_funcionario)
+    if additems_ja_existe is not None: return True, additems_ja_existe
+    nova_add = db_criar_additems(id_comanda, id_servico, quantidade, id_funcionario)
+    return False, nova_add
+
 
 
 def criar_cargo(nome_cargo):
@@ -630,8 +767,8 @@ CREATE TABLE IF NOT EXISTS cliente (
     id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
     nome VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
-    senha VARCHAR(10) NOT NULL,
     data_nascimento TEXT NOT NULL,
+    tefone VARCHAR(10) NOT NULL,
     UNIQUE(email)
 );
 
@@ -655,6 +792,11 @@ CREATE TABLE IF NOT EXISTS situacao (
 
 CREATE TABLE IF NOT EXISTS operacao (
     id_operacao INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome VARCHAR(8) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS forma_pagamento (
+    id_forma_pagamento INTEGER PRIMARY KEY AUTOINCREMENT,
     nome VARCHAR(8) NOT NULL
 );
 
@@ -692,8 +834,8 @@ CREATE TABLE IF NOT EXISTS servico_funcionario (
 
 CREATE TABLE IF NOT EXISTS agendamento (
     id_agendamento INTEGER PRIMARY KEY AUTOINCREMENT,
-    data1 TEXT NOT NULL,
-    hora TEXT NOT NULL,
+    data1 date NOT NULL,
+    hora time NOT NULL,
     id_cliente INTEGER NOT NULL,
     id_servico INTEGER NOT NULL,
     id_funcionario INTEGER NOT NULL,
@@ -706,7 +848,7 @@ CREATE TABLE IF NOT EXISTS agendamento (
 CREATE TABLE IF NOT EXISTS comanda (
     id_comanda INTEGER PRIMARY KEY AUTOINCREMENT,
     numero_comanda INTEGER NOT NULL,
-    data_venda TEXT NOT NULL,
+    data_venda Date NOT NULL,
     id_cliente INTEGER NOT NULL,
     id_operacao INTEGER NOT NULL,
     id_situacao INTEGER NOT NULL,
@@ -718,6 +860,30 @@ CREATE TABLE IF NOT EXISTS comanda (
 
 );
 
+CREATE TABLE IF NOT EXISTS addItems (
+    id_comanda INTEGER NOT NULL,
+    id_servico INTEGER NOT NULL,
+    quantidade INTEGER NOT NULL,
+    id_funcionario INTEGER NOT NULL,
+    FOREIGN KEY (id_comanda) REFERENCES comanda(id_comanda),
+    FOREIGN KEY (id_servico) REFERENCES servico(id_servico),
+    FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_funcionario),
+    PRIMARY KEY (id_comanda,id_servico)
+    
+
+);
+
+CREATE TABLE IF NOT EXISTS comandaFechada (
+    id_comanda_fechada INTEGER PRIMARY KEY,
+    id_comanda INTEGER NOT NULL,
+    valor_unitario REAL NOT NULL,
+    desconto REAL NOT NULL,
+    valor_total REAL NOT NULL,
+    id_forma_pagamento INTERGER NOT NULL,
+    FOREIGN KEY (id_forma_pagamento) REFERENCES forma_pagamento(id_forma_pagamento),
+    FOREIGN KEY (id_comanda) REFERENCES comanda(id_comanda)
+
+);
 
 """
 
@@ -769,6 +935,25 @@ def db_verificar_funcionario(id_cargo, nome, cpf, email, endereco, telefone, sta
         return row_to_dict(cur.description, cur.fetchone())
 
 
+def db_verificar_comanda(id_cliente, numero_comanda, data_venda, id_operacao, id_situacao, nome):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_comanda,id_cliente, numero_comanda, data_venda, id_operacao, id_situacao, id_funcionario FROM comanda WHERE id_cliente = ? and numero_comanda = ? and data_venda = ? and id_operacao = ? and id_situacao = ? and id_funcionario = ?", [id_cliente, numero_comanda, data_venda, id_operacao, id_situacao, nome])
+        return row_to_dict(cur.description, cur.fetchone())
+
+
+def db_verificar_additems(id_comanda, id_servico, quantidade, id_funcionario):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_comanda, id_servico, quantidade, id_funcionario FROM addItems WHERE id_comanda = ? and id_servico = ? and quantidade = ? and id_funcionario = ?", [id_comanda, id_servico, quantidade, id_funcionario])
+        return row_to_dict(cur.description, cur.fetchone())
+
+
+def db_verificar_num_comanda(numero_comanda):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_cliente, id_comanda, numero_comanda FROM comanda WHERE id_situacao = 1 AND numero_comanda = ?",[numero_comanda])
+        return row_to_dict(cur.description, cur.fetchone())
+
+
+####################################################################################################
 
 def db_criar_cliente(nome, email, data_nascimento, senha):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
@@ -824,6 +1009,25 @@ def db_criar_cargo(nome_cargo):
         id_cargo = cur.lastrowid
         con.commit()
         return {'id_cargo':id_cargo,'nome_cargo':nome_cargo}
+
+
+def db_criar_comanda(id_cliente, numero_comanda, data_venda, id_operacao, id_situacao, id_funcionario):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("INSERT INTO comanda (id_cliente, numero_comanda, data_venda, id_operacao, id_situacao, id_funcionario) VALUES (?, ?, ?, ?, ?, ?)", [id_cliente, numero_comanda, data_venda, id_operacao, id_situacao, id_funcionario])
+        id_comanda = cur.lastrowid
+        con.commit()
+        return {'id_comanda':id_comanda, 'id_cliente':id_cliente, 'numero_comanda':numero_comanda, 'data_venda':data_venda, 'id_operacao':id_operacao, 'id_situacao':id_situacao, 'id_funcionario':id_funcionario}
+
+
+
+
+
+def db_criar_additems(id_comanda, id_servico, quantidade, id_funcionario):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("INSERT INTO addItems (id_comanda, id_servico, quantidade, id_funcionario) VALUES (?, ?, ?, ?)", [id_comanda, id_servico, quantidade, id_funcionario])
+        con.commit()
+        return {'id_comanda':id_comanda, 'id_servico':id_servico, 'quantidade':quantidade, 'id_funcionario':id_funcionario}
+
 
 
 
@@ -887,7 +1091,7 @@ def db_listar_agendamentos():
 
 def db_listar_cliente():
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT id_cliente, nome, email, data_nascimento FROM cliente")
+        cur.execute("SELECT id_cliente, nome, email, data_nascimento, telefone FROM cliente")
         return rows_to_dict(cur.description, cur.fetchall())
 
 
@@ -909,6 +1113,17 @@ def db_listar_cargo():
         return rows_to_dict(cur.description, cur.fetchall())
 
 
+def db_listar_operacao():
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_operacao, nome FROM operacao")
+        return rows_to_dict(cur.description, cur.fetchall())
+
+def db_listar_situacao():
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_situacao, nome FROM situacao")
+        return rows_to_dict(cur.description, cur.fetchall())
+
+
 def db_trazer_ultimo_id_servico():
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("SELECT * FROM servico ORDER BY id_servico DESC LIMIT 1")
@@ -920,10 +1135,18 @@ def db_deletar_agendamento(id_agendamento):
         cur.execute("DELETE FROM agendamento WHERE id_agendamento = ?", [id_agendamento])
         con.commit()
 
+    
+
 def db_deletar_operacao(id_operacao):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("DELETE FROM operacao WHERE id_operacao = ?", [id_operacao])
         con.commit()
+
+def db_alterar():
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("ALTER TABLE addItems ADD CONSTRAINT PK_add_items PRIMARY KEY(id_comanda,id_servico)")
+        con.commit()
+
 
 
 def db_editar_agendamento(id_agendamento, data1, hora, id_cliente, id_servico, id_funcionario):
@@ -940,7 +1163,12 @@ def db_editar_funcionario(id_funcionario, nome, email, endereco, cpf, telefone, 
         return {'id_funcionario':id_funcionario, 'id_cargo':id_cargo, 'nome':nome, 'cpf':cpf, 'email':email, 'endereco':endereco, 'telefone':telefone, 'status':status}
 
 
-#criar_cargo('Escova')
+def db_atualizar_comanda(id_situacao, numero_comanda):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("UPDATE comanda SET id_situacao = ? WHERE numero_comanda = ?", [id_situacao, numero_comanda])
+        con.commit()
+        return {'id_situacao':id_situacao, 'numero_comanda':numero_comanda}
+
 
 
 

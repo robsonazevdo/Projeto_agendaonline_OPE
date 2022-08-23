@@ -35,9 +35,26 @@
 </head>
 
 <body>
+   
+  <div class="janela-modal" id="janela-modal">
+    <div class="modal-t" id="modal-t">
+      <button class="fechar" onclick="abrirModal()" id="fechar">x</button>
+      <form action="/verefica_comanda" method="POST" class="text-center form-contato" class="was-validated" id="formulario">
+
+
+        <label for="id_numero" >Número Da Comanda</label>
+        <input type="number"  id="id_numero" placeholder="Número Comanda*" autocomplete="off" required autofocus  name="numero_comanda">
+
+
+        <button type="submit" class=" btn-primary"><i class="fas fa-search"></i></button>
+
+      </form>
+    </div>
+</div>
+    
 
     <nav class="navbar navbar-expand-lg navbar-light" style="background-image: linear-gradient(to bottom right, #545252 , #ebddcd);">
-        
+      
         <a class="navbar-brand" href="/inicio_admin" class="logo-menu">Logo</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -45,7 +62,7 @@
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="nav nav-tabs navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="/inicio_admin">Ínicio <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="/inicio_admin">Início <span class="sr-only">(current)</span></a>
               
             </li>
             <li class="nav-item active"><a class="nav-link " href="/calendario">Agenda</a></li>
@@ -60,6 +77,18 @@
                 
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Link isolado</a>
+              </div>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Vendas</a>
+              <div class="dropdown-menu">
+                <button class="dropdown-item btn-funcao" onclick="abrirModal()">Abrir Comanda</button>
+                <a class="dropdown-item" href="#">Fechar Comanda</a>
+                
+                
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Adicionar Items</a>
               </div>
             </li>
             <li class="nav-item active"><a  class="nav-link "href="/historico">Histórico Pagamento</a></li>
@@ -98,17 +127,22 @@
     
     </div>
 
+
+
     <footer>
       <div class="rodape">
         <p>Olá</p>
       </div>
+      
     </footer>
+
+    
     
     <link rel="stylesheet " href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css " />
     <script src="http://code.jquery.com/jquery-1.8.2.js "></script>
     <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js "></script>
     <script src="/static/js/script_funcionario.js"></script>
-    <script src="/static/js/script.js"></script>
+ 
     <script src="/static/js/script-calendar.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

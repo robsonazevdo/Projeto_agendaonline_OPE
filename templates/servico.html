@@ -28,6 +28,7 @@
             <th>Duração</th>
             <th>Categoria</th>
             <th>Situação</th>
+            <th>Alterar</th>
         </tr>
     </thead>
     <tbody >
@@ -41,7 +42,7 @@
             <td>{{s.status}}</td>
             
         
-            <td><a href="/alterar_funcionario/{{s.id_servico}}"><i class="fas fa-pencil-alt"></i></a>
+            <td><a href="/alterar_servico/{{s.id_servico}}"><i class="fas fa-pencil-alt"></i></a>
     
             
             </td>
@@ -92,11 +93,10 @@
 
 
             <div class="form-check">
-                <input type="radio" id="id_status" checked="yes" name="status" value="Ativo">
+                <input type="radio" id="id_status" name="status" checked="yes" value="Ativo">
                 <label class="form-check-label" for="exampleRadios1">
                   Ativo
                 </label>
-            
                 <input type="radio" id="id_status" name="status" value="Inativo">
                 <label class="form-check-label" for="exampleRadios1">
                   Inativo

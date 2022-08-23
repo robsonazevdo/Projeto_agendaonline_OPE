@@ -12,6 +12,7 @@
 
 <!---->
 
+
 {% block content %}
 
  {% if mensagem %}
@@ -20,37 +21,78 @@
     {% if erro %}
         <p class="erro">{{erro}}</p>
     {% endif %}
-
-<div class="conteudo">
-<!--inicio cadastro-->
-    <div class="form">
-        <fieldset>
-            <form action="/users" method="POST" class="text-center form-contato" class="was-validated">
-
-                <h1 class=" ">Cadastrar Cliente</h1>
-
-                <label for="id_nome" >Nome Completo</label>
-                <input class="input-fun" type="text" id="id_nome" placeholder="Nome Completo*" autocomplete="off" required autofocus name="nome">
-
-                <label for="id_email" >Email</label>
-                <input class="input-fun" type="email" id="id_email" placeholder="Email*" autocomplete="off" required autofocus name="email">
-
-                <label for="id_cep" >Data Nascimento</label>
-                <input class="input-fun" type="date" id="id_dt-nascimento" placeholder="DATA NASCIMENTO* " autocomplete="off" required autofocus name="data_nascimento">
-
-                <label for="telefone" >Telefone/WhatsApp</label>
-                <input class="input-fun" type="tel" id="telefone"  placeholder="Telefone/Whats'App* "required  name="telefone">
-
+    <table class="table table-striped">
                 
-                <button type="submit " class="btn btn-form btn-primary">Enviar</button>
+        <thead>
+            
+            <tr>
 
-            </form>
-        </fieldset>
-    </div>
-</div>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Data de Nascimento</th>
+                <th>Telefone</th>
+                <th>Alterar</th>
+            </tr>
+        </thead>
+        <tbody >
+            {% for c in cliente %}
+            
+            <tr>
+                <td >{{c.nome}}</td>
+                <td>{{c.email}}</td>
+                <td>{{c.data_nascimento}}</td>
+                <td>{{c.telefone}}</td>
+        
+                <td><a href="/alterar_cliente/{{c.id_cliente}}"><i class="fas fa-pencil-alt"></i></a>
+        
+                </td>
+                
+            </tr>
+        
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
+
+
+
 
 <!--fim cadastro-->
 {% endblock content %}
+
+{% block formularios %}
+
+
+    <!--inicio cadastro-->
+        <div class="formulario">
+            <fieldset>
+                <form action="/users" method="POST" class="text-center form-contato" class="was-validated">
+    
+                    <h3 class=" ">Cadastro Cliente</h3>
+    
+                    <label for="id_nome" >Nome Completo</label>
+                    <input class="input-fun" type="text" id="id_nome" placeholder="Nome Completo*" autocomplete="off" required autofocus name="nome">
+    
+                    <label for="id_email" >Email</label>
+                    <input class="input-fun" type="email" id="id_email" placeholder="Email*" autocomplete="off" required autofocus name="email">
+    
+                    <label for="id_cep" >Data Nascimento</label>
+                    <input class="input-fun" type="date" id="id_dt-nascimento" placeholder="DATA NASCIMENTO* " autocomplete="off" required autofocus name="data_nascimento">
+    
+                    <label for="telefone" >Telefone/WhatsApp</label>
+                    <input class="input-fun" type="tel" id="telefone"  placeholder="Telefone/Whats'App* "required  name="telefone">
+    
+                    
+                    <button type="submit " class="btn btn-form btn-primary">Enviar</button>
+    
+                </form>
+            </fieldset>
+        </div>
+   
+
+{% endblock formularios %}
 
 <!-- scripts-->
 

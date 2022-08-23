@@ -1,0 +1,93 @@
+{%extends 'base_admin.html'%}
+<!---->
+
+
+{% block title %} Comanda {% endblock title %} {% block head%} {{super()}}
+<link rel="stylesheet" type="text/css" href="/static/css/style-historico.css">{% endblock head%}
+
+<!-- estilos-->
+
+{% block estilos %} {% endblock estilos %}
+
+
+<!---->
+
+{% block content %}
+<!--inicio cadastro-->
+<div class="">
+
+    {% if mensagem %}
+    <p class="mensagem">{{mensagem}}</p>
+    {% endif %}
+    {% if erro %}
+        <p class="erro">{{erro}}</p>
+    {% endif %}
+
+    <h1>Abrir Comanda</h1>
+    
+    
+    
+    <form action="/criar_comanda" method="POST" class="text-center form-contato" class="was-validated">
+
+                <label for="id_data_venda" class="form-label">Data de Venda</label>
+                <input type="date" id="id_data" placeholder="Data de Venda*" autocomplete="off" required autofocus  name="data">
+
+                <label for="id_num_comanda" class="form-label">Número Comanda</label>
+                
+                <input type="text" id="id_num_comanda"   value="{% if num %} {{num}} {% endif %}"  placeholder="Número Comanda*" autocomplete="off" required autofocus name="numero_comanda">
+               
+
+                <div class="mb-3">
+                    <label for="id_cliente" class="form-label">Nome cliente</label>
+                    <select name="id_cliente" id="id_cliente" data-width="100%" title="Escolha Cliente"  class="selectpicker" data-live-search="true">
+                           
+                            {% for c in cliente %}
+                                <option value="{{c['id_cliente']}}">{{c['nome']}}</option>
+                                {% endfor %}
+                        </select>
+                </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_operacao" class="form-label">Tipo Operação</label>
+                        <select name="id_operacao" id="id_operacao">
+                            <option required value="">Escolha a Operação</option>
+                            {% for o in operacao %}
+                                <option required value="{{o['id_operacao']}}">{{o['nome']}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                
+                    <div class="mb-3">
+                        <label for="id_situacao" class="form-label">Situação</label>
+                        <select name="id_situacao" id="id_situacao">
+                            <option required value="">Situação</option>
+                            {% for s in situacao %}
+                                <option required value="{{s['id_situacao']}}">{{s['nome']}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+               
+                    <button type="submit" class="btn btn-form btn-primary">Abrir Comanda</button>
+
+    </form>
+    
+</div>
+{% endblock content %}
+
+{% block formularios %} 
+    
+{% endblock formularios %}
+
+<!--fim cadastro-->
+
+
+<!-- scripts-->
+
+{% block scripts %}
+    
+{% endblock scripts %}
+
+
+
+
+<!-- scripts-->

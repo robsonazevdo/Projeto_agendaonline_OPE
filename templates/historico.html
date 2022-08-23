@@ -44,7 +44,8 @@
             
             <tr>
                 <td>{{c.nome_cliente}}</td>
-                <td>{{c.data1}}</td>
+                <td id="data" style="display: none;">{{c.data1}}</td>
+                <td id="dataFormatada"></td>
                 <td>{{c.hora}}</td>
                 <td>{{c.nome_servico}}</td>
                 <td>{{c.nome_funcionario}}</td>
@@ -88,5 +89,17 @@
 <!-- scripts-->
 
 {% block scripts %} 
+    <script>
+        const dataFomatada = document.querySelector('#dataFormatada');
+        
+console.log(data.innerText)
+
+        function conveter_data(){
+            let formatted = data.innerText;
+            return formatted.split('-').reverse().join('/')
+        }
+dataFormatada.innerHTML = conveter_data();
+
+    </script>
 {% endblock scripts %}
 <!-- scripts-->

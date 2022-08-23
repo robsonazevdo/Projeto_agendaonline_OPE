@@ -121,7 +121,7 @@
               
               events: [
               {% for event in events %}
-                { id: '{{event.id_agendamento}}', resourceId: '{{event.id_funcionario}}', start: '{{event.data1}}T{{event.hora}}', end: '{{event.data1}}', title: "{% for s in servico %}{% if event.id_servico == s.id_servico %}{{s.nome_servico}}{% endif %}{% endfor %} - {% for c in cliente %}{% if event.id_cliente == c.id_cliente %}{{c.nome}}{% endif %}{% endfor %}" },
+                { id: '{{event.id_agendamento}}', resourceId: '{{event.id_funcionario}}', start: '{{event.data1}}T{{event.hora}}', end: '{{event.data1}}T{{event.hora}}', title: "{% for s in servico %}{% if event.id_servico == s.id_servico %}{{s.nome_servico}}{% endif %}{% endfor %} - {% for c in cliente %}{% if event.id_cliente == c.id_cliente %}{{c.nome}}{% endif %}{% endfor %}" },
                 {% endfor %}
               ],
 

@@ -21,7 +21,7 @@
 
 .form-label {
     font-weight: bold;
-    color: #ffffff;
+    color: #545252;
     display: block;
     text-align: left;
     font-size: 15px;
@@ -30,7 +30,7 @@
 .input-fun {
     border-bottom: 2px solid #ffffff;
     padding: 2px;
-    font-size: 1rem;
+    font-size: 1.2rem;
     margin-bottom: 20px;
     background-image: linear-gradient(to bottom right, #ebddcd , #545252);
     color: #fff;
@@ -98,9 +98,7 @@ select{
     
 }
 
-h3{
-    color:#fff;
-}
+
 
 
 
