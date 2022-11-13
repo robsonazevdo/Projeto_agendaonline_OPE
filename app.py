@@ -111,18 +111,15 @@ def addItems():
     cliente = db_listar_cliente()
     funcionario = db_listar_funcionarios()
     servico = db_listar_servico()
-    num = db_verificar_num_comanda(45)
-    print(num['id_comanda'])
-    print(num['id_cliente'])
+    #num = db_verificar_num_comanda(45)
+    
 
-    return render_template('add_items.html', cliente=cliente, funcionario=funcionario, servico=servico, num=num)
+    return render_template('add_items.html', cliente=cliente, funcionario=funcionario, servico=servico, num='')
 
 
-@app.route('/add_items', methods=['POST'])
+@app.route('/add_items', methods=['POST','GET'])
 def add_items_api():
 
-    
-    
     # Extrai os dados do formulário.
     
     id_comanda = request.form.get("id_comanda")
@@ -136,7 +133,7 @@ def add_items_api():
     
    
     # Monta a resposta.
-    mensagem = f"Serviço já foi adicionado." if ja_existia else f"criada com sucesso."
+    mensagem = f"Serviço já foi adicionado." if ja_existia else f"Item adicionado com sucesso."
    
 
     return render_template('add_items.html', mensagem = mensagem)
@@ -148,20 +145,20 @@ def verifica_id_comanda():
 
     numero_comanda = request.form.get("numero_comanda")
     num = db_verificar_num_comanda(numero_comanda)
-    print(num)
+   
     if num is None:
-        mensagem = 'Pode ser aberta'
-        number = numero_comanda
-    else:
-        mensagem = 'Comanda está sendo usada'
+        mensagem = 'Não existe'
         number = ''
+    else:
+        mensagem = ''
+        number = num
         
     
     lista = db_listar_cliente()
-    lista2 = db_listar_operacao()
-    lista3 = db_listar_situacao()
+    servico = db_listar_servico()
+    funcionario = db_listar_funcionarios()
     
-    return render_template('add_items.html', cliente=lista, operacao=lista2, situacao=lista3, num=number, mensagem=mensagem)
+    return render_template('add_items.html', cliente=lista, servico=servico, funcionario=funcionario, num=number, mensagem=mensagem)
 
 
 
@@ -185,25 +182,30 @@ def verifica_comanda():
     num = db_verificar_num_comanda(numero_comanda)
     
     if num is None:
-        mensagem = 'Pode ser aberta'
+        mensagem = 'Comanda Pode ser aberta'
         number = numero_comanda
     else:
         mensagem = 'Comanda está sendo usada'
         number = ''
-        
+   
+    return render_template('admin.html',   num=number, mensagem=mensagem)
+
+
+
+@app.route('/use/<num>')
+def use_num(num):
+
+    cliente = db_listar_cliente()
+    situacao = db_listar_situacao()
+    operacao = db_listar_operacao()
     
-    lista = db_listar_cliente()
-    lista2 = db_listar_operacao()
-    lista3 = db_listar_situacao()
-    
-    return render_template('comanda.html', cliente=lista, operacao=lista2, situacao=lista3, num=number, mensagem=mensagem)
+    return render_template('comanda.html', num = num, cliente=cliente, situacao=situacao, operacao=operacao)
 
 
 
-@app.route('/criar_comanda', methods=['POST'])
+
+@app.route('/criar_comanda', methods=['GET', 'POST'])
 def criar_comando_api():
-
-    
     
     # Extrai os dados do formulário.
     id_cliente = request.form.get("id_cliente")
@@ -219,10 +221,10 @@ def criar_comando_api():
     
    
     # Monta a resposta.
-    mensagem = f"O email já existe." if ja_existia else f"O Cadastro foi criada com sucesso."
+    mensagem = f"Comanda já está em uso." if ja_existia else f"Comanda criada com sucesso."
    
 
-    return render_template('comanda.html', mensagem = mensagem)
+    return render_template('admin.html', mensagem = mensagem)
 
    
 
@@ -884,6 +886,7 @@ CREATE TABLE IF NOT EXISTS comandaFechada (
     FOREIGN KEY (id_comanda) REFERENCES comanda(id_comanda)
 
 );
+
 
 """
 

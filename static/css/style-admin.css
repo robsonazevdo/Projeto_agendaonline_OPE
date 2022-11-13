@@ -22,17 +22,6 @@
     padding-right: 10px;
 }
 
-.mensagem {
-    color: #008000;
-    background-color: #80ff80;
-    border-color: #008000;
-}
-
-.erro {
-    color: #800000;
-    background-color: #ff8080;
-    border-color: #800000;
-}
 
 
 
@@ -97,6 +86,7 @@
     backdrop-filter: blur(10px);
     padding: 50px;
     border-radius: 20px;
+    
 }
 
 .fechar{
@@ -117,6 +107,63 @@
 .abrir{
     display: flex;
 }
-.fechar_x{
+
+@keyframes abrirmodal {
+    from{
+        opacity: 0;
+        transform: translate3d(0,-30px, -5px);
+    }
+    to{
+        opacity: 1;
+        transform: translate3d(0,0,0);
+    }
+}
+
+.abrir .modal-t{
+    animation: abrirmodal 0.6s;
+}
+
+.modal-msg{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    background-color: #00000080;
+    align-items: center;
+    justify-content: center;
+    z-index: 98; 
+}
+
+.card{
+    width: 60%;
+    min-width: 450px;
+    min-height: 200px;
+    background-color: #ffffff96;
+    backdrop-filter: blur(10px);
+    padding: 50px;
+    border-radius: 20px; 
+}
+
+.fechar_card{
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 0;
+    background-color: red;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+.ocultar{
     display: none;
+}
+
+
+.card{
+    animation: abrirmodal 0.6s;
 }

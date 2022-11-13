@@ -1,0 +1,6 @@
+tabela fechar venda(
+	SELECT c.nome, co.numero_comanda, s.nome_servico, ad.quatidade, s.preco_servico as valor_unitario FROM addItems as ad INNER JOIN 
+	servico AS s ON ad.id_servico = s.id_servico INNER JOIN comanda AS co ON ad.id_comanda = co.id_comanda INNER JOIN cliente AS c 
+	ON c.id_clente = co.id_cliente WHERE ad.id_comanda = 4
+);
+	

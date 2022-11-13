@@ -13,8 +13,10 @@ function toggle(event) {
     }
 
 }
+
 function abrirModal(){
     const modal = document.getElementById('janela-modal')
+    
     modal.classList.add('abrir')
     
     modal.addEventListener('click', (e) => {
@@ -22,8 +24,32 @@ function abrirModal(){
         modal.classList.remove('abrir')
     })
 
-}
+};
 
+function abrirModal2(){
+    const modal = document.getElementById('janela-modal2')
+    
+    modal.classList.add('abrir')
+    
+    modal.addEventListener('click', (e) => {
+        if(e.target.id == 'fechar' || e.target.id == 'janela-modal2')
+        modal.classList.remove('abrir')
+    })
+
+};
+
+
+function fecharModal(){
+    
+    const card = document.getElementById('modal-msg')
+     
+    
+    card.addEventListener('click', (e) => {
+        if(e.target.id == 'fechar_card' || e.target.id == 'modal-msg' || e.target.id == 'btn-funcao')
+        card.classList.add('ocultar')
+    })
+
+};
 
 btn.addEventListener('click', toggle, false);
 btn_fechar.addEventListener('click', toggle, false);

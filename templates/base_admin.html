@@ -36,6 +36,31 @@
 
 <body>
    
+  {% if mensagem  %}
+
+    <div class="modal-msg" id="modal-msg">
+        
+        <div class="card" id="card">
+            <button class="fechar_card" onclick="fecharModal()" id="fechar_card">x</button>
+
+            <p>{{mensagem}}</p>
+
+            {% if num == ''  %}
+
+            <button id='btn-funcao' class=" btn btn-primary btn-funcao"  onclick="abrirModal(); fecharModal();">Escolha outra Comanda</button>
+            
+            {% elif '' in num %}
+
+            <a class="btn btn-primary"href="/use/{{num}}">Confirma</a>
+
+            {% endif %}
+
+            
+        </div>
+    </div>
+
+    {% endif %}
+
   <div class="janela-modal" id="janela-modal">
     <div class="modal-t" id="modal-t">
       <button class="fechar" onclick="abrirModal()" id="fechar">x</button>
@@ -46,11 +71,28 @@
         <input type="number"  id="id_numero" placeholder="Número Comanda*" autocomplete="off" required autofocus  name="numero_comanda">
 
 
-        <button type="submit" class=" btn-primary"><i class="fas fa-search"></i></button>
+        <button type="submit" ><i class="fas fa-search"></i></button>
 
       </form>
     </div>
 </div>
+
+<div class="janela-modal" id="janela-modal">
+  <div class="modal-t" id="modal-t">
+    <button class="fechar" onclick="abrirModal2()" id="fechar">x</button>
+    <form action="/verefica_comanda2" method="POST" class="text-center form-contato" class="was-validated" id="formulario">
+
+
+      <label for="id_numero">Número Da Comanda</label>
+      <input type="number"  id="id_numero" placeholder="Número Comanda*" autocomplete="off" required autofocus  name="numero_comanda">
+
+
+      <button type="submit" ><i class="fas fa-search"></i></button>
+
+    </form>
+  </div>
+</div>
+
     
 
     <nav class="navbar navbar-expand-lg navbar-light" style="background-image: linear-gradient(to bottom right, #545252 , #ebddcd);">
@@ -84,7 +126,7 @@
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Vendas</a>
               <div class="dropdown-menu">
                 <button class="dropdown-item btn-funcao" onclick="abrirModal()">Abrir Comanda</button>
-                <a class="dropdown-item" href="#">Fechar Comanda</a>
+                <a class="dropdown-item" onclick="abrirModal2() ">Fechar Comanda</a>
                 
                 
                 <div class="dropdown-divider"></div>
