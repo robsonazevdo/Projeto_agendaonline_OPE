@@ -1,0 +1,166 @@
+{%extends 'base_admin.html'%}
+<!---->
+
+
+{% block title %} Fechar Venda {% endblock title %} {% block head%} {{super()}}
+<link rel="stylesheet" type="text/css" href="/static/css/relogio.css">
+<link<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">{% endblock head%}
+
+<!-- estilos-->
+
+{% block estilos %} {% endblock estilos %}
+
+
+<!---->
+
+{% block content %}
+<!--inicio cadastro-->
+
+          <div class="conteudo">
+
+            <!--<div class="">
+                    <h1>Fechar Venda</h1>
+                    
+                    <form action="/add_items_venda" method="POST" class="text-center form-contato" class="was-validated">
+                
+                                <label for="id_data_venda" class="form-label">Quantidade</label>
+                                <input type="text" id="id_data" placeholder="Quantidade*" autocomplete="off" required autofocus  name="quantidade">
+                
+                                <label for="id_num_comanda" class="form-label">Número Comanda</label>
+                                <input type="text" style='display: none;' id="id_num_comanda"   value={{ id_comanda }}  placeholder="Número Comanda*" autocomplete="off" required autofocus name="id_comanda">
+                                <input type="text" id="id_num_comanda"   value="{% if num %} {{num}} {% endif %}"  placeholder="Número Comanda*" autocomplete="off" required autofocus name='numero_comanda'>
+                              
+                
+                                <div class="mb-3">
+                                    <label for="id_cliente" class="form-label">Nome cliente</label>
+                                    <select name="id_cliente" id="id_cliente" data-width="100%" title="Escolha Cliente"  class="selectpicker" data-live-search="true">
+                                           
+                                            {% for c in cliente %}
+                                                <option value="{{c['id_cliente']}}"{% if c['id_cliente'] == num['id_cliente'] %}selected="selected"{% endif %}>{{c['nome']}}</option>
+                                                {% endfor %}
+                                        </select>
+                                </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="id_operacao" class="form-label">Serviço</label>
+                                        <select name="id_servico" id="id_servico" data-width="100%" title="Escolha Serviço"  class="selectpicker" data-live-search="true">
+                                            
+                                            {% for o in servico %}
+                                                <option required value="{{o['id_servico']}}">{{o['nome_servico']}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                
+                                    <div class="mb-3">
+                                        <label for="id_situacao" class="form-label">Funcionário</label>
+                                        <select name="id_funcionario" id="id_funcionario"data-width="100%" title="Escolha Funcionário"  class="selectpicker" data-live-search="true">
+                                            
+                                            {% for s in funcionario %}
+                                                <option required value="{{s['id_funcionario']}}">{{s['nome']}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                               
+                                    <button type="submit" class="btn btn-form btn-primary">Adicionar Item</button>
+                
+                    </form>
+                
+          
+                </div>-->
+
+                <div class="div">
+
+                    <table class="table ">
+                    <form >
+                        <h2>Demonstrating the Box Model</h2>
+                        <thead>
+                            <tr>
+                                <th scope="col">Item</th>
+                                <th scope="col">Descrição</th>
+                                <th scope="col">Qtde</th>
+                                <th scope="col">Valor Unitário</th>
+                                <th scope="col">Total Item</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                                                                                
+                            {% for c in range (cliente| length) %}
+                            
+                            <tr>
+                                
+                                <td>{{loop.index}}</td>
+                                <td>{{cliente[c]['nome_servico']}}</td>
+                                <td><input type='text'  value={{cliente[c]['quantidade']}} id='quantidade'> </td>
+                                
+                                <td><input type='text'  value={{ cliente[c]['valor_unitario'] }}  id='v_unitario'></td>
+                                
+                                <td id='v_total'>R$ {{ "%.2f "| format(cliente[c]['quantidade'] * cliente[c]['valor_unitario'] )
+                                
+                                }}</td>
+                               
+                            </tr>
+                            
+                           {% endfor %}
+                        </tbody>
+                
+                    </table>
+                    
+                    <div class="total">
+
+                        <div class="input-group input-group-sm mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroup-sizing-sm">Desconto</span>
+                            </div>
+                            <label unit="%">
+                            <input id='desconto' onchange="Desconto()" type="number" step='1.00' value='0.00' min="1.00" max="70.00" placeholder='0.00' class="form-control" aria-label="Exemplo do tamanho do input" aria-describedby="inputGroup-sizing-sm">
+                            </label>
+                        </div>
+                    
+                        <div class="input-group input-group-sm mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroup-sizing-sm">Sub Total:</span>
+                            </div>
+                            <input id="total_final" type="text" value={{ "%.2f "| format(lista ) }} class="form-control" aria-label="Exemplo do tamanho do input" aria-describedby="inputGroup-sizing-sm">
+                          
+                        </div>
+                    
+                    </div>
+                    <button type="submit" class="btn btn-form btn-primary">Adicionar Item</button>
+
+                </form>
+                </div>
+                
+
+            </div>
+                
+<!--fim cadastro-->
+{% endblock content %}
+
+
+<!-- scripts-->
+
+{% block scripts %}
+
+<script>
+    document.getElementById('')
+
+    function Desconto (){
+
+        var desc = document.getElementById('desconto');
+        var total_final = document.getElementById('total_final');
+        console.log(total_final.value, desc.value);
+        
+        var calcDesc = parseFloat(total_final.value) * (parseFloat(desc.value) / 100);
+        var resultado = total_final.value = parseFloat(total_final.value) -calcDesc;
+
+        
+    }
+   
+
+
+</script>
+
+ {% endblock scripts %}

@@ -7,35 +7,82 @@
 <link<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">{% endblock head%}
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 <!-- estilos-->
 
-{% block estilos %} {% endblock estilos %}
+{% block estilos %} 
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 48
+    }
+    </style>
+
+{% endblock estilos %}
 
 
 <!---->
 
 {% block content %}
 <!--inicio cadastro-->
-<div class="conteudo">
-    <div class="clock">
-        <div class="hand seconds"></div>
-        <div class="hand minutes"></div>
-        <div class="hand hours"></div>
-
-        <div class="div number number-1">1</div>
-        <div class="div number number-2">2</div>
-        <div class="div number number-3">3</div>
-        <div class="div number number-4">4</div>
-        <div class="div number number-5">5</div>
-        <div class="div number number-6">6</div>
-        <div class="div number number-7">7</div>
-        <div class="div number number-8">8</div>
-        <div class="div number number-9">9</div>
-        <div class="div number number-10">10</div>
-        <div class="div number number-11">11</div>
-        <div class="div number number-12">12</div>
+<div class"body-calendar">
+<div class="wrapper">
+    <header>
+        <p class="current-date">Dezembro 2022</p>
+        <div class="icons">
+            <span class="material-symbols-outlined">arrow_back_ios</span>
+                <span class="material-symbols-outlined">arrow_forward_ios</span>
+        </div>
+    </header>
+    <div class="calendar">
+        <ul class="week">
+            <li class="">Domingo</li>
+            <li class="">Segunda</li>
+            <li class="">Terça</li>
+            <li class="">Quarta</li>
+            <li class="">Quinta</li>
+            <li class="">Sexta</li>
+            <li class="">Sabado</li>
+            
+        </ul>
+        <ul class="days">
+            <li class="">1</li>
+            <li class="">2</li>
+            <li class="">3</li>
+            <li class="">4</li>
+            <li class="">5</li>
+            <li class="">6</li>
+            <li class="">7</li>
+            <li class="">8</li>
+            <li class="">9</li>
+            <li class="">10</li>
+            <li class="">11</li>
+            <li class="">12</li>
+            <li class="">13</li>
+            <li class="">14</li>
+            <li class="">15</li>
+            <li class="">16</li>
+            <li class="">17</li>
+            <li class="">18</li>
+            <li class="">19</li>
+            <li class="">20</li>
+            <li class="">21</li>
+            <li class="">22</li>
+            <li class="">23</li>
+            <li class="">24</li>
+            <li class="">25</li>
+            <li class="">26</li>
+            <li class="">27</li>
+            <li class="">28</li>
+            <li class="">29</li>
+            <li class="">30</li>
+            <li class="">31</li>
+        </ul>
     </div>
+</div>
 </div>
 <!--fim cadastro-->
 {% endblock content %}

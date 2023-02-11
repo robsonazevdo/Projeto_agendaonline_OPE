@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
     <link rel="stylesheet" href="" class="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/static/css/style-admin.css">
-    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"/>
@@ -45,10 +46,20 @@
 
             <p>{{mensagem}}</p>
 
-            {% if num == ''  %}
+            {% if num == 1  %}
 
             <button id='btn-funcao' class=" btn btn-primary btn-funcao"  onclick="abrirModal(); fecharModal();">Escolha outra Comanda</button>
-            
+
+            {% elif num == 2  %}
+
+            <button id='btn-funcao' class=" btn btn-primary btn-funcao"  onclick="abrirModal2(); fecharModal();">Escolha outra Comanda</button>
+
+
+            {% elif num == 0 %}
+
+            <button id='btn-funcao' class=" btn btn-primary btn-funcao"  onclick="abrirModal3(); fecharModal();">Escolha outra Comanda</button>
+
+
             {% elif '' in num %}
 
             <a class="btn btn-primary"href="/use/{{num}}">Confirma</a>
@@ -64,7 +75,7 @@
   <div class="janela-modal" id="janela-modal">
     <div class="modal-t" id="modal-t">
       <button class="fechar" onclick="abrirModal()" id="fechar">x</button>
-      <form action="/verefica_comanda" method="POST" class="text-center form-contato" class="was-validated" id="formulario">
+      <form action="/verifica_comanda" method="POST" class="text-center form-contato" class="was-validated" id="formulario">
 
 
         <label for="id_numero" >Número Da Comanda</label>
@@ -77,10 +88,10 @@
     </div>
 </div>
 
-<div class="janela-modal" id="janela-modal">
+<div class="janela-modal" id="janela-modal2">
   <div class="modal-t" id="modal-t">
     <button class="fechar" onclick="abrirModal2()" id="fechar">x</button>
-    <form action="/verefica_comanda2" method="POST" class="text-center form-contato" class="was-validated" id="formulario">
+    <form action="/verifica_comanda2" method="POST" class="text-center form-contato" class="was-validated" id="formulario">
 
 
       <label for="id_numero">Número Da Comanda</label>
@@ -93,6 +104,21 @@
   </div>
 </div>
 
+<div class="janela-modal"id="janela-modal3">
+  <div class="modal-t" id="modal-t">
+      <button class="fechar" onclick="fecharModal3()" id="fechar">x</button>
+      <form action="/verifica_id_comanda" method="POST" class="text-center form-contato" class="was-validated" id="formulario">
+  
+  
+        <label for="id_numero" class="form-label">Número Da Comanda</label>
+        <input type="number"  id="id_numero" placeholder="Número Comanda*" autocomplete="off" required autofocus class="input-fun" name="numero_comanda">
+  
+  
+        <button type="submit" class="btn btn-form btn-primary"><i class="fas fa-search"></i></button>
+  
+    </form>
+  </div>
+</div>
     
 
     <nav class="navbar navbar-expand-lg navbar-light" style="background-image: linear-gradient(to bottom right, #545252 , #ebddcd);">
@@ -126,11 +152,12 @@
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Vendas</a>
               <div class="dropdown-menu">
                 <button class="dropdown-item btn-funcao" onclick="abrirModal()">Abrir Comanda</button>
-                <a class="dropdown-item" onclick="abrirModal2() ">Fechar Comanda</a>
+                <a class="dropdown-item" onclick="abrirModal3()">Adicionar Items</a>
+                
                 
                 
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Adicionar Items</a>
+                <button class="dropdown-item" onclick="abrirModal2()">Fechar Comanda</button>
               </div>
             </li>
             <li class="nav-item active"><a  class="nav-link "href="/historico">Histórico Pagamento</a></li>

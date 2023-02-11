@@ -11,8 +11,6 @@ app = Flask(__name__)
 
 
 
-
-
 @app.route('/')
 def inicio():
     return render_template('index.html')
@@ -27,12 +25,16 @@ def inicio_admin():
 
         return render_template("/login.html", erro="")
 
-    return render_template('admin.html')
+    lista = db_listar_cliente()
+     
+    return render_template('admin.html', cliente=lista, num='')
     
+
 
 @app.route('/admin')
 def cadastro_admin():
     return render_template('cadastro_admin.html')
+
 
 
 @app.route('/add_admin', methods=['GET', 'POST'])
@@ -105,16 +107,25 @@ def historico():
     return render_template('historico.html', listar=lista)
 
 
+
+@app.route('/fechar_venda')
+def fechar_venda():
+    
+    return render_template('fechar_venda.html')
+
+
+
 @app.route('/addItems')
-def addItems():
+def additems():
 
     cliente = db_listar_cliente()
     funcionario = db_listar_funcionarios()
     servico = db_listar_servico()
-    #num = db_verificar_num_comanda(45)
+    
     
 
     return render_template('add_items.html', cliente=cliente, funcionario=funcionario, servico=servico, num='')
+
 
 
 @app.route('/add_items', methods=['POST','GET'])
@@ -139,8 +150,48 @@ def add_items_api():
     return render_template('add_items.html', mensagem = mensagem)
 
 
+@app.route('/add_items_venda', methods=['POST','GET'])
+def add_items_venda():
 
-@app.route('/verefica_id_comanda',methods=['GET',"POST"])
+    # Extrai os dados do formulário.
+    
+    id_comanda = request.form.get("id_comanda")
+    quantidade = request.form.get("quantidade")
+    id_servico = request.form.get("id_servico")
+    id_funcionario = request.form.get("id_funcionario")
+    numero_comanda = request.form.get("numero_comanda")
+    
+
+    # Faz o processamento.
+    ja_existia, additems = criar_additems(id_comanda, id_servico, quantidade, id_funcionario)
+    
+   
+    # Monta a resposta.
+    mensagem = f"Serviço já foi adicionado." if ja_existia else f"Item adicionado com sucesso."
+   
+    print(numero_comanda)
+    return redirect(url_for('verifica_comanda2', numero_comanda=numero_comanda))
+
+
+
+@app.route('/verifica_comanda',methods=['GET',"POST"])
+def verifica_comanda():
+
+    numero_comanda = request.form.get("numero_comanda")
+    num = db_verificar_num_comanda(numero_comanda)
+    
+    if num is None:
+        mensagem = 'Comanda Pode ser aberta'
+        number = numero_comanda
+    else:
+        mensagem = 'Comanda está sendo usada'
+        number = 1
+   
+    return render_template('admin.html',   num=number, mensagem=mensagem)
+
+
+
+@app.route('/verifica_id_comanda',methods=['GET',"POST"])
 def verifica_id_comanda():
 
     numero_comanda = request.form.get("numero_comanda")
@@ -148,19 +199,52 @@ def verifica_id_comanda():
    
     if num is None:
         mensagem = 'Não existe'
-        number = ''
-    else:
-        mensagem = ''
+        number = 0
+        return render_template('admin.html',num=number, mensagem=mensagem)
+    else: 
         number = num
+        mensagem = ''        
+    
+        lista = db_listar_cliente()
+        servico = db_listar_servico()
+        funcionario = db_listar_funcionarios()
+        
+        return render_template('add_items.html', cliente=lista, servico=servico, funcionario=funcionario, num=number, mensagem=mensagem)
+
+
+@app.route('/verifica_comanda2',methods=['GET',"POST"])
+def verifica_comanda2():
+    
+    lista=0
+    num = db_verificar_num_comanda(request.form.get("numero_comanda"))
+    numero = 0
+    print(num)
+    if num != None:
+        addItems = db_verifica_additem(num['id_comanda'])
         
     
-    lista = db_listar_cliente()
-    servico = db_listar_servico()
-    funcionario = db_listar_funcionarios()
+    if num is None:
+        mensagem = 'Não existe Comanda Aberta'
+        number = 2
+        return render_template('admin.html',   num=number, mensagem=mensagem)
     
-    return render_template('add_items.html', cliente=lista, servico=servico, funcionario=funcionario, num=number, mensagem=mensagem)
-
-
+    elif num != None and addItems == None:
+        mensagem = 'Não Existem Items Nessa Comanda'
+        number = 2
+        return render_template('admin.html',   num=number, mensagem=mensagem) 
+    
+    else:  
+        cliente = ver_comanda_fechar(addItems['id_comanda'])
+        id = addItems['id_comanda']
+        funcionario = db_listar_funcionarios()
+        servico = db_listar_servico()
+        
+        
+        for c in range(len(cliente)):
+            lista += cliente[c]['quantidade'] * cliente[c]['valor_unitario']
+            numero = cliente[c]['numero_comanda']
+       
+        return render_template('fechar_venda.html', cliente=cliente, num=numero, id_comanda=id,  mensagem='',lista=lista, funcionario=funcionario, servico=servico)
 
 
 
@@ -173,22 +257,6 @@ def comanda():
     num = {'numero_comanda': 0}
     return render_template('comanda.html', cliente=lista, operacao=lista2, situacao=lista3,num='')
 
-
-
-@app.route('/verefica_comanda',methods=['GET',"POST"])
-def verifica_comanda():
-
-    numero_comanda = request.form.get("numero_comanda")
-    num = db_verificar_num_comanda(numero_comanda)
-    
-    if num is None:
-        mensagem = 'Comanda Pode ser aberta'
-        number = numero_comanda
-    else:
-        mensagem = 'Comanda está sendo usada'
-        number = ''
-   
-    return render_template('admin.html',   num=number, mensagem=mensagem)
 
 
 
@@ -770,7 +838,7 @@ CREATE TABLE IF NOT EXISTS cliente (
     nome VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
     data_nascimento TEXT NOT NULL,
-    tefone VARCHAR(10) NOT NULL,
+    telefone VARCHAR(10) NOT NULL,
     UNIQUE(email)
 );
 
@@ -902,9 +970,9 @@ def db_inicializar():
         con.commit()
 
 
-def db_verificar_cliente(nome, email, data_nascimento, senha):
+def db_verificar_cliente(nome, email, data_nascimento, telefone):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("SELECT id_cliente, nome, email, data_nascimento, senha FROM cliente WHERE nome = ? AND email = ? AND senha = ?", [nome, email, senha])
+        cur.execute("SELECT id_cliente, nome, email, data_nascimento, telefone FROM cliente WHERE nome = ? AND email = ? AND telefone = ?", [nome, email, telefone])
         return row_to_dict(cur.description, cur.fetchone())
 
 
@@ -912,6 +980,8 @@ def db_verificar_agendamento(data1, hora, id_cliente, id_servico, id_funcionario
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("SELECT id_agendamento, data1, hora, id_cliente, id_servico, id_funcionario FROM agendamento WHERE data1 = ? AND hora = ? AND id_funcionario = ?", [data1, hora, id_funcionario])
         return row_to_dict(cur.description, cur.fetchone())
+    
+
 
 
 def db_verificar_servico_funcionario(i, id_funcionario):
@@ -949,6 +1019,10 @@ def db_verificar_additems(id_comanda, id_servico, quantidade, id_funcionario):
         cur.execute("SELECT id_comanda, id_servico, quantidade, id_funcionario FROM addItems WHERE id_comanda = ? and id_servico = ? and quantidade = ? and id_funcionario = ?", [id_comanda, id_servico, quantidade, id_funcionario])
         return row_to_dict(cur.description, cur.fetchone())
 
+def db_verifica_additem(id_comanda):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT id_comanda, id_servico, quantidade, id_funcionario FROM addItems WHERE id_comanda = ? ", [id_comanda])
+        return row_to_dict(cur.description, cur.fetchone())
 
 def db_verificar_num_comanda(numero_comanda):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
@@ -958,12 +1032,12 @@ def db_verificar_num_comanda(numero_comanda):
 
 ####################################################################################################
 
-def db_criar_cliente(nome, email, data_nascimento, senha):
+def db_criar_cliente(nome, email, data_nascimento, telefone):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
-        cur.execute("INSERT INTO cliente (nome, email, data_nascimento, senha) VALUES (?, ?, ?, ?)", [nome, email, data_nascimento, senha])
+        cur.execute("INSERT INTO cliente (nome, email, data_nascimento, telefone) VALUES (?, ?, ?, ?)", [nome, email, data_nascimento, telefone])
         id_cliente = cur.lastrowid
         con.commit()
-        return {'id_cliente': id_cliente, 'nome': nome, 'email': email, 'data_nascimento': data_nascimento, 'senha':senha}
+        return {'id_cliente': id_cliente, 'nome': nome, 'email': email, 'data_nascimento': data_nascimento, 'telefone':telefone}
 
 
 def db_criar_admin(nome, email, senha):
@@ -1065,6 +1139,10 @@ def db_historico_cliente(nome_cliente):
         cur.execute("SELECT c.nome AS nome_cliente, a.data1, a.hora, s.nome_servico, s.preco_servico, f.nome AS nome_funcionario FROM cliente AS c LEFT JOIN agendamento AS a ON c.id_cliente = a.id_cliente LEFT join servico as s ON a.id_servico = s.id_servico LEFT join funcionario as f on f.id_funcionario = a.id_funcionario where c.nome = ? ORDER BY a.data1 desc",[nome_cliente])
         return rows_to_dict(cur.description, cur.fetchall())
 
+def ver_comanda_fechar(id_comanda):
+    with closing(conectar()) as con, closing(con.cursor()) as cur:
+        cur.execute("SELECT c.nome, co.numero_comanda, s.nome_servico, ad.quantidade, s.preco_servico as valor_unitario FROM addItems as ad INNER JOIN servico AS s ON ad.id_servico = s.id_servico INNER JOIN comanda AS co ON ad.id_comanda = co.id_comanda INNER JOIN cliente AS c ON c.id_cliente = co.id_cliente WHERE ad.id_comanda = ?",[id_comanda])
+        return rows_to_dict(cur.description, cur.fetchall())
 
 def db_historico_funcionario():
     with closing(conectar()) as con, closing(con.cursor()) as cur:
@@ -1133,13 +1211,13 @@ def db_trazer_ultimo_id_servico():
         return row_to_dict(cur.description, cur.fetchone())
 
 
+
 def db_deletar_agendamento(id_agendamento):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("DELETE FROM agendamento WHERE id_agendamento = ?", [id_agendamento])
         con.commit()
-
+        
     
-
 def db_deletar_operacao(id_operacao):
     with closing(conectar()) as con, closing(con.cursor()) as cur:
         cur.execute("DELETE FROM operacao WHERE id_operacao = ?", [id_operacao])

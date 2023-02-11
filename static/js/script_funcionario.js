@@ -38,6 +38,18 @@ function abrirModal2(){
 
 };
 
+function abrirModal3(){
+    const modal = document.getElementById('janela-modal3')
+    
+    modal.classList.add('abrir')
+    
+    modal.addEventListener('click', (e) => {
+        if(e.target.id == 'fechar' || e.target.id == 'janela-modal3')
+        modal.classList.remove('abrir')
+    })
+
+};
+
 
 function fecharModal(){
     
